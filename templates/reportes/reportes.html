@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reportes.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+            <h2>Stockify</h2>
+
+        </div>
+
+        <a href="{{ url_for('dashboard.dashboard') }}" class="back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+    </header>
+
+    <main>
+
+        <section class="title">
+
+            <h1>Reportes</h1>
+
+            <p>Consulta información detallada del comportamiento de tu negocio.</p>
+
+        </section>
+
+        <section class="summary">
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <h3>Reportes Disponibles</h3>
+
+                <span>0</span>
+
+            </div>
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <h3>Ventas del Mes</h3>
+
+                <span>$0</span>
+
+            </div>
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-box-open"></i>
+
+                <h3>Productos</h3>
+
+                <span>0</span>
+
+            </div>
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                <h3>Más Vendido</h3>
+
+                <span>---</span>
+
+            </div>
+
+        </section>
+
+        <section class="modules">
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-calendar-day"></i>
+
+                </div>
+
+                <h2>Ventas Diarias</h2>
+
+                <p>Consulta todas las ventas realizadas durante un día específico.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                </div>
+
+                <h2>Ventas Mensuales</h2>
+
+                <p>Visualiza el comportamiento de las ventas por mes.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-ranking-star"></i>
+
+                </div>
+
+                <h2>Productos Más Vendidos</h2>
+
+                <p>Descubre cuáles son los productos con mayor cantidad de ventas.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-boxes-stacked"></i>
+
+                </div>
+
+                <h2>Inventario Disponible</h2>
+
+                <p>Consulta el stock disponible de todos los productos registrados.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                </div>
+
+                <h2>Utilidad por Producto</h2>
+
+                <p>Conoce la rentabilidad obtenida por cada producto vendido.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-box-archive"></i>
+
+                </div>
+
+                <h2>Productos sin Movimiento</h2>
+
+                <p>Identifica los productos que llevan tiempo sin registrarse en ventas.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

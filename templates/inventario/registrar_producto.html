@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventario | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registrar_producto.css') }}">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+            <h2>Stockify</h2>
+
+        </div>
+
+        <a href="{{ url_for('dashboard.dashboard') }}" class="back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+    </header>
+
+    <main>
+
+        <section class="title">
+
+            <h1>Inventario</h1>
+
+            <p>Administra los productos registrados en el sistema.</p>
+
+        </section>
+
+        <div class="content">
+
+            <section class="card">
+
+                {% if productoEditar %}
+
+                <h2>
+
+                    <i class="fa-solid fa-pen-to-square"></i>
+
+                    Editar Producto
+
+                </h2>
+
+                {% else %}
+
+                <h2>
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                    Registrar Producto
+
+                </h2>
+
+                {% endif %}
+
+                {% with messages=get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                {% for categoria,mensaje in messages %}
+
+                <div class="alert {{ categoria }}">
+
+                    {{ mensaje }}
+
+                </div>
+
+                {% endfor %}
+
+                {% endif %}
+
+                {% endwith %}
+
+                {% if productoEditar %}
+
+                <form action="{{ url_for('inventario.actualizar_producto') }}" method="POST">
+
+                    {% else %}
+
+                    <form action="{{ url_for('inventario.registrar_producto') }}" method="POST">
+
+                        {% endif %}
+
+                        <input type="hidden" name="id_producto"
+                            value="{{ productoEditar.id_producto if productoEditar else '' }}">
+
+                        <div class="grid2">
+
+                            <div>
+
+                                <label>Código</label>
+
+                                <input type="text" name="codigo"
+                                    value="{{ productoEditar.codigo if productoEditar else '' }}" required>
+
+                            </div>
+
+                            <div>
+
+                                <label>Categoría</label>
+
+                                <input type="text" name="categoria" value="{{ productoEditar.categoria if productoEditar else '' }}" required>
+
+                            </div>
+
+                        </div>
+
+                        <label>Nombre del Producto</label>
+
+                        <input type="text" name="nombre" value="{{ productoEditar.nombre if productoEditar else '' }}"
+                            required>
+
+                        <label>Descripción</label>
+
+                        <textarea name="descripcion"
+                            rows="4">{{ productoEditar.descripcion if productoEditar else '' }}</textarea>
+
+                        <div class="grid3">
+
+                            <div>
+
+                                <label>Costo</label>
+
+                                <input type="number" step="0.01" min="0" name="costo"
+                                    value="{{ productoEditar.costo if productoEditar else '' }}" required>
+
+                            </div>
+
+                            <div>
+
+                                <label>Precio Venta</label>
+
+                                <input type="number" step="0.01" min="0" name="precio_venta"
+                                    value="{{ productoEditar.precio_venta if productoEditar else '' }}" required>
+
+                            </div>
+
+                            <div>
+
+                                <label>Stock</label>
+
+                                <input type="number" min="0" name="stock"
+                                    value="{{ productoEditar.stock if productoEditar else '' }}" required>
+
+                            </div>
+
+                        </div>
+
+                        {% if productoEditar %}
+
+                        <label>Estado</label>
+
+                        <select name="estado">
+
+                            <option value="1" {% if productoEditar.estado==1 %}selected{% endif %}>
+                                Activo
+                            </option>
+
+                            <option value="0" {% if productoEditar.estado==0 %}selected{% endif %}>
+                                Inactivo
+                            </option>
+
+                        </select>
+
+                        {% endif %}
+
+                        <div class="buttons">
+
+                            {% if productoEditar %}
+
+                            <a href="{{ url_for('inventario.inventario') }}" class="cancel">
+
+                                <i class="fa-solid fa-xmark"></i>
+
+                                Cancelar
+
+                            </a>
+
+                            <button type="submit" class="save">
+
+                                <i class="fa-solid fa-floppy-disk"></i>
+
+                                Guardar Cambios
+
+                            </button>
+
+                            {% else %}
+
+                            <button type="reset" class="cancel">
+
+                                <i class="fa-solid fa-broom"></i>
+
+                                Limpiar
+
+                            </button>
+
+                            <button type="submit" class="save">
+
+                                <i class="fa-solid fa-box"></i>
+
+                                Registrar Producto
+
+                            </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </form>
+
+            </section>
+
+            <section class="card">
+
+                <div class="table-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-boxes-stacked"></i>
+
+                        Productos Registrados
+
+                    </h2>
+
+                    <div class="search">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="text" placeholder="Buscar producto...">
+
+                    </div>
+
+                </div>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Código</th>
+
+                            <th>Nombre</th>
+
+                            <th>Categoría</th>
+
+                            <th>Costo</th>
+
+                            <th>Precio Venta</th>
+
+                            <th>Stock</th>
+
+                            <th>Estado</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% if productos %}
+
+                        {% for producto in productos %}
+
+                        <tr>
+
+                            <td>{{ producto.codigo }}</td>
+
+                            <td>{{ producto.nombre }}</td>
+
+                            <td>{{ producto.categoria }}</td>
+
+                            <td>${{ producto.costo }}</td>
+
+                            <td>${{ producto.precio_venta }}</td>
+
+                            <td>{{ producto.stock }}</td>
+
+                            <td>
+
+                                {% if producto.estado==1 %}
+
+                                <span class="status active">
+
+                                    Activo
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status inactive">
+
+                                    Inactivo
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td class="actions">
+
+                                <a href="{{ url_for('inventario.editar_producto',id_producto=producto.id_producto) }}"
+                                    class="edit">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                <a href="#" class="view">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </a>
+
+                                {% if producto.estado==1 %}
+
+                                <a href="{{ url_for('inventario.desactivar_producto',id_producto=producto.id_producto) }}"
+                                    class="delete">
+
+                                    <i class="fa-solid fa-box-archive"></i>
+
+                                </a>
+
+                                {% else %}
+
+                                <a href="{{ url_for('inventario.activar_producto',id_producto=producto.id_producto) }}"
+                                    class="activate">
+
+                                    <i class="fa-solid fa-box-open"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="8" class="empty">
+
+                                No hay productos registrados.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

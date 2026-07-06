@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+            <h2>Stockify</h2>
+
+        </div>
+
+        <a href="{{ url_for('dashboard.dashboard') }}" class="back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+    </header>
+
+    <main>
+
+        <section class="title">
+
+            <h1>Registrar Venta</h1>
+
+            <p>Registra una venta con uno o varios productos.</p>
+
+        </section>
+
+        <section class="content">
+
+            <div class="left">
+
+                <div class="card">
+
+                    <h2>Información del Cliente</h2>
+
+                    <div class="grid2">
+
+                        <div class="group">
+                            <label>Nombre del Cliente</label>
+                            <input type="text" placeholder="Nombre completo">
+                        </div>
+
+                        <div class="group">
+                            <label>CC / NIT (Opcional)</label>
+                            <input type="text" placeholder="Documento">
+                        </div>
+
+                        <div class="group">
+                            <label>Fecha</label>
+                            <input type="date">
+                        </div>
+
+                        <div class="group">
+                            <label>Método de Pago</label>
+
+                            <select>
+
+                                <option>Efectivo</option>
+                                <option>Nequi</option>
+                                <option>Daviplata</option>
+                                <option>Transferencia</option>
+                                <option>Tarjeta Débito</option>
+                                <option>Tarjeta Crédito</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h2>Agregar Producto</h2>
+
+                    <div class="grid4">
+
+                        <div class="group product">
+
+                            <label>Producto</label>
+
+                            <input type="text" placeholder="Buscar producto...">
+
+                        </div>
+
+                        <div class="group">
+
+                            <label>Cantidad</label>
+
+                            <input type="number" min="1" value="1">
+
+                        </div>
+
+                        <div class="group">
+
+                            <label>Precio</label>
+
+                            <input type="number" placeholder="$0">
+
+                        </div>
+
+                        <div class="group button-group">
+
+                            <button class="add">
+
+                                <i class="fa-solid fa-plus"></i>
+
+                                Agregar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h2>Productos de la Venta</h2>
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Producto</th>
+
+                                <th>Cantidad</th>
+
+                                <th>Precio</th>
+
+                                <th>Subtotal</th>
+
+                                <th></th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td colspan="5" class="empty">
+
+                                    No hay productos agregados.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <aside class="summary">
+
+                <div class="card">
+
+                    <h2>Resumen de la Venta</h2>
+
+                    <div class="summary-list">
+
+                        <div class="item">
+                            <span>Productos</span>
+                            <strong>0</strong>
+                        </div>
+
+                        <div class="item">
+                            <span>Subtotal</span>
+                            <strong>$0</strong>
+                        </div>
+
+                        <div class="item">
+                            <span>Descuento</span>
+                            <strong>$0</strong>
+                        </div>
+
+                        <div class="item">
+                            <span>IVA</span>
+                            <strong>$0</strong>
+                        </div>
+
+                        <div class="total">
+                            <span>Total</span>
+                            <strong>$0</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="obs">
+
+                        <label>Observaciones</label>
+
+                        <textarea placeholder="Escribe alguna observación..."></textarea>
+
+                    </div>
+
+                    <div class="buttons-summary">
+
+                        <button class="save">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Registrar Venta
+                        </button>
+
+                        <button class="cancel">
+                            <i class="fa-solid fa-xmark"></i>
+                            Cancelar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </aside>
+        </section>
+
+    </main>
+
+</body>
+
+</html>

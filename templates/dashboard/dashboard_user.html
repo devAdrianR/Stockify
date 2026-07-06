@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stockify | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Stockify">
+            <h2>Stockify</h2>
+        </div>
+        <nav>
+            <a href="{{ url_for('auth.logout') }}" class="logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section class="welcome">
+            <h1>¡Bienvenido!</h1>
+            <p>
+                Selecciona el módulo con el que deseas trabajar.
+            </p>
+        </section>
+        <section class="modules">
+            <a href="{{ url_for('inventario.inventario') }}" class="card">
+                <div class="icon">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <h2>Inventario</h2>
+                <p>Gestiona productos, categorías y existencias.</p>
+                <span class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+            </a>
+
+            <a href="{{ url_for('ventas.ventas') }}" class="card">
+                <div class="icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <h2>Ventas</h2>
+                <p>Registra ventas y administra clientes.</p>
+                <span class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+            </a>
+
+            <a href="{{ url_for('finanzas.finanzas') }}" class="card">
+                <div class="icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h2>Finanzas</h2>
+                <p>Gestiona ingresos, egresos y estados financieros.</p>
+                <span class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+            </a>
+
+            <a href="{{ url_for('reportes.reportes') }}" class="card">
+                <div class="icon">
+                    <i class="fa-solid fa-file-lines"></i>
+                </div>
+                <h2>Reportes</h2>
+                <p>Consulte estadísticas y genere informes.</p>
+                <span class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+            </a>
+        </section>
+    </main>
+    <footer>
+        <p>© 2026 Stockify | Sistema de Inventario</p>
+    </footer>
+</body>
+
+</html>

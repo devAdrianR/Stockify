@@ -1,0 +1,571 @@
+/*=========================================
+                VARIABLES
+=========================================*/
+
+:root{
+--dark:#173D31;
+--green:#2D6A4F;
+--accent:#52B788;
+--light:#F4F8F6;
+--white:#FFFFFF;
+--text:#26342D;
+--gray:#7B8A84;
+--border:#DCE6E1;
+--shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/*=========================================
+                RESET
+=========================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:"Inter",sans-serif;
+background:var(--light);
+color:var(--text);
+}
+
+/*=========================================
+                HEADER
+=========================================*/
+
+header{
+height:80px;
+background:var(--dark);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 50px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo img{
+width:42px;
+}
+
+.logo h2{
+font-family:"Sora",sans-serif;
+font-size:28px;
+color:white;
+}
+
+.back{
+background:var(--green);
+color:white;
+padding:12px 22px;
+border-radius:12px;
+text-decoration:none;
+font-weight:600;
+transition:.25s;
+}
+
+.back:hover{
+background:var(--accent);
+}
+
+/*=========================================
+                MAIN
+=========================================*/
+
+main{
+width:1400px;
+max-width:95%;
+margin:40px auto;
+}
+
+.title{
+margin-bottom:35px;
+}
+
+.title h1{
+font-family:"Sora",sans-serif;
+font-size:42px;
+color:var(--dark);
+margin-bottom:10px;
+}
+
+.title p{
+font-size:18px;
+color:var(--gray);
+}
+
+/*=========================================
+                LAYOUT
+=========================================*/
+
+.content{
+display:grid;
+grid-template-columns:2fr 380px;
+gap:30px;
+align-items:start;
+}
+
+/*=========================================
+                TARJETAS
+=========================================*/
+
+.card{
+background:white;
+border-radius:18px;
+padding:30px;
+box-shadow:var(--shadow);
+border:1px solid var(--border);
+margin-bottom:25px;
+}
+
+.card h2{
+font-family:"Sora",sans-serif;
+font-size:24px;
+color:var(--dark);
+margin-bottom:25px;
+}
+
+/*=========================================
+                GRID
+=========================================*/
+
+.grid2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.grid4{
+display:grid;
+grid-template-columns:3fr 1fr 1fr auto;
+gap:20px;
+align-items:end;
+}
+
+/*=========================================
+                FORMULARIOS
+=========================================*/
+
+.group{
+display:flex;
+flex-direction:column;
+}
+
+.group label{
+margin-bottom:10px;
+font-weight:600;
+color:var(--text);
+}
+
+.group input,
+.group select{
+height:52px;
+border:1px solid var(--border);
+border-radius:12px;
+padding:0 16px;
+font-size:15px;
+background:white;
+transition:.25s;
+}
+
+.group input:focus,
+.group select:focus{
+outline:none;
+border-color:var(--accent);
+box-shadow:0 0 0 4px rgba(82,183,136,.15);
+}
+
+/*=========================================
+            PRODUCTO
+=========================================*/
+
+.product{
+position:relative;
+}
+
+.product input{
+padding-left:18px;
+}
+
+/*=========================================
+            BOTÓN AGREGAR
+=========================================*/
+
+.button-group{
+justify-content:flex-end;
+}
+
+.add{
+height:52px;
+padding:0 24px;
+border:none;
+border-radius:12px;
+background:var(--green);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.add:hover{
+background:var(--dark);
+transform:translateY(-2px);
+}
+
+/*=========================================
+                VARIABLES
+=========================================*/
+
+:root{
+--dark:#173D31;
+--green:#2D6A4F;
+--accent:#52B788;
+--light:#F4F8F6;
+--white:#FFFFFF;
+--text:#26342D;
+--gray:#7B8A84;
+--border:#DCE6E1;
+--shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/*=========================================
+                RESET
+=========================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:"Inter",sans-serif;
+background:var(--light);
+color:var(--text);
+}
+
+/*=========================================
+            RESUMEN
+=========================================*/
+
+.summary{
+position:sticky;
+top:30px;
+}
+
+.summary .card{
+padding:30px;
+}
+
+.summary h2{
+font-family:"Sora",sans-serif;
+font-size:28px;
+color:var(--dark);
+margin-bottom:30px;
+}
+
+.summary-list{
+display:flex;
+flex-direction:column;
+gap:15px;
+margin-bottom:30px;
+}
+
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding-bottom:12px;
+border-bottom:1px solid var(--border);
+font-size:16px;
+}
+
+.item span{
+color:#666;
+}
+
+.item strong{
+font-size:17px;
+color:var(--dark);
+}
+
+.total{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:10px;
+padding:18px;
+border-radius:14px;
+background:var(--light);
+}
+
+.total span{
+font-size:18px;
+font-weight:700;
+color:var(--dark);
+}
+
+.total strong{
+font-size:32px;
+font-weight:700;
+color:var(--green);
+}
+
+.obs{
+margin:30px 0;
+}
+
+.obs label{
+display:block;
+margin-bottom:10px;
+font-weight:600;
+}
+
+.obs textarea{
+width:100%;
+height:120px;
+padding:15px;
+border:1px solid var(--border);
+border-radius:12px;
+resize:none;
+font-family:"Inter",sans-serif;
+font-size:15px;
+transition:.25s;
+}
+
+.obs textarea:focus{
+outline:none;
+border-color:var(--accent);
+box-shadow:0 0 0 4px rgba(82,183,136,.15);
+}
+
+.buttons-summary{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.save,
+.cancel{
+height:52px;
+border:none;
+border-radius:12px;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.save{
+background:var(--green);
+color:white;
+}
+
+.save:hover{
+background:var(--dark);
+}
+
+.cancel{
+background:#E8ECE9;
+color:#333;
+}
+
+.cancel:hover{
+background:#D9DFDB;
+}
+
+/*=========================================
+                HEADER
+=========================================*/
+
+header{
+height:80px;
+background:var(--dark);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 50px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo img{
+width:42px;
+}
+
+.logo h2{
+font-family:"Sora",sans-serif;
+font-size:28px;
+color:white;
+}
+
+.back{
+background:var(--green);
+color:white;
+padding:12px 22px;
+border-radius:12px;
+text-decoration:none;
+font-weight:600;
+transition:.25s;
+}
+
+.back:hover{
+background:var(--accent);
+}
+
+/*=========================================
+                MAIN
+=========================================*/
+
+main{
+width:1400px;
+max-width:95%;
+margin:40px auto;
+}
+
+.title{
+margin-bottom:35px;
+}
+
+.title h1{
+font-family:"Sora",sans-serif;
+font-size:42px;
+color:var(--dark);
+margin-bottom:10px;
+}
+
+.title p{
+font-size:18px;
+color:var(--gray);
+}
+
+/*=========================================
+                LAYOUT
+=========================================*/
+
+.content{
+display:grid;
+grid-template-columns:2fr 380px;
+gap:30px;
+align-items:start;
+}
+
+/*=========================================
+                TARJETAS
+=========================================*/
+
+.card{
+background:white;
+border-radius:18px;
+padding:30px;
+box-shadow:var(--shadow);
+border:1px solid var(--border);
+margin-bottom:25px;
+}
+
+.card h2{
+font-family:"Sora",sans-serif;
+font-size:24px;
+color:var(--dark);
+margin-bottom:25px;
+}
+
+/*=========================================
+                GRID
+=========================================*/
+
+.grid2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.grid4{
+display:grid;
+grid-template-columns:3fr 1fr 1fr auto;
+gap:20px;
+align-items:end;
+}
+
+/*=========================================
+                FORMULARIOS
+=========================================*/
+
+.group{
+display:flex;
+flex-direction:column;
+}
+
+.group label{
+margin-bottom:10px;
+font-weight:600;
+color:var(--text);
+}
+
+.group input,
+.group select{
+height:52px;
+border:1px solid var(--border);
+border-radius:12px;
+padding:0 16px;
+font-size:15px;
+background:white;
+transition:.25s;
+}
+
+.group input:focus,
+.group select:focus{
+outline:none;
+border-color:var(--accent);
+box-shadow:0 0 0 4px rgba(82,183,136,.15);
+}
+
+/*=========================================
+            PRODUCTO
+=========================================*/
+
+.product{
+position:relative;
+}
+
+.product input{
+padding-left:18px;
+}
+
+/*=========================================
+            BOTÓN AGREGAR
+=========================================*/
+
+.button-group{
+justify-content:flex-end;
+}
+
+.add{
+height:52px;
+padding:0 24px;
+border:none;
+border-radius:12px;
+background:var(--green);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.add:hover{
+background:var(--dark);
+transform:translateY(-2px);
+}

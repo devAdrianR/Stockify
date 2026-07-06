@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario | Stockify</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/inventario.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+
+<header>
+<div class="logo">
+<img src="{{ url_for('static', filename='img/logo.png') }}">
+<h2>Stockify</h2>
+</div>
+
+<a href="{{ url_for('dashboard.dashboard') }}" class="back">
+<i class="fa-solid fa-arrow-left"></i>
+Dashboard
+</a>
+</header>
+
+<main>
+
+<section class="title">
+<h1>Inventario</h1>
+<p>Gestiona todos los productos de tu negocio.</p>
+</section>
+
+<section class="search">
+<input type="text" placeholder="Buscar producto...">
+<i class="fa-solid fa-magnifying-glass"></i>
+</section>
+
+<section class="cards">
+
+<a href="{{ url_for('inventario.registrar_producto') }}" class="card">
+<i class="fa-solid fa-plus"></i>
+<h3>Registrar Producto</h3>
+<p>Agregar nuevos productos al sistema.</p>
+</a>
+
+<a href="{{ url_for('inventario.editar_producto') }}" class="card">
+<i class="fa-solid fa-pen"></i>
+<h3>Editar Producto</h3>
+<p>Modificar información existente.</p>
+</a>
+
+<a href="{{ url_for('inventario.eliminar_producto') }}" class="card">
+<i class="fa-solid fa-trash"></i>
+<h3>Eliminar Producto</h3>
+<p>Eliminar productos del inventario.</p>
+</a>
+
+<a href="{{ url_for('inventario.ver_inventario') }}" class="card">
+<i class="fa-solid fa-boxes-stacked"></i>
+<h3>Ver Inventario</h3>
+<p>Consultar existencias actuales.</p>
+</a>
+
+<a href="{{ url_for('inventario.categorias') }}" class="card">
+<i class="fa-solid fa-layer-group"></i>
+<h3>Categorías</h3>
+<p>Administrar categorías.</p>
+</a>
+
+<a href="{{ url_for('inventario.movimientos') }}" class="card">
+<i class="fa-solid fa-arrow-right-arrow-left"></i>
+<h3>Movimientos</h3>
+<p>Entradas y salidas de inventario.</p>
+</a>
+
+</section>
+
+</main>
+
+</body>
+</html>

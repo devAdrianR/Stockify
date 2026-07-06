@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/finanzas.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+            <h2>Stockify</h2>
+
+        </div>
+
+        <a href="{{ url_for('dashboard.dashboard') }}" class="back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+    </header>
+
+    <main>
+
+        <section class="title">
+
+            <h1>Finanzas</h1>
+
+            <p>Gestiona los ingresos, gastos y consulta el estado financiero de tu negocio.</p>
+
+        </section>
+
+        <section class="summary">
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-sack-dollar"></i>
+
+                <h3>Ingresos del Día</h3>
+
+                <span>$0</span>
+
+            </div>
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+                <h3>Gastos del Día</h3>
+
+                <span>$0</span>
+
+            </div>
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <h3>Utilidad</h3>
+
+                <span>$0</span>
+
+            </div>
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-wallet"></i>
+
+                <h3>Saldo en Caja</h3>
+
+                <span>$0</span>
+
+            </div>
+
+        </section>
+
+        <section class="modules">
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-circle-plus"></i>
+
+                </div>
+
+                <h2>Registrar Ingreso</h2>
+
+                <p>Registra cualquier ingreso adicional del negocio.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-circle-minus"></i>
+
+                </div>
+
+                <h2>Registrar Gasto</h2>
+
+                <p>Registra compras, servicios, nómina y otros gastos.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-cash-register"></i>
+
+                </div>
+
+                <h2>Caja del Día</h2>
+
+                <p>Consulta el dinero disponible al finalizar la jornada.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+
+                </div>
+
+                <h2>Cuentas por Cobrar</h2>
+
+                <p>Administra los pagos pendientes de tus clientes.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+
+                </div>
+
+                <h2>Cuentas por Pagar</h2>
+
+                <p>Controla las obligaciones pendientes con proveedores.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+            <a href="#" class="card">
+
+                <div class="icon">
+
+                    <i class="fa-solid fa-scale-balanced"></i>
+
+                </div>
+
+                <h2>Balance General</h2>
+
+                <p>Consulta un resumen financiero del negocio.</p>
+
+                <span class="arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+            </a>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
