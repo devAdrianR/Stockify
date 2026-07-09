@@ -129,7 +129,8 @@
 
                                 <label>Categoría</label>
 
-                                <input type="text" name="categoria" value="{{ productoEditar.categoria if productoEditar else '' }}" required>
+                                <input type="text" name="categoria"
+                                    value="{{ productoEditar.categoria if productoEditar else '' }}" required>
 
                             </div>
 
@@ -252,11 +253,28 @@
 
                     </h2>
 
-                    <div class="search">
+                    <div class="search-container">
 
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <div class="search-box">
 
-                        <input type="text" placeholder="Buscar producto...">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input type="text" id="buscarProducto"
+                                placeholder="Buscar por código, nombre o categoría...">
+
+                        </div>
+
+                        <select id="filtroBusqueda">
+
+                            <option value="todos">Todos</option>
+
+                            <option value="codigo">Código</option>
+
+                            <option value="nombre">Nombre</option>
+
+                            <option value="categoria">Categoría</option>
+
+                        </select>
 
                     </div>
 
@@ -288,7 +306,7 @@
 
                     </thead>
 
-                    <tbody>
+                    <tbody id="tablaProductos">
 
                         {% if productos %}
 
@@ -336,12 +354,6 @@
                                     class="edit">
 
                                     <i class="fa-solid fa-pen"></i>
-
-                                </a>
-
-                                <a href="#" class="view">
-
-                                    <i class="fa-solid fa-eye"></i>
 
                                 </a>
 
@@ -394,7 +406,7 @@
         </div>
 
     </main>
-
+<script src="{{ url_for('static', filename='js/buscar_productos.js') }}"></script>
 </body>
 
 </html>

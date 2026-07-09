@@ -33,51 +33,50 @@ Dashboard
 </section>
 
 <section class="search">
-<input type="text" placeholder="Buscar producto...">
+<input type="text" id="buscarModulo" placeholder="Buscar módulo...">
 <i class="fa-solid fa-magnifying-glass"></i>
 </section>
 
 <section class="cards">
 
 <a href="{{ url_for('inventario.registrar_producto') }}" class="card">
-<i class="fa-solid fa-plus"></i>
-<h3>Registrar Producto</h3>
-<p>Agregar nuevos productos al sistema.</p>
-</a>
-
-<a href="{{ url_for('inventario.editar_producto') }}" class="card">
-<i class="fa-solid fa-pen"></i>
-<h3>Editar Producto</h3>
-<p>Modificar información existente.</p>
-</a>
-
-<a href="{{ url_for('inventario.eliminar_producto') }}" class="card">
-<i class="fa-solid fa-trash"></i>
-<h3>Eliminar Producto</h3>
-<p>Eliminar productos del inventario.</p>
-</a>
-
-<a href="{{ url_for('inventario.ver_inventario') }}" class="card">
 <i class="fa-solid fa-boxes-stacked"></i>
-<h3>Ver Inventario</h3>
-<p>Consultar existencias actuales.</p>
+<h3>Gestionar Productos</h3>
+<p>Registrar, editar, activar o desactivar productos y consultar existencias.</p>
 </a>
 
 <a href="{{ url_for('inventario.categorias') }}" class="card">
 <i class="fa-solid fa-layer-group"></i>
 <h3>Categorías</h3>
-<p>Administrar categorías.</p>
+<p>Crear y administrar las categorías del inventario.</p>
 </a>
 
 <a href="{{ url_for('inventario.movimientos') }}" class="card">
 <i class="fa-solid fa-arrow-right-arrow-left"></i>
 <h3>Movimientos</h3>
-<p>Entradas y salidas de inventario.</p>
+<p>Consultar entradas y salidas de inventario.</p>
 </a>
 
 </section>
 
 </main>
+
+<script>
+const buscador = document.getElementById("buscarModulo");
+const tarjetas = document.querySelectorAll(".cards .card");
+
+buscador.addEventListener("input", () => {
+    const texto = buscador.value.toLowerCase();
+
+    tarjetas.forEach(tarjeta => {
+        const titulo = tarjeta.querySelector("h3").textContent.toLowerCase();
+        const descripcion = tarjeta.querySelector("p").textContent.toLowerCase();
+        const coincide = titulo.includes(texto) || descripcion.includes(texto);
+
+        tarjeta.style.display = coincide ? "" : "none";
+    });
+});
+</script>
 
 </body>
 </html>

@@ -1,254 +1,401 @@
 import mysql.connector as mysql
 from config import DB_CONFIG
 
+
 def connect():
     try:
-        connection=mysql.connect(**DB_CONFIG)
-        print("Connected to the database successfully!")
+        connection = mysql.connect(**DB_CONFIG)
         return connection
     except mysql.Error as err:
-        print(f"Error connecting to the database: {err}")
+        print(err)
         return None
-    
-def registrarProducto(nombre,codigo,categoria,costo,precio_venta,stock,descripcion):
 
-    connection=connect()
+
+# ==========================
+# REGISTRAR PRODUCTO
+# ==========================
+
+def registrarProducto(nombre, codigo, categoria, costo, precio_venta, stock, descripcion):
+
+    connection = connect()
 
     if connection is None:
-        return False,"No fue posible conectar con la base de datos."
+        return False, "No fue posible conectar con la base de datos."
 
-    cursor=connection.cursor(dictionary=True)
+    cursor = connection.cursor(dictionary=True)
 
-    sql="""
-    SELECT id_producto
-    FROM productos
-    WHERE nombre=%s
-    OR codigo=%s
-    """
+    cursor.execute("""
+        SELECT id_producto
+        FROM productos
+        WHERE nombre=%s
+        OR codigo=%s
+    """, (nombre, codigo))
 
-    cursor.execute(sql,(nombre,codigo))
+    if cursor.fetchone():
+        cursor.close()
+        connection.close()
+        return False, "El nombre o el código del producto ya existen."
+
+    cursor.close()
+
+    cursor = connection.cursor()
+
+    try:
+
+        cursor.execute("""
+            INSERT INTO productos
+            (nombre,codigo,categoria,costo,precio_venta,stock,descripcion)
+            VALUES(%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            nombre,
+            codigo,
+            categoria,
+            costo,
+            precio_venta,
+            stock,
+            descripcion
+        ))
+
+        connection.commit()
+
+        return True, "Producto registrado correctamente."
+
+    except mysql.Error as err:
+
+        print(err)
+        return False, "No fue posible registrar el producto."
+
+    finally:
+
+        cursor.close()
+        connection.close()
+
+
+# ==========================
+# OBTENER PRODUCTOS
+# ==========================
+
+def obtenerProducto(id_producto=None):
+
+    connection = connect()
+
+    if connection is None:
+        return False, "No fue posible conectar con la base de datos.", None
+
+    cursor = connection.cursor(dictionary=True)
+
+    try:
+
+        if id_producto is None:
+
+            cursor.execute("""
+                SELECT *
+                FROM productos
+                ORDER BY nombre
+            """)
+
+            productos = cursor.fetchall()
+
+            return True, "Productos obtenidos correctamente.", productos
+
+        cursor.execute("""
+            SELECT *
+            FROM productos
+            WHERE id_producto=%s
+        """, (id_producto,))
+
+        producto = cursor.fetchone()
+
+        if producto is None:
+            return False, "Producto no encontrado.", None
+
+        return True, "Producto obtenido correctamente.", producto
+
+    except mysql.Error as err:
+
+        print(err)
+
+        return False, "No fue posible obtener los productos.", None
+
+    finally:
+
+        cursor.close()
+        connection.close()
+
+
+# ==========================
+# EDITAR PRODUCTO
+# ==========================
+
+def editarProducto(
+    id_producto,
+    nombre,
+    codigo,
+    categoria,
+    costo,
+    precio_venta,
+    stock,
+    descripcion,
+    estado
+):
+
+    connection = connect()
+
+    if connection is None:
+        return False, "No fue posible conectar con la base de datos."
+
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id_producto
+        FROM productos
+        WHERE (nombre=%s OR codigo=%s)
+        AND id_producto<>%s
+    """, (
+        nombre,
+        codigo,
+        id_producto
+    ))
 
     if cursor.fetchone():
 
         cursor.close()
         connection.close()
 
-        return False,"El nombre o el código del producto ya existen."
+        return False, "El nombre o el código ya existen."
 
     cursor.close()
 
-    cursor=connection.cursor()
-
-    sql="""
-    INSERT INTO productos(nombre,codigo,categoria,costo,precio_venta,stock,descripcion)
-    VALUES(%s,%s,%s,%s,%s,%s,%s)
-    """
+    cursor = connection.cursor()
 
     try:
 
-        cursor.execute(sql,(nombre,codigo,categoria,costo,precio_venta,stock,descripcion))
+        cursor.execute("""
+            UPDATE productos
+            SET nombre=%s,
+                codigo=%s,
+                categoria=%s,
+                costo=%s,
+                precio_venta=%s,
+                stock=%s,
+                descripcion=%s,
+                estado=%s
+            WHERE id_producto=%s
+        """, (
+            nombre,
+            codigo,
+            categoria,
+            costo,
+            precio_venta,
+            stock,
+            descripcion,
+            estado,
+            id_producto
+        ))
 
         connection.commit()
 
-        return True,"Producto registrado correctamente."
+        return True, "Producto actualizado correctamente."
 
     except mysql.Error as err:
 
         print(err)
 
-        return False,"No fue posible registrar el producto."
+        return False, "No fue posible actualizar el producto."
 
     finally:
 
         cursor.close()
         connection.close()
 
-def editarProducto(id_producto,nombre,codigo,categoria,costo,precio_venta,stock,descripcion):
 
-    connection=connect()
+# ==========================
+# ACTIVAR PRODUCTO
+# ==========================
+
+def activarProducto(id_producto):
+
+    connection = connect()
 
     if connection is None:
-        return False,"No fue posible conectar con la base de datos."
+        return False, "No fue posible conectar con la base de datos."
 
-    cursor=connection.cursor(dictionary=True)
-
-    sql="""
-    SELECT id_producto
-    FROM productos
-    WHERE (nombre=%s OR codigo=%s)
-    AND id_producto!=%s
-    """
-
-    cursor.execute(sql,(nombre,codigo,id_producto))
-
-    if cursor.fetchone():
-
-        cursor.close()
-        connection.close()
-
-        return False,"El nombre o el código del producto ya existen."
-
-    cursor.close()
-
-    cursor=connection.cursor()
-
-    sql="""
-    UPDATE productos
-    SET nombre=%s,
-        codigo=%s,
-        categoria=%s,
-        costo=%s,
-        precio_venta=%s,
-        stock=%s,
-        descripcion=%s
-    WHERE id_producto=%s
-    """
+    cursor = connection.cursor()
 
     try:
 
-        cursor.execute(sql,(nombre,codigo,categoria,costo,precio_venta,stock,descripcion,id_producto))
+        cursor.execute("""
+            UPDATE productos
+            SET estado=1
+            WHERE id_producto=%s
+        """, (id_producto,))
 
         connection.commit()
 
-        return True,"Producto editado correctamente."
+        return True, "Producto activado correctamente."
 
     except mysql.Error as err:
 
         print(err)
 
-        return False,"No fue posible editar el producto."
+        return False, "No fue posible activar el producto."
 
     finally:
 
         cursor.close()
         connection.close()
 
-def eliminarProducto(id_producto):
 
-    connection=connect()
+# ==========================
+# DESACTIVAR PRODUCTO
+# ==========================
+
+def desactivarProducto(id_producto):
+
+    connection = connect()
 
     if connection is None:
-        return False,"No fue posible conectar con la base de datos."
+        return False, "No fue posible conectar con la base de datos."
 
-    cursor=connection.cursor()
-
-    sql="""
-    DELETE FROM productos
-    WHERE id_producto=%s
-    """
+    cursor = connection.cursor()
 
     try:
 
-        cursor.execute(sql,(id_producto,))
+        cursor.execute("""
+            UPDATE productos
+            SET estado=0
+            WHERE id_producto=%s
+        """, (id_producto,))
 
         connection.commit()
 
-        return True,"Producto eliminado correctamente."
+        return True, "Producto desactivado correctamente."
 
     except mysql.Error as err:
 
         print(err)
 
-        return False,"No fue posible eliminar el producto."
+        return False, "No fue posible desactivar el producto."
 
     finally:
 
         cursor.close()
         connection.close()
 
-def verInventario():
 
-    connection=connect()
-
-    if connection is None:
-        return False,"No fue posible conectar con la base de datos.",[]
-
-    cursor=connection.cursor(dictionary=True)
-
-    sql="""
-    SELECT *
-    FROM productos
-    """
-
-    try:
-
-        cursor.execute(sql)
-
-        productos=cursor.fetchall()
-
-        return True,"Inventario obtenido correctamente.",productos
-
-    except mysql.Error as err:
-
-        print(err)
-
-        return False,"No fue posible obtener el inventario.",[]
-
-    finally:
-
-        cursor.close()
-        connection.close()
+# ==========================
+# CATEGORÍAS
+# ==========================
 
 def categorias():
 
-    connection=connect()
+    connection = connect()
 
     if connection is None:
-        return False,"No fue posible conectar con la base de datos.",[]
+        return False, "No fue posible conectar.", []
 
-    cursor=connection.cursor(dictionary=True)
-
-    sql="""
-    SELECT DISTINCT categoria
-    FROM productos
-    """
+    cursor = connection.cursor(dictionary=True)
 
     try:
 
-        cursor.execute(sql)
+        cursor.execute("""
+            SELECT DISTINCT categoria
+            FROM productos
+            ORDER BY categoria
+        """)
 
-        categorias=cursor.fetchall()
+        categorias = cursor.fetchall()
 
-        return True,"Categorías obtenidas correctamente.",categorias
+        return True, "Categorías obtenidas correctamente.", categorias
 
     except mysql.Error as err:
 
         print(err)
 
-        return False,"No fue posible obtener las categorías.",[]
+        return False, "No fue posible obtener las categorías.", []
 
     finally:
 
         cursor.close()
         connection.close()
 
-def movimientos():
+# ==========================
+# BUSCAR PRODUCTOS
+# ==========================
 
-    connection=connect()
+def buscarProducto(texto="", filtro="todos"):
+
+    connection = connect()
 
     if connection is None:
-        return False,"No fue posible conectar con la base de datos.",[]
+        return False, "No fue posible conectar con la base de datos.", []
 
-    cursor=connection.cursor(dictionary=True)
+    cursor = connection.cursor(dictionary=True)
 
-    sql="""
-    SELECT *
-    FROM movimientos
-    """
+    texto = f"%{texto}%"
 
     try:
 
-        cursor.execute(sql)
+        if filtro == "codigo":
 
-        movimientos=cursor.fetchall()
+            sql = """
+                SELECT *
+                FROM productos
+                WHERE codigo LIKE %s
+                ORDER BY nombre
+            """
 
-        return True,"Movimientos obtenidos correctamente.",movimientos
+            cursor.execute(sql, (texto,))
+
+        elif filtro == "nombre":
+
+            sql = """
+                SELECT *
+                FROM productos
+                WHERE nombre LIKE %s
+                ORDER BY nombre
+            """
+
+            cursor.execute(sql, (texto,))
+
+        elif filtro == "categoria":
+
+            sql = """
+                SELECT *
+                FROM productos
+                WHERE categoria LIKE %s
+                ORDER BY nombre
+            """
+
+            cursor.execute(sql, (texto,))
+
+        else:
+
+            sql = """
+                SELECT *
+                FROM productos
+                WHERE
+                    codigo LIKE %s
+                    OR nombre LIKE %s
+                    OR categoria LIKE %s
+                ORDER BY nombre
+            """
+
+            cursor.execute(sql, (
+                texto,
+                texto,
+                texto
+            ))
+
+        productos = cursor.fetchall()
+
+        return True, "Productos encontrados.", productos
 
     except mysql.Error as err:
 
         print(err)
 
-        return False,"No fue posible obtener los movimientos.",[]
+        return False, "No fue posible realizar la búsqueda.", []
 
     finally:
 
