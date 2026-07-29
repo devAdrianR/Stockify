@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registrar Gasto | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registrar_gasto.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+        <h2>Stockify</h2>
+
+    </div>
+
+    <a href="{{ url_for('finanzas.finanzas') }}" class="back">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Volver
+
+    </a>
+
+</header>
+
+<main>
+
+    <section class="title">
+
+        <h1>Registrar Gasto</h1>
+
+<p>Registra un nuevo gasto del negocio.</p>
+
+    </section>
+
+    <section class="form-card">
+
+        <form action="#" method="POST">
+
+            <div class="group">
+
+                <label>Concepto del gasto</label>
+
+                <input
+                    type="text"
+                    name="concepto"
+                    placeholder="Ej: Compra de insumos"
+                    required>
+
+            </div>
+
+            <div class="group">
+
+                <label>Monto</label>
+
+                <input
+                    type="number"
+                    name="monto"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    required>
+
+            </div>
+
+            <div class="group">
+
+                <label>Categoría</label>
+
+                <select name="categoria" required>
+
+                    <option value="">Seleccione una categoría</option>
+
+                    <option>Compras</option>
+
+                    <option>Servicios</option>
+
+                    <option>Nómina</option>
+
+                    <option>Arriendo</option>
+
+                    <option>Transporte</option>
+
+                    <option>Otro</option>
+
+                </select>
+
+            </div>
+
+            <div class="group">
+
+                <label>Fecha</label>
+
+                <input
+                    type="date"
+                    name="fecha"
+                    required>
+
+            </div>
+
+            <div class="group full">
+
+                <label>Descripción</label>
+
+                <textarea
+                    name="descripcion"
+                    rows="5"
+                    placeholder="Escriba una descripción del gasto..."></textarea>
+
+            </div>
+
+            <div class="buttons">
+
+                <button type="submit" class="save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Guardar
+
+                </button>
+
+                <a href="{{ url_for('finanzas.finanzas') }}" class="cancel">
+
+                    Cancelar
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

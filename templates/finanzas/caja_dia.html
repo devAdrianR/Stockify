@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Caja del Día | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caja_dia.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+
+<img src="{{ url_for('static', filename='img/logo.png') }}">
+
+<h2>Stockify</h2>
+
+</div>
+
+<a href="{{ url_for('finanzas.finanzas') }}" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Volver
+
+</a>
+
+</header>
+
+<main>
+
+<section class="title">
+
+<h1>Caja del Día</h1>
+
+<p>Resumen de ingresos, gastos y saldo del día.</p>
+
+</section>
+
+<section class="cards">
+
+<div class="info">
+
+<h3>Ingresos</h3>
+
+<span>$0</span>
+
+</div>
+
+<div class="info">
+
+<h3>Gastos</h3>
+
+<span>$0</span>
+
+</div>
+
+<div class="info">
+
+<h3>Saldo</h3>
+
+<span>$0</span>
+
+</div>
+
+</section>
+
+<section class="table-card">
+
+<h2>Movimientos del Día</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Hora</th>
+
+<th>Concepto</th>
+
+<th>Tipo</th>
+
+<th>Valor</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+    <tr>
+        <td colspan="4" style="text-align:center;">
+            No hay movimientos registrados hoy.
+        </td>
+    </tr>
+</tbody>
+
+</table>
+
+</section>
+
+</main>
+
+</body>
+
+</html>

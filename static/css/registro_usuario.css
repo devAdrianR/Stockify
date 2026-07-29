@@ -51,7 +51,8 @@ gap:15px;
 }
 
 .logo img{
-width:42px;
+width:100px;
+ height:100px;  
 }
 
 .logo h2{

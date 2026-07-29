@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cuentas por Pagar | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cuentas_pagar.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <img src="{{ url_for('static', filename='img/logo.png') }}">
+        <h2>Stockify</h2>
+    </div>
+
+    <a href="{{ url_for('finanzas.finanzas') }}" class="back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver
+    </a>
+
+</header>
+
+<main>
+
+    <section class="title">
+
+        <h1>Cuentas por Pagar</h1>
+
+        <p>Administra las obligaciones pendientes con tus proveedores.</p>
+
+    </section>
+
+    <div class="top">
+
+        <button class="btn" id="abrirModal">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Nuevo Registro
+
+        </button>
+
+    </div>
+
+    <!-- Modal -->
+
+    <div class="modal" id="modalRegistro">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2>Nueva Cuenta por Pagar</h2>
+
+                <span class="cerrar" id="cerrarModal">&times;</span>
+
+            </div>
+
+            <form action="#" method="POST">
+
+                <div class="campo">
+                    <label>Proveedor</label>
+                    <input type="text" name="proveedor" required>
+                </div>
+
+                <div class="campo">
+                    <label>Concepto</label>
+                    <input type="text" name="concepto" required>
+                </div>
+
+                <div class="campo">
+                    <label>Valor</label>
+                    <input type="number" name="valor" required>
+                </div>
+
+                <div class="campo">
+                    <label>Fecha de vencimiento</label>
+                    <input type="date" name="fecha_vencimiento" required>
+                </div>
+
+                <div class="campo">
+                    <label>Estado</label>
+
+                    <select name="estado">
+
+                        <option value="Pendiente" selected>Pendiente</option>
+                        <option value="Pagada">Pagada</option>
+
+                    </select>
+
+                </div>
+
+                <div class="acciones">
+
+                    <button type="submit" class="btn">
+
+                        Guardar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Proveedor</th>
+                    <th>Valor</th>
+                    <th>Fecha de vencimiento</th>
+                    <th>Estado</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td colspan="4" style="text-align:center;">
+                        No hay cuentas por pagar registradas.
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+<script>
+
+const modal = document.getElementById("modalRegistro");
+const abrir = document.getElementById("abrirModal");
+const cerrar = document.getElementById("cerrarModal");
+
+abrir.onclick = () => {
+    modal.style.display = "flex";
+}
+
+cerrar.onclick = () => {
+    modal.style.display = "none";
+}
+
+window.onclick = (e) => {
+    if (e.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+</script>
+
+</body>
+</html>
