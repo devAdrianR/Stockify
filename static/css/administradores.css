@@ -1,0 +1,521 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:"Inter",sans-serif;
+    background:#f6f8f7;
+    color:#1f2937;
+
+}
+
+/*==========================
+HEADER
+==========================*/
+
+header{
+
+    height:75px;
+
+    background:#14532d;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 40px;
+
+    color:white;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.logo{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+}
+
+.logo img{
+
+    width:42px;
+
+}
+
+.logo h2{
+
+    font-family:"Sora",sans-serif;
+
+    font-size:24px;
+
+}
+
+.back{
+
+    text-decoration:none;
+
+    color:white;
+
+    background:#22c55e;
+
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    transition:.3s;
+
+}
+
+.back:hover{
+
+    background:#16a34a;
+
+}
+
+/*==========================
+MAIN
+==========================*/
+
+main{
+
+    width:95%;
+
+    max-width:1500px;
+
+    margin:35px auto;
+
+}
+
+/*==========================
+TITLE
+==========================*/
+
+.title{
+
+    margin-bottom:30px;
+
+}
+
+.title h1{
+
+    font-family:"Sora",sans-serif;
+
+    color:#14532d;
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.title p{
+
+    color:#6b7280;
+
+}
+
+/*==========================
+LAYOUT
+==========================*/
+
+.container{
+
+    display:grid;
+
+    grid-template-columns:380px 1fr;
+
+    gap:30px;
+
+    align-items:start;
+
+}
+
+/*==========================
+FORMULARIO
+==========================*/
+
+.form-card{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:30px;
+
+    border:1px solid #e5e7eb;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+
+}
+
+.form-card h2{
+
+    font-family:"Sora",sans-serif;
+
+    color:#14532d;
+
+    margin-bottom:25px;
+
+    font-size:24px;
+
+}
+
+.form-card h2 i{
+
+    color:#22c55e;
+
+    margin-right:10px;
+
+}
+
+.group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-bottom:18px;
+
+}
+
+.group label{
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    color:#374151;
+
+}
+
+.group input,
+.group select{
+
+    padding:12px 15px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.25s;
+
+}
+
+.group input:focus,
+.group select:focus{
+
+    border-color:#22c55e;
+
+    box-shadow:0 0 0 3px rgba(34,197,94,.15);
+
+}
+
+.buttons{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:25px;
+
+}
+
+.btn-save{
+
+    flex:1;
+
+    border:none;
+
+    cursor:pointer;
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-save:hover{
+
+    background:#15803d;
+
+}
+
+.btn-cancel{
+
+    text-decoration:none;
+
+    background:#ef4444;
+
+    color:white;
+
+    padding:13px 18px;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+    font-weight:600;
+
+}
+
+.btn-cancel:hover{
+
+    background:#dc2626;
+
+}
+
+/*==========================
+TABLA
+==========================*/
+
+.table-card{
+
+    background:white;
+
+    border-radius:15px;
+
+    border:1px solid #e5e7eb;
+
+    overflow:hidden;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+
+}
+
+.table-container{
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#14532d;
+
+    color:white;
+
+}
+
+th{
+
+    padding:18px;
+
+    text-align:left;
+
+    font-weight:600;
+
+}
+
+td{
+
+    padding:18px;
+
+    border-bottom:1px solid #eef2f7;
+
+}
+
+tbody tr:hover{
+
+    background:#f9fafb;
+
+}
+
+/*==========================
+BADGES
+==========================*/
+
+.badge{
+
+    padding:6px 14px;
+
+    border-radius:50px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.activo{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.inactivo{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+/*==========================
+ACCIONES
+==========================*/
+
+.acciones{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.acciones a{
+
+    width:38px;
+
+    height:38px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:10px;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+}
+
+.edit{
+
+    background:#3b82f6;
+
+}
+
+.edit:hover{
+
+    background:#2563eb;
+
+}
+
+.delete{
+
+    background:#ef4444;
+
+}
+
+.delete:hover{
+
+    background:#dc2626;
+
+}
+
+.activate{
+
+    background:#16a34a;
+
+}
+
+.activate:hover{
+
+    background:#15803d;
+
+}
+
+/*==========================
+ALERTAS
+==========================*/
+
+.alert{
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:20px;
+
+    font-weight:600;
+
+}
+
+.success{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.error{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+/*==========================
+RESPONSIVE
+==========================*/
+
+@media(max-width:1100px){
+
+    .container{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    header{
+
+        flex-direction:column;
+
+        height:auto;
+
+        gap:15px;
+
+        padding:20px;
+
+    }
+
+    .buttons{
+
+        flex-direction:column;
+
+    }
+
+}

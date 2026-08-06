@@ -11,6 +11,8 @@ from routes.inventario_routes import inventario_bp
 from routes.ventas_routes import ventas_bp
 from routes.finanzas_routes import finanzas_bp
 from routes.reportes_routes import reportes_bp
+from routes.empresas_routes import empresas_bp
+from routes.crud_usuarios_routes import crud_usuarios_bp
 
 load_dotenv()
 
@@ -34,6 +36,8 @@ app.register_blueprint(inventario_bp)
 app.register_blueprint(ventas_bp)
 app.register_blueprint(finanzas_bp)
 app.register_blueprint(reportes_bp)
+app.register_blueprint(empresas_bp)
+app.register_blueprint(crud_usuarios_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

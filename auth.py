@@ -1,43 +1,105 @@
 from functools import wraps
-from flask import session,redirect,url_for,flash
+from flask import session, redirect, url_for, flash
+
+
+# ======================================
+# LOGIN REQUERIDO
+# ======================================
 
 def login_required(f):
 
     @wraps(f)
-    def decorated_function(*args,**kwargs):
+    def decorated_function(*args, **kwargs):
 
         if "id_usuario" not in session:
-            flash("Debes iniciar sesión.","error")
-            return redirect(url_for("login"))
 
-        return f(*args,**kwargs)
+            flash("Debes iniciar sesión.", "error")
+
+            return redirect(url_for("auth.login"))
+
+        return f(*args, **kwargs)
 
     return decorated_function
+
+
+# ======================================
+# SUPERADMIN
+# ======================================
+
+def superadmin_required(f):
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        if session.get("rol") != "SUPERADMIN":
+
+            flash("Acceso no autorizado.", "error")
+
+            return redirect(url_for("auth.login"))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+# ======================================
+# ADMIN
+# ======================================
 
 def admin_required(f):
 
     @wraps(f)
-    def decorated_function(*args,**kwargs):
+    def decorated_function(*args, **kwargs):
 
-        if session.get("rol")!="Administrador":
-            session.clear()
-            flash("Acceso no autorizado.","error")
-            return redirect(url_for("login"))
+        if session.get("rol") != "ADMIN":
 
-        return f(*args,**kwargs)
+            flash("Acceso no autorizado.", "error")
+
+            return redirect(url_for("auth.login"))
+
+        return f(*args, **kwargs)
 
     return decorated_function
+
+
+# ======================================
+# EMPLEADO
+# ======================================
 
 def empleado_required(f):
 
     @wraps(f)
-    def decorated_function(*args,**kwargs):
+    def decorated_function(*args, **kwargs):
 
-        if session.get("rol")!="Empleado":
-            session.clear()
-            flash("Acceso no autorizado.","error")
-            return redirect(url_for("login"))
+        if session.get("rol") != "EMPLEADO":
 
-        return f(*args,**kwargs)
+            flash("Acceso no autorizado.", "error")
+
+            return redirect(url_for("auth.login"))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+
+
+
+# ======================================
+# CUALQUIER USUARIO LOGUEADO
+# ======================================
+
+def usuario_required(f):
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        if session.get("rol") not in ["SUPERADMIN", "ADMIN", "EMPLEADO"]:
+
+            flash("Acceso no autorizado.", "error")
+
+            return redirect(url_for("auth.login"))
+
+        return f(*args, **kwargs)
 
     return decorated_function

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stockify</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard_superadmin.css') }}">
+
+    <link rel="shortcut icon"
+        href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+
+        <h2>Stockify</h2>
+
+    </div>
+
+    <div class="usuario">
+
+        <span>
+
+            <i class="fa-solid fa-user-shield"></i>
+
+            {{ session["nombre_usuario"] }}
+
+        </span>
+
+        <a href="{{ url_for('auth.logout') }}">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Cerrar sesión
+
+        </a>
+
+    </div>
+
+</header>
+
+<main>
+
+    <section class="hero">
+
+        <h1>Panel de SuperAdministrador</h1>
+
+        <p>
+            Desde este panel puedes administrar las empresas registradas en
+            Stockify, asignar administradores y gestionar la plataforma.
+        </p>
+
+    </section>
+
+    <h2 class="titulo">
+
+        Administración del Sistema
+
+    </h2>
+
+    <section class="cards">
+
+        <a href="{{ url_for('empresas.empresas') }}" class ="card">
+
+            <i class="fa-solid fa-building"></i>
+
+            <h3>Empresas</h3>
+
+            <p>
+                Registrar, editar y administrar las empresas de la plataforma.
+            </p>
+
+        </a>
+
+        <a href="{{ url_for('crud_usuarios.usuarios') }}" class="card">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h3>Usuarios</h3>
+
+            <p>
+                Consultar todos los usuarios registrados y administrar sus
+                accesos.
+            </p>
+
+        </a>
+
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

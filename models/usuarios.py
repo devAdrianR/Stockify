@@ -1,3 +1,4 @@
+from flask import session
 import mysql.connector as mysql
 from config import DB_CONFIG
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -11,7 +12,7 @@ def connect():
         print(f"Error connecting to the database: {err}")
         return None
 
-def registrarUsuario(usuario,correo,password,rol):
+def registrarUsuario(id_empresa,usuario,correo,password,rol):
 
     connection=connect()
 
@@ -23,11 +24,11 @@ def registrarUsuario(usuario,correo,password,rol):
     sql="""
     SELECT id_usuario
     FROM usuarios
-    WHERE nombre_usuario=%s
-    OR correo=%s
+    WHERE id_empresa=%s AND nombre_usuario=%s
+    OR id_empresa=%s AND correo=%s
     """
 
-    cursor.execute(sql,(usuario,correo))
+    cursor.execute(sql,(id_empresa,usuario,id_empresa,correo))
 
     if cursor.fetchone():
 
@@ -43,13 +44,13 @@ def registrarUsuario(usuario,correo,password,rol):
     passwordHash=generate_password_hash(password)
 
     sql="""
-    INSERT INTO usuarios(nombre_usuario,correo,password,rol)
-    VALUES(%s,%s,%s,%s)
+    INSERT INTO usuarios(id_empresa,nombre_usuario,correo,password,rol)
+    VALUES(%s,%s,%s,%s,%s)
     """
 
     try:
 
-        cursor.execute(sql,(usuario,correo,passwordHash,rol))
+        cursor.execute(sql,(id_empresa,usuario,correo,passwordHash,rol))
 
         connection.commit()
 
@@ -121,7 +122,7 @@ def obtenerUsuarios():
 
     cursor=connection.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM usuarios ORDER BY fecha_creacion DESC")
+    cursor.execute("SELECT * FROM usuarios where id_empresa=%s ORDER BY fecha_creacion DESC",(session["id_empresa"],))
 
     usuarios=cursor.fetchall()
 
@@ -139,7 +140,7 @@ def obtenerUsuarioID(idUsuario):
 
     cursor=connection.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM usuarios WHERE id_usuario=%s",(idUsuario,))
+    cursor.execute("SELECT * FROM usuarios WHERE id_usuario=%s AND id_empresa=%s",(idUsuario,session["id_empresa"]))
 
     usuario=cursor.fetchone()
 
@@ -184,11 +185,12 @@ def actualizarUsuario(idUsuario,usuario,correo,rol,estado):
         rol=%s,
         estado=%s
     WHERE id_usuario=%s
+    AND id_empresa=%s
     """
 
     try:
 
-        cursor.execute(sql,(usuario,correo,rol,estado,idUsuario))
+        cursor.execute(sql,(usuario,correo,rol,estado,idUsuario,session["id_empresa"]))
 
         connection.commit()
 

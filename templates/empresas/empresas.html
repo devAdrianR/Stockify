@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Empresas | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/empresas.css') }}">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+
+            <img src="{{ url_for('static', filename='img/logo.png') }}">
+
+            <h2>Stockify</h2>
+
+        </div>
+
+        <a href="{{ url_for('dashboard.dashboard_superadmin') }}" class="back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+    </header>
+
+    <main>
+
+        <section class="title">
+
+            <h1>Gestión de Empresas</h1>
+
+            <p>
+
+                Administra todas las empresas registradas en la plataforma.
+
+            </p>
+
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+        {% for categoria,mensaje in messages %}
+
+        <div class="alert {{ categoria }}">
+
+            {{ mensaje }}
+
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        {% endwith %}
+
+        <section class="container">
+
+            <!-- FORMULARIO -->
+
+            <div class="form-card">
+
+                <h2>
+
+                    <i class="fa-solid fa-building"></i>
+
+                    {{ "Editar Empresa" if empresa else "Registrar Empresa" }}
+
+                </h2>
+
+                <form method="POST">
+
+                    <input type="hidden" name="id_empresa" value="{{ empresa.id_empresa if empresa else '' }}">
+
+                    <div class="group">
+
+                        <label>Nombre</label>
+
+                        <input type="text" name="nombre" required value="{{ empresa.nombre if empresa else '' }}">
+
+                    </div>
+
+                    <div class="group">
+
+                        <label>NIT</label>
+
+                        <input type="text" name="nit" required value="{{ empresa.nit if empresa else '' }}">
+
+                    </div>
+
+                    <div class="group">
+
+                        <label>Dirección</label>
+
+                        <input type="text" name="direccion" value="{{ empresa.direccion if empresa else '' }}">
+
+                    </div>
+
+                    <div class="group">
+
+                        <label>Teléfono</label>
+
+                        <input type="text" name="telefono" value="{{ empresa.telefono if empresa else '' }}">
+
+                    </div>
+
+                    {% if empresa %}
+
+                    <div class="group">
+
+                        <label>Estado</label>
+
+                        <select name="estado">
+
+                            <option value="1" {% if empresa.estado==1 %}selected{% endif %}>
+                                Activa
+                            </option>
+
+                            <option value="0" {% if empresa.estado==0 %}selected{% endif %}>
+                                Inactiva
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    {% endif %}
+
+                    <div class="buttons">
+
+                        <button type="submit" class="btn-save">
+
+                            <i class="fa-solid fa-floppy-disk"></i>
+
+                            {{ "Actualizar" if empresa else "Registrar" }}
+
+                        </button>
+
+                        {% if empresa %}
+
+                        <a href="{{ url_for('empresas.empresas') }}" class="btn-cancel">
+
+                            Cancelar
+
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- TABLA -->
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Empresa</th>
+
+                            <th>NIT</th>
+
+                            <th>Estado</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for empresa in empresas %}
+
+                        <tr>
+
+                            <td>{{ empresa.id_empresa }}</td>
+
+                            <td>{{ empresa.nombre }}</td>
+
+                            <td>{{ empresa.nit }}</td>
+
+                            <td>
+
+                                {% if empresa.estado==1 %}
+
+                                <span class="badge activo">
+
+                                    Activa
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge inactivo">
+
+                                    Inactiva
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td class="acciones">
+
+                                <a href="{{ url_for('empresas.empresas',
+        editar=empresa.id_empresa) }}" class="edit" title="Editar">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                {% if empresa.estado == 1 %}
+
+                                <a href="{{ url_for('empresas.desactivar_empresa',
+        id_empresa=empresa.id_empresa) }}" class="delete" title="Desactivar">
+
+                                    <i class="fa-solid fa-ban"></i>
+
+                                </a>
+
+                                {% else %}
+
+                                <a href="{{ url_for('empresas.activar_empresa',
+        id_empresa=empresa.id_empresa) }}" class="activate" title="Activar">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
