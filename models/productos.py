@@ -15,7 +15,7 @@ def connect():
 # REGISTRAR PRODUCTO
 # ==========================
 
-def registrarProducto(nombre, codigo, categoria, costo, precio_venta, stock, descripcion):
+def registrarProducto(id_empresa, nombre, codigo, categoria, costo, precio_venta, stock, descripcion):
 
     connection = connect()
 
@@ -27,9 +27,9 @@ def registrarProducto(nombre, codigo, categoria, costo, precio_venta, stock, des
     cursor.execute("""
         SELECT id_producto
         FROM productos
-        WHERE nombre=%s
-        OR codigo=%s
-    """, (nombre, codigo))
+        WHERE id_empresa=%s
+        AND (nombre=%s OR codigo=%s)
+    """, (id_empresa, nombre, codigo))
 
     if cursor.fetchone():
         cursor.close()
@@ -44,9 +44,10 @@ def registrarProducto(nombre, codigo, categoria, costo, precio_venta, stock, des
 
         cursor.execute("""
             INSERT INTO productos
-            (nombre,codigo,categoria,costo,precio_venta,stock,descripcion)
-            VALUES(%s,%s,%s,%s,%s,%s,%s)
+            (id_empresa,nombre,codigo,categoria,costo,precio_venta,stock,descripcion)
+            VALUES(%s,%s,%s,%s,%s,%s,%s,%s)
         """, (
+            id_empresa,
             nombre,
             codigo,
             categoria,
@@ -75,7 +76,7 @@ def registrarProducto(nombre, codigo, categoria, costo, precio_venta, stock, des
 # OBTENER PRODUCTOS
 # ==========================
 
-def obtenerProducto(id_producto=None):
+def obtenerProducto(id_empresa, id_producto=None):
 
     connection = connect()
 
@@ -91,8 +92,9 @@ def obtenerProducto(id_producto=None):
             cursor.execute("""
                 SELECT *
                 FROM productos
+                WHERE id_empresa=%s
                 ORDER BY nombre
-            """)
+            """, (id_empresa,))
 
             productos = cursor.fetchall()
 
@@ -102,7 +104,8 @@ def obtenerProducto(id_producto=None):
             SELECT *
             FROM productos
             WHERE id_producto=%s
-        """, (id_producto,))
+            AND id_empresa=%s
+        """, (id_producto, id_empresa))
 
         producto = cursor.fetchone()
 
@@ -128,6 +131,7 @@ def obtenerProducto(id_producto=None):
 # ==========================
 
 def editarProducto(
+    id_empresa,
     id_producto,
     nombre,
     codigo,
@@ -149,9 +153,11 @@ def editarProducto(
     cursor.execute("""
         SELECT id_producto
         FROM productos
-        WHERE (nombre=%s OR codigo=%s)
+        WHERE id_empresa=%s
+        AND (nombre=%s OR codigo=%s)
         AND id_producto<>%s
     """, (
+        id_empresa,
         nombre,
         codigo,
         id_producto
@@ -181,6 +187,7 @@ def editarProducto(
                 descripcion=%s,
                 estado=%s
             WHERE id_producto=%s
+            AND id_empresa=%s
         """, (
             nombre,
             codigo,
@@ -190,7 +197,8 @@ def editarProducto(
             stock,
             descripcion,
             estado,
-            id_producto
+            id_producto,
+            id_empresa
         ))
 
         connection.commit()
@@ -213,7 +221,7 @@ def editarProducto(
 # ACTIVAR PRODUCTO
 # ==========================
 
-def activarProducto(id_producto):
+def activarProducto(id_empresa, id_producto):
 
     connection = connect()
 
@@ -228,7 +236,8 @@ def activarProducto(id_producto):
             UPDATE productos
             SET estado=1
             WHERE id_producto=%s
-        """, (id_producto,))
+            AND id_empresa=%s
+        """, (id_producto, id_empresa))
 
         connection.commit()
 
@@ -250,7 +259,7 @@ def activarProducto(id_producto):
 # DESACTIVAR PRODUCTO
 # ==========================
 
-def desactivarProducto(id_producto):
+def desactivarProducto(id_empresa, id_producto):
 
     connection = connect()
 
@@ -265,7 +274,8 @@ def desactivarProducto(id_producto):
             UPDATE productos
             SET estado=0
             WHERE id_producto=%s
-        """, (id_producto,))
+            AND id_empresa=%s
+        """, (id_producto, id_empresa))
 
         connection.commit()
 
@@ -287,7 +297,7 @@ def desactivarProducto(id_producto):
 # CATEGORÍAS
 # ==========================
 
-def categorias():
+def categorias(id_empresa):
 
     connection = connect()
 
@@ -301,8 +311,9 @@ def categorias():
         cursor.execute("""
             SELECT DISTINCT categoria
             FROM productos
+            WHERE id_empresa=%s
             ORDER BY categoria
-        """)
+        """, (id_empresa,))
 
         categorias = cursor.fetchall()
 
@@ -323,7 +334,7 @@ def categorias():
 # BUSCAR PRODUCTOS
 # ==========================
 
-def buscarProducto(texto="", filtro="todos"):
+def buscarProducto(id_empresa, texto="", filtro="todos"):
 
     connection = connect()
 
@@ -341,47 +352,53 @@ def buscarProducto(texto="", filtro="todos"):
             sql = """
                 SELECT *
                 FROM productos
-                WHERE codigo LIKE %s
+                WHERE id_empresa=%s
+                AND codigo LIKE %s
                 ORDER BY nombre
             """
 
-            cursor.execute(sql, (texto,))
+            cursor.execute(sql, (id_empresa, texto))
 
         elif filtro == "nombre":
 
             sql = """
                 SELECT *
                 FROM productos
-                WHERE nombre LIKE %s
+                WHERE id_empresa=%s
+                AND nombre LIKE %s
                 ORDER BY nombre
             """
 
-            cursor.execute(sql, (texto,))
+            cursor.execute(sql, (id_empresa, texto))
 
         elif filtro == "categoria":
 
             sql = """
                 SELECT *
                 FROM productos
-                WHERE categoria LIKE %s
+                WHERE id_empresa=%s
+                AND categoria LIKE %s
                 ORDER BY nombre
             """
 
-            cursor.execute(sql, (texto,))
+            cursor.execute(sql, (id_empresa, texto))
 
         else:
 
             sql = """
                 SELECT *
                 FROM productos
-                WHERE
+                WHERE id_empresa=%s
+                AND (
                     codigo LIKE %s
                     OR nombre LIKE %s
                     OR categoria LIKE %s
+                )
                 ORDER BY nombre
             """
 
             cursor.execute(sql, (
+                id_empresa,
                 texto,
                 texto,
                 texto
