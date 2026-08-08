@@ -16,8 +16,10 @@ inventario_bp = Blueprint("inventario", __name__)
 
 def get_id_empresa():
     id_empresa = session.get("id_empresa")
+
     if id_empresa is None:
         flash("No se encontró la empresa asociada al usuario.", "error")
+
     return id_empresa
 
 
@@ -36,6 +38,7 @@ def inventario():
 def registrar_producto():
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
         return redirect(url_for("inventario.registrar_producto"))
 
@@ -50,14 +53,16 @@ def registrar_producto():
         descripcion = request.form["descripcion"].strip()
 
         ok, mensaje = registrarProducto(
+
+            id_empresa,
             nombre,
             codigo,
             categoria,
             costo,
             precio_venta,
             stock,
-            descripcion,
-            id_empresa
+            descripcion
+
         )
 
         flash(mensaje, "success" if ok else "error")
@@ -76,18 +81,32 @@ def registrar_producto():
     )
 
 
+# ==========================================
+# BUSCAR PRODUCTOS
+# ==========================================
+
 @inventario_bp.route("/buscar_productos")
 @login_required
 def buscar_productos():
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
-        return {"ok": False, "productos": []}
+        return {
+            "ok": False,
+            "productos": []
+        }
 
     texto = request.args.get("texto", "").strip()
     filtro = request.args.get("filtro", "todos")
 
-    ok, mensaje, productos = buscarProducto(texto, filtro, id_empresa)
+    ok, mensaje, productos = buscarProducto(
+
+        id_empresa,
+        texto,
+        filtro
+
+    )
 
     return {
         "ok": ok,
@@ -104,10 +123,17 @@ def buscar_productos():
 def editar_producto(id_producto):
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
         return redirect(url_for("inventario.registrar_producto"))
 
-    ok, _, productoEditar = obtenerProducto(id_producto, id_empresa)
+    ok, _, productoEditar = obtenerProducto(
+
+        id_empresa,
+        id_producto
+
+    )
+
     ok_lista, _, productos = obtenerProducto(id_empresa=id_empresa)
 
     if not ok_lista:
@@ -133,6 +159,7 @@ def editar_producto(id_producto):
 def actualizar_producto():
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
         return redirect(url_for("inventario.registrar_producto"))
 
@@ -148,6 +175,8 @@ def actualizar_producto():
     estado = request.form["estado"]
 
     ok, mensaje = editarProducto(
+
+        id_empresa,
         id_producto,
         nombre,
         codigo,
@@ -156,8 +185,8 @@ def actualizar_producto():
         precio_venta,
         stock,
         descripcion,
-        estado,
-        id_empresa
+        estado
+
     )
 
     flash(mensaje, "success" if ok else "error")
@@ -174,10 +203,16 @@ def actualizar_producto():
 def activar_producto(id_producto):
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
         return redirect(url_for("inventario.registrar_producto"))
 
-    ok, mensaje = activarProducto(id_producto, id_empresa)
+    ok, mensaje = activarProducto(
+
+        id_empresa,
+        id_producto
+
+    )
 
     flash(mensaje, "success" if ok else "error")
 
@@ -193,10 +228,16 @@ def activar_producto(id_producto):
 def desactivar_producto(id_producto):
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
         return redirect(url_for("inventario.registrar_producto"))
 
-    ok, mensaje = desactivarProducto(id_producto, id_empresa)
+    ok, mensaje = desactivarProducto(
+
+        id_empresa,
+        id_producto
+
+    )
 
     flash(mensaje, "success" if ok else "error")
 
@@ -212,16 +253,19 @@ def desactivar_producto(id_producto):
 def ver_categorias():
 
     id_empresa = get_id_empresa()
+
     if id_empresa is None:
         return redirect(url_for("inventario.registrar_producto"))
 
     ok, mensaje, lista_categorias = categorias(id_empresa)
 
     if ok:
+
         return render_template(
             "inventario/categorias.html",
             categorias=lista_categorias
         )
 
     flash(mensaje, "error")
+
     return redirect(url_for("inventario.registrar_producto"))

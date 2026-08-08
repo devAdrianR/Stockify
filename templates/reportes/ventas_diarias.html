@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ventas Diarias | Stockify</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/ventas_diarias.css') }}">
+
+    <link rel="shortcut icon"
+        href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header>
+
+        <div class="logo">
+
+            <img
+                src="{{ url_for('static', filename='img/logo.png') }}"
+                alt="Logo Stockify">
+
+            <h2>Stockify</h2>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('reportes.reportes') }}"
+            class="back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Reportes
+
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         CONTENIDO PRINCIPAL
+    ====================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+             TÍTULO
+        ================================================== -->
+
+        <section class="title">
+
+            <h1>Ventas Diarias</h1>
+
+            <p>
+                Consulta todas las ventas registradas durante
+                una fecha específica.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FILTRO
+        ================================================== -->
+
+        <section class="filter-card">
+
+            <form method="GET">
+
+
+                <div class="group">
+
+                    <label for="fecha">
+
+                        Fecha
+
+                    </label>
+
+
+                    <input
+                        type="date"
+                        id="fecha"
+                        name="fecha"
+                        value="{{ fecha }}">
+
+                </div>
+
+
+
+                <div class="buttons">
+
+
+                    <button
+                        type="submit"
+                        class="btn-search">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        Buscar
+
+                    </button>
+
+
+
+                    <a
+                        href="{{ url_for('reportes.ventas_diarias') }}"
+                        class="btn-clear">
+
+                        <i class="fa-solid fa-rotate"></i>
+
+                        Limpiar
+
+                    </a>
+
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RESUMEN
+        ================================================== -->
+
+        <section class="summary">
+
+
+            <!-- TOTAL VENTAS -->
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-cash-register"></i>
+
+                <h3>
+
+                    Total Ventas
+
+                </h3>
+
+                <span>
+
+                    {{ resumen.total_ventas }}
+
+                </span>
+
+            </div>
+
+
+
+            <!-- INGRESOS -->
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-sack-dollar"></i>
+
+                <h3>
+
+                    Ingresos
+
+                </h3>
+
+                <span>
+
+                    ${{ "{:,.0f}".format(resumen.ingresos or 0) }}
+
+                </span>
+
+            </div>
+
+
+
+            <!-- PRODUCTOS VENDIDOS -->
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-boxes-stacked"></i>
+
+                <h3>
+
+                    Productos Vendidos
+
+                </h3>
+
+                <span>
+
+                    {{ resumen.productos }}
+
+                </span>
+
+            </div>
+
+
+
+            <!-- PROMEDIO -->
+
+            <div class="summary-card">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <h3>
+
+                    Promedio Venta
+
+                </h3>
+
+                <span>
+
+                    ${{ "{:,.0f}".format(resumen.promedio or 0) }}
+
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             TABLA
+        ================================================== -->
+
+        <section class="table-card">
+
+
+            <div class="table-header">
+
+                <h2>
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    Ventas Registradas
+
+                </h2>
+
+            </div>
+
+
+
+            <div class="table-container">
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Hora</th>
+
+                            <th>Cliente</th>
+
+                            <th>Documento</th>
+
+                            <th>Método</th>
+
+                            <th>Productos</th>
+
+                            <th>Total</th>
+
+                            <th>Usuario</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                    {% if ventas %}
+
+
+                        {% for venta in ventas %}
+
+                        <tr>
+
+
+                            <!-- ID -->
+
+                            <td>
+
+                                {{ venta.id_venta }}
+
+                            </td>
+
+
+
+                            <!-- HORA -->
+
+                            <td>
+
+                                {{ venta.fecha.strftime('%H:%M') }}
+
+                            </td>
+
+
+
+                            <!-- CLIENTE -->
+
+                            <td>
+
+                                {{ venta.cliente }}
+
+                            </td>
+
+
+
+                            <!-- DOCUMENTO -->
+
+                            <td>
+
+                                {{ venta.documento or "-" }}
+
+                            </td>
+
+
+
+                            <!-- MÉTODO -->
+
+                            <td>
+
+                                {{ venta.metodo_pago }}
+
+                            </td>
+
+
+
+                            <!-- PRODUCTOS -->
+
+                            <td>
+
+                                {{ venta.productos }}
+
+                            </td>
+
+
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                ${{ "{:,.0f}".format(venta.total or 0) }}
+
+                            </td>
+
+
+
+                            <!-- USUARIO -->
+
+                            <td>
+
+                                {{ venta.nombre_usuario or "-" }}
+
+                            </td>
+
+
+
+                            <!-- ACCIONES -->
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="btn-detail"
+                                    data-id="{{ venta.id_venta }}"
+                                    title="Ver detalle">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </button>
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                class="empty">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                                No existen ventas registradas
+                                para la fecha seleccionada.
+
+                            </td>
+
+                        </tr>
+
+
+                    {% endif %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         MODAL DETALLE DE VENTA
+    ====================================================== -->
+
+    <div
+        id="modalDetalle"
+        class="modal">
+
+
+        <div class="modal-content">
+
+
+            <!-- CABECERA -->
+
+            <div class="modal-header">
+
+
+                <h2>
+
+                    <i class="fa-solid fa-file-invoice"></i>
+
+                    Detalle de Venta
+
+                </h2>
+
+
+
+                <button
+                    type="button"
+                    id="cerrarModal"
+                    title="Cerrar">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- CONTENIDO -->
+
+            <div id="detalleVenta">
+
+                <div class="loading">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <p>
+
+                        Cargando información...
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT EXTERNO
+    ====================================================== -->
+
+    <script
+        src="{{ url_for('static', filename='js/ventas_diarias.js') }}">
+    </script>
+
+
+</body>
+
+</html>

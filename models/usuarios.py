@@ -28,7 +28,7 @@ def registrarUsuario(id_empresa,usuario,correo,password,rol):
     OR id_empresa=%s AND correo=%s
     """
 
-    cursor.execute(sql,(id_empresa,usuario,id_empresa,correo))
+    cursor.execute(sql,(id_empresa,usuario,id_empresa,correo,rol))
 
     if cursor.fetchone():
 

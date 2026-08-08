@@ -33,12 +33,18 @@ def buscar_producto():
     if texto == "":
         return jsonify([])
 
-    ok, mensaje, productos = buscarProductoVenta(texto)
+    id_empresa = session.get("id_empresa")
+
+    ok, mensaje, productos = buscarProductoVenta(
+        texto,
+        id_empresa
+    )
 
     if ok:
         return jsonify(productos)
 
     return jsonify([])
+
 
 
 # ======================================
@@ -59,8 +65,17 @@ def registrar_venta():
         })
 
     id_usuario = session["id_usuario"]
+    id_empresa = session.get("id_empresa")
+
+    if not id_empresa:
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa del usuario en sesión."
+        })
 
     ok, mensaje = registrarVenta(
+
+        id_empresa,
 
         id_usuario,
 

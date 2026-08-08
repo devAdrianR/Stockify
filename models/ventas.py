@@ -19,7 +19,7 @@ def connect():
 # BUSCAR PRODUCTOS
 # ==========================================
 
-def buscarProductoVenta(texto):
+def buscarProductoVenta(texto, id_empresa):
 
     connection = connect()
 
@@ -34,6 +34,7 @@ def buscarProductoVenta(texto):
 
         cursor.execute("""
             SELECT
+                id_empresa,
                 id_producto,
                 codigo,
                 nombre,
@@ -42,6 +43,7 @@ def buscarProductoVenta(texto):
             FROM productos
             WHERE estado = 1
             AND stock > 0
+            AND id_empresa = %s
             AND (
                 nombre LIKE %s
                 OR codigo LIKE %s
@@ -49,6 +51,7 @@ def buscarProductoVenta(texto):
             ORDER BY nombre
             LIMIT 10
         """, (
+            id_empresa,
             texto,
             texto
         ))
@@ -74,6 +77,7 @@ def buscarProductoVenta(texto):
 # ==========================================
 
 def registrarVenta(
+        id_empresa,
         id_usuario,
         cliente,
         documento,
@@ -104,6 +108,7 @@ def registrarVenta(
             (
 
                 id_usuario,
+                id_empresa,
                 cliente,
                 documento,
                 fecha,
@@ -119,11 +124,12 @@ def registrarVenta(
 
             VALUES
 
-            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)
+            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)
 
         """, (
 
             id_usuario,
+            id_empresa,
             cliente,
             documento,
             fecha,
@@ -147,10 +153,13 @@ def registrarVenta(
                 SELECT stock
                 FROM productos
                 WHERE id_producto=%s
+                AND id_empresa=%s
 
             """, (
 
                 producto["id_producto"],
+
+                id_empresa
 
             ))
 
@@ -177,13 +186,14 @@ def registrarVenta(
                     id_producto,
                     cantidad,
                     precio,
-                    subtotal
+                    subtotal,
+                    id_empresa
 
                 )
 
                 VALUES
 
-                (%s,%s,%s,%s,%s)
+                (%s,%s,%s,%s,%s,%s)
 
             """, (
 
@@ -191,7 +201,8 @@ def registrarVenta(
                 producto["id_producto"],
                 producto["cantidad"],
                 producto["precio"],
-                producto["subtotal"]
+                producto["subtotal"],
+                id_empresa
 
             ))
 
@@ -202,11 +213,13 @@ def registrarVenta(
                 SET stock = stock - %s
 
                 WHERE id_producto = %s
+                AND id_empresa = %s
 
             """, (
 
                 producto["cantidad"],
-                producto["id_producto"]
+                producto["id_producto"],
+                id_empresa
 
             ))
 
