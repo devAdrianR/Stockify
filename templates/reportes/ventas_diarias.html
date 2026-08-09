@@ -9,26 +9,23 @@
 
     <title>Ventas Diarias | Stockify</title>
 
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/ventas_diarias.css') }}">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas_diarias.css') }}">
 
-    <link rel="shortcut icon"
-        href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
 
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
         rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
@@ -37,25 +34,21 @@
 
 
     <!-- =====================================================
-         HEADER
-    ====================================================== -->
+     HEADER
+====================================================== -->
 
     <header>
 
         <div class="logo">
 
-            <img
-                src="{{ url_for('static', filename='img/logo.png') }}"
-                alt="Logo Stockify">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Stockify">
 
             <h2>Stockify</h2>
 
         </div>
 
 
-        <a
-            href="{{ url_for('reportes.reportes') }}"
-            class="back">
+        <a href="{{ url_for('reportes.reportes') }}" class="back">
 
             <i class="fa-solid fa-arrow-left"></i>
 
@@ -68,19 +61,21 @@
 
 
     <!-- =====================================================
-         CONTENIDO PRINCIPAL
-    ====================================================== -->
+     CONTENIDO PRINCIPAL
+====================================================== -->
 
     <main>
 
 
         <!-- =================================================
-             TÍTULO
-        ================================================== -->
+         TÍTULO
+    ================================================== -->
 
         <section class="title">
 
-            <h1>Ventas Diarias</h1>
+            <h1>
+                Ventas Diarias
+            </h1>
 
             <p>
                 Consulta todas las ventas registradas durante
@@ -92,8 +87,8 @@
 
 
         <!-- =================================================
-             FILTRO
-        ================================================== -->
+         FILTRO DE FECHA
+    ================================================== -->
 
         <section class="filter-card">
 
@@ -103,17 +98,11 @@
                 <div class="group">
 
                     <label for="fecha">
-
                         Fecha
-
                     </label>
 
 
-                    <input
-                        type="date"
-                        id="fecha"
-                        name="fecha"
-                        value="{{ fecha }}">
+                    <input type="date" id="fecha" name="fecha" value="{{ fecha }}">
 
                 </div>
 
@@ -122,9 +111,7 @@
                 <div class="buttons">
 
 
-                    <button
-                        type="submit"
-                        class="btn-search">
+                    <button type="submit" class="btn-search">
 
                         <i class="fa-solid fa-magnifying-glass"></i>
 
@@ -134,9 +121,7 @@
 
 
 
-                    <a
-                        href="{{ url_for('reportes.ventas_diarias') }}"
-                        class="btn-clear">
+                    <a href="{{ url_for('reportes.ventas_diarias') }}" class="btn-clear">
 
                         <i class="fa-solid fa-rotate"></i>
 
@@ -155,8 +140,8 @@
 
 
         <!-- =================================================
-             RESUMEN
-        ================================================== -->
+         RESUMEN DEL DÍA
+    ================================================== -->
 
         <section class="summary">
 
@@ -168,15 +153,11 @@
                 <i class="fa-solid fa-cash-register"></i>
 
                 <h3>
-
                     Total Ventas
-
                 </h3>
 
                 <span>
-
-                    {{ resumen.total_ventas }}
-
+                    {{ resumen.total_ventas or 0 }}
                 </span>
 
             </div>
@@ -190,15 +171,11 @@
                 <i class="fa-solid fa-sack-dollar"></i>
 
                 <h3>
-
                     Ingresos
-
                 </h3>
 
                 <span>
-
                     ${{ "{:,.0f}".format(resumen.ingresos or 0) }}
-
                 </span>
 
             </div>
@@ -212,15 +189,11 @@
                 <i class="fa-solid fa-boxes-stacked"></i>
 
                 <h3>
-
                     Productos Vendidos
-
                 </h3>
 
                 <span>
-
-                    {{ resumen.productos }}
-
+                    {{ resumen.productos or 0 }}
                 </span>
 
             </div>
@@ -234,15 +207,11 @@
                 <i class="fa-solid fa-chart-line"></i>
 
                 <h3>
-
                     Promedio Venta
-
                 </h3>
 
                 <span>
-
                     ${{ "{:,.0f}".format(resumen.promedio or 0) }}
-
                 </span>
 
             </div>
@@ -253,8 +222,8 @@
 
 
         <!-- =================================================
-             TABLA
-        ================================================== -->
+         TABLA DE VENTAS
+    ================================================== -->
 
         <section class="table-card">
 
@@ -277,14 +246,11 @@
 
                 <table>
 
-
                     <thead>
 
                         <tr>
 
-                            <th>#</th>
-
-                            <th>Hora</th>
+                            <th>Fecha</th>
 
                             <th>Cliente</th>
 
@@ -305,11 +271,10 @@
                     </thead>
 
 
-
                     <tbody>
 
 
-                    {% if ventas %}
+                        {% if ventas %}
 
 
                         {% for venta in ventas %}
@@ -317,21 +282,11 @@
                         <tr>
 
 
-                            <!-- ID -->
+                            <!-- FECHA -->
 
                             <td>
 
-                                {{ venta.id_venta }}
-
-                            </td>
-
-
-
-                            <!-- HORA -->
-
-                            <td>
-
-                                {{ venta.fecha.strftime('%H:%M') }}
+                                {{ venta.fecha.strftime('%d/%m/%Y %H:%M') }}
 
                             </td>
 
@@ -341,7 +296,7 @@
 
                             <td>
 
-                                {{ venta.cliente }}
+                                {{ venta.cliente or "-" }}
 
                             </td>
 
@@ -357,11 +312,11 @@
 
 
 
-                            <!-- MÉTODO -->
+                            <!-- MÉTODO DE PAGO -->
 
                             <td>
 
-                                {{ venta.metodo_pago }}
+                                {{ venta.metodo_pago or "-" }}
 
                             </td>
 
@@ -371,7 +326,7 @@
 
                             <td>
 
-                                {{ venta.productos }}
+                                {{ venta.productos or 0 }}
 
                             </td>
 
@@ -401,16 +356,13 @@
 
                             <td>
 
-                                <button
-                                    type="button"
-                                    class="btn-detail"
-                                    data-id="{{ venta.id_venta }}"
+                                <button type="button" class="btn-detail" data-id="{{ venta.id_venta }}"
+                                    data-url="{{ url_for('reportes.detalle_venta', id_venta=venta.id_venta) }}"
                                     title="Ver detalle">
 
                                     <i class="fa-solid fa-eye"></i>
 
                                 </button>
-
                             </td>
 
 
@@ -419,14 +371,12 @@
                         {% endfor %}
 
 
-                    {% else %}
+                        {% else %}
 
 
                         <tr>
 
-                            <td
-                                colspan="9"
-                                class="empty">
+                            <td colspan="8" class="empty">
 
                                 <i class="fa-solid fa-circle-info"></i>
 
@@ -438,7 +388,7 @@
                         </tr>
 
 
-                    {% endif %}
+                        {% endif %}
 
 
                     </tbody>
@@ -456,18 +406,18 @@
 
 
     <!-- =====================================================
-         MODAL DETALLE DE VENTA
-    ====================================================== -->
+     MODAL DETALLE DE VENTA
+====================================================== -->
 
-    <div
-        id="modalDetalle"
-        class="modal">
+    <div id="modalDetalle" class="modal">
 
 
         <div class="modal-content">
 
 
-            <!-- CABECERA -->
+            <!-- =================================================
+             CABECERA DEL MODAL
+        ================================================== -->
 
             <div class="modal-header">
 
@@ -482,10 +432,7 @@
 
 
 
-                <button
-                    type="button"
-                    id="cerrarModal"
-                    title="Cerrar">
+                <button type="button" id="cerrarModal" title="Cerrar">
 
                     <i class="fa-solid fa-xmark"></i>
 
@@ -496,21 +443,23 @@
 
 
 
-            <!-- CONTENIDO -->
+            <!-- =================================================
+             CONTENIDO DEL MODAL
+        ================================================== -->
 
             <div id="detalleVenta">
+
 
                 <div class="loading">
 
                     <i class="fa-solid fa-spinner fa-spin"></i>
 
                     <p>
-
                         Cargando información...
-
                     </p>
 
                 </div>
+
 
             </div>
 
@@ -523,11 +472,10 @@
 
 
     <!-- =====================================================
-         JAVASCRIPT EXTERNO
-    ====================================================== -->
+     JAVASCRIPT
+====================================================== -->
 
-    <script
-        src="{{ url_for('static', filename='js/ventas_diarias.js') }}">
+    <script src="{{ url_for('static', filename='js/ventas_diarias.js') }}">
     </script>
 
 

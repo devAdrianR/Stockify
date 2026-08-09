@@ -110,18 +110,10 @@ def detalle_venta(id_venta):
             "mensaje": "No se encontró la empresa asociada."
         }), 400
 
-    # ==========================================
-    # OBTENER DETALLE
-    # ==========================================
-
     encabezado, productos = detalleVenta(
         id_empresa,
         id_venta
     )
-
-    # ==========================================
-    # VENTA NO ENCONTRADA
-    # ==========================================
 
     if encabezado is None:
         return jsonify({
@@ -129,15 +121,13 @@ def detalle_venta(id_venta):
             "mensaje": "Venta no encontrada."
         }), 404
 
-    # ==========================================
-    # RESPUESTA JSON
-    # ==========================================
-
     return jsonify({
         "ok": True,
         "venta": encabezado,
         "productos": productos
     })
+
+   
 
 
 # =====================================================

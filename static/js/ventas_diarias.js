@@ -5,6 +5,11 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    console.log("=================================");
+    console.log("VENTAS_DIARIAS.JS CARGADO");
+    console.log("=================================");
+
+
     /* =====================================================
        ELEMENTOS
     ===================================================== */
@@ -13,19 +18,53 @@ document.addEventListener("DOMContentLoaded", function () {
     const cerrarModal = document.getElementById("cerrarModal");
     const detalleVenta = document.getElementById("detalleVenta");
 
-    const botonesDetalle = document.querySelectorAll(".btn-detail");
+    const botonesDetalle =
+        document.querySelectorAll(".btn-detail");
 
-
-    /* =====================================================
-       COMPROBAR ELEMENTOS
-    ===================================================== */
 
     console.log("Ventas diarias cargado.");
-    console.log("Botones de detalle:", botonesDetalle.length);
+    console.log(
+        "Botones de detalle:",
+        botonesDetalle.length
+    );
 
 
     /* =====================================================
-       ABRIR DETALLE DE VENTA
+       VERIFICAR ELEMENTOS
+    ===================================================== */
+
+    if (!modal) {
+
+        console.error(
+            "ERROR: No existe #modalDetalle"
+        );
+
+        return;
+    }
+
+
+    if (!cerrarModal) {
+
+        console.error(
+            "ERROR: No existe #cerrarModal"
+        );
+
+        return;
+    }
+
+
+    if (!detalleVenta) {
+
+        console.error(
+            "ERROR: No existe #detalleVenta"
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       BOTONES DE DETALLE
     ===================================================== */
 
     botonesDetalle.forEach(function (boton) {
@@ -33,18 +72,40 @@ document.addEventListener("DOMContentLoaded", function () {
         boton.addEventListener("click", function () {
 
             const idVenta = this.dataset.id;
+            const urlDetalle = this.dataset.url;
 
-            console.log("Consultando venta:", idVenta);
+
+            console.log("=================================");
+            console.log("CLICK EN DETALLE");
+            console.log("ID venta:", idVenta);
+            console.log("URL detalle:", urlDetalle);
+            console.log("=================================");
+
 
             if (!idVenta) {
 
-                console.error("No se encontró el ID de la venta.");
+                console.error(
+                    "No se encontró el ID de la venta."
+                );
 
                 return;
-
             }
 
-            abrirDetalle(idVenta);
+
+            if (!urlDetalle) {
+
+                console.error(
+                    "No se encontró la URL del detalle."
+                );
+
+                return;
+            }
+
+
+            abrirDetalle(
+                idVenta,
+                urlDetalle
+            );
 
         });
 
@@ -52,17 +113,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =====================================================
-       FUNCIÓN ABRIR DETALLE
+       ABRIR DETALLE
     ===================================================== */
 
-    function abrirDetalle(idVenta) {
+    function abrirDetalle(idVenta, urlDetalle) {
 
-        /* Abrir modal */
+        console.log("=================================");
+        console.log("ABRIENDO DETALLE");
+        console.log("ID:", idVenta);
+        console.log("URL:", urlDetalle);
+        console.log("=================================");
 
-        modal.classList.add("active");
+
+        /* =================================================
+           MOSTRAR MODAL
+
+           IMPORTANTE:
+           El CSS utiliza .modal.show
+        ================================================= */
+
+        modal.classList.add("show");
 
 
-        /* Mostrar cargando */
+        console.log(
+            "Modal:",
+            modal
+        );
+
+
+        console.log(
+            "Contenedor detalle:",
+            detalleVenta
+        );
+
+
+        /* =================================================
+           MOSTRAR CARGANDO
+        ================================================= */
 
         detalleVenta.innerHTML = `
 
@@ -79,29 +166,46 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
 
+        console.log(
+            "Modal abierto. Ahora consultando Flask..."
+        );
+
+
         /* =================================================
            CONSULTAR FLASK
         ================================================= */
 
-        fetch(`/reportes/detalle_venta/${idVenta}`)
+        fetch(urlDetalle)
 
             .then(function (response) {
+
+                console.log(
+                    "Respuesta HTTP:",
+                    response.status
+                );
+
 
                 if (!response.ok) {
 
                     throw new Error(
-                        "Error HTTP: " + response.status
+                        "Error HTTP: " +
+                        response.status
                     );
 
                 }
+
 
                 return response.json();
 
             })
 
+
             .then(function (data) {
 
-                console.log("Respuesta detalle:", data);
+                console.log(
+                    "Respuesta de Flask:",
+                    data
+                );
 
 
                 if (!data.ok) {
@@ -116,6 +220,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
+                console.log(
+                    "Venta recibida:",
+                    data.venta
+                );
+
+
+                console.log(
+                    "Productos recibidos:",
+                    data.productos
+                );
+
+
                 mostrarDetalle(
                     data.venta,
                     data.productos
@@ -123,12 +239,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             })
 
+
             .catch(function (error) {
 
                 console.error(
                     "Error obteniendo detalle:",
                     error
                 );
+
 
                 mostrarError(
                     "No fue posible cargar el detalle de la venta."
@@ -143,7 +261,11 @@ document.addEventListener("DOMContentLoaded", function () {
        MOSTRAR DETALLE
     ===================================================== */
 
-    function mostrarDetalle(venta, productos) {
+    function mostrarDetalle(
+        venta,
+        productos
+    ) {
+
 
         if (!venta) {
 
@@ -164,23 +286,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         /* =================================================
-           FORMATEAR VALORES
+           DATOS
         ================================================= */
 
-        const subtotal = numero(venta.subtotal);
-
-        const descuento = numero(venta.descuento);
-
-        const iva = numero(venta.iva);
-
-        const total = numero(venta.total);
+        const subtotal =
+            numero(venta.subtotal);
 
 
-        /* =================================================
-           FECHA
-        ================================================= */
+        const descuento =
+            numero(venta.descuento);
 
-        const fecha = formatearFecha(venta.fecha);
+
+        const iva =
+            numero(venta.iva);
+
+
+        const total =
+            numero(venta.total);
+
+
+        const fecha =
+            formatearFecha(venta.fecha);
 
 
         /* =================================================
@@ -242,6 +368,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         colspan="5"
                         class="empty">
 
+                        <i class="fa-solid fa-circle-info"></i>
+
                         No hay productos asociados
                         a esta venta.
 
@@ -255,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         /* =================================================
-           HTML DEL DETALLE
+           GENERAR HTML
         ================================================= */
 
         detalleVenta.innerHTML = `
@@ -264,7 +392,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 <!-- =====================================
-                     INFORMACIÓN GENERAL
+                     INFORMACIÓN DE LA VENTA
                 ====================================== -->
 
                 <div class="detail-section">
@@ -288,7 +416,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             </span>
 
                             <strong>
-                                #${venta.id_venta}
+                                #${escapeHTML(
+                                    venta.id_venta
+                                )}
                             </strong>
 
                         </div>
@@ -301,7 +431,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             </span>
 
                             <strong>
-                                ${fecha}
+                                ${escapeHTML(fecha)}
                             </strong>
 
                         </div>
@@ -392,7 +522,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         <table class="detail-table">
 
-
                             <thead>
 
                                 <tr>
@@ -428,7 +557,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             </tbody>
 
-
                         </table>
 
                     </div>
@@ -438,10 +566,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 <!-- =====================================
-                     TOTALES
+                     RESUMEN DE PAGO
                 ====================================== -->
 
-                <div class="detail-section totals-section">
+                <div class="detail-section">
 
                     <h3>
 
@@ -462,7 +590,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             </span>
 
                             <strong>
-                                ${formatearMoneda(subtotal)}
+                                ${formatearMoneda(
+                                    subtotal
+                                )}
                             </strong>
 
                         </div>
@@ -476,7 +606,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             <strong class="discount">
 
-                                - ${formatearMoneda(descuento)}
+                                - ${formatearMoneda(
+                                    descuento
+                                )}
 
                             </strong>
 
@@ -490,7 +622,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             </span>
 
                             <strong>
-                                ${formatearMoneda(iva)}
+                                ${formatearMoneda(
+                                    iva
+                                )}
                             </strong>
 
                         </div>
@@ -503,7 +637,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             </span>
 
                             <strong>
-                                ${formatearMoneda(total)}
+                                ${formatearMoneda(
+                                    total
+                                )}
                             </strong>
 
                         </div>
@@ -519,7 +655,10 @@ document.addEventListener("DOMContentLoaded", function () {
                      OBSERVACIONES
                 ====================================== -->
 
-                ${venta.observaciones ? `
+                ${
+                    venta.observaciones
+                    ?
+                    `
 
                     <div class="detail-section">
 
@@ -542,12 +681,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     </div>
 
-                ` : ""}
+                    `
+                    :
+                    ""
+                }
 
 
             </div>
 
         `;
+
+
+        console.log(
+            "Detalle de venta renderizado correctamente."
+        );
 
     }
 
@@ -583,45 +730,55 @@ document.addEventListener("DOMContentLoaded", function () {
        CERRAR MODAL
     ===================================================== */
 
-    cerrarModal.addEventListener("click", function () {
-
-        cerrarDetalle();
-
-    });
-
-
-    /* =====================================================
-       CERRAR AL HACER CLICK FUERA
-    ===================================================== */
-
-    modal.addEventListener("click", function (event) {
-
-        if (event.target === modal) {
+    cerrarModal.addEventListener(
+        "click",
+        function () {
 
             cerrarDetalle();
 
         }
-
-    });
+    );
 
 
     /* =====================================================
-       CERRAR CON ESC
+       CERRAR HACIENDO CLICK FUERA
     ===================================================== */
 
-    document.addEventListener("keydown", function (event) {
+    modal.addEventListener(
+        "click",
+        function (event) {
 
-        if (event.key === "Escape") {
-
-            if (modal.classList.contains("active")) {
+            if (
+                event.target === modal
+            ) {
 
                 cerrarDetalle();
 
             }
 
         }
+    );
 
-    });
+
+    /* =====================================================
+       CERRAR CON ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains("show")
+            ) {
+
+                cerrarDetalle();
+
+            }
+
+        }
+    );
 
 
     /* =====================================================
@@ -630,7 +787,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function cerrarDetalle() {
 
-        modal.classList.remove("active");
+        console.log(
+            "Cerrando detalle..."
+        );
+
+
+        modal.classList.remove("show");
+
 
         detalleVenta.innerHTML = `
 
@@ -665,7 +828,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        const resultado = Number(valor);
+
+        const resultado =
+            Number(valor);
+
 
         return isNaN(resultado)
             ? 0
@@ -680,15 +846,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function formatearMoneda(valor) {
 
-        const numeroValor = numero(valor);
+        const numeroValor =
+            numero(valor);
 
-        return "$" + numeroValor.toLocaleString(
-            "es-CO",
-            {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }
-        );
+
+        return "$" +
+            numeroValor.toLocaleString(
+                "es-CO",
+                {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }
+            );
 
     }
 
@@ -708,14 +877,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            const fechaJS = new Date(
-                fecha.replace(" ", "T")
-            );
+            const fechaTexto =
+                String(fecha);
 
 
-            if (isNaN(fechaJS.getTime())) {
+            const fechaJS =
+                new Date(
+                    fechaTexto.replace(
+                        " ",
+                        "T"
+                    )
+                );
 
-                return fecha;
+
+            if (
+                isNaN(
+                    fechaJS.getTime()
+                )
+            ) {
+
+                return fechaTexto;
 
             }
 
@@ -733,7 +914,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } catch (error) {
 
-            return fecha;
+            return String(fecha);
 
         }
 
@@ -742,8 +923,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =====================================================
        ESCAPAR HTML
-       Evita insertar directamente contenido
-       proveniente de la base de datos.
     ===================================================== */
 
     function escapeHTML(valor) {
@@ -759,13 +938,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         return String(valor)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
 
     }
-
 
 });

@@ -190,88 +190,65 @@ def ventasDiarias(id_empresa, fecha=None):
     connection = connect()
 
     if connection is None:
-
         return []
 
     cursor = connection.cursor(dictionary=True)
 
     try:
 
-        # Si no se recibe fecha, utilizar HOY
-
         if not fecha:
-
             fecha = date.today()
-
 
         cursor.execute("""
             SELECT
 
                 v.id_venta,
-
                 v.cliente,
-
                 v.documento,
-
                 v.fecha,
-
                 v.metodo_pago,
-
                 v.subtotal,
-
                 v.descuento,
-
                 v.iva,
-
                 v.total,
-
                 v.observaciones,
-
                 v.id_usuario,
-
                 v.estado,
 
-                COUNT(DISTINCT dv.id_producto) AS productos
+                -- Cantidad total de unidades vendidas
+                COALESCE(SUM(dv.cantidad), 0) AS productos,
+
+                -- Nombre del usuario que realizó la venta
+                u.nombre_usuario
 
             FROM ventas v
 
             LEFT JOIN detalle_venta dv
-
                 ON dv.id_venta = v.id_venta
-
                 AND dv.id_empresa = v.id_empresa
 
+            LEFT JOIN usuarios u
+                ON u.id_usuario = v.id_usuario
+                AND u.id_empresa = v.id_empresa
+
             WHERE v.id_empresa = %s
-
             AND DATE(v.fecha) = %s
-
             AND v.estado = 'Completada'
 
             GROUP BY
-
                 v.id_venta,
-
                 v.cliente,
-
                 v.documento,
-
                 v.fecha,
-
                 v.metodo_pago,
-
                 v.subtotal,
-
                 v.descuento,
-
                 v.iva,
-
                 v.total,
-
                 v.observaciones,
-
                 v.id_usuario,
-
-                v.estado
+                v.estado,
+                u.nombre_usuario
 
             ORDER BY v.fecha DESC
 
@@ -282,27 +259,13 @@ def ventasDiarias(id_empresa, fecha=None):
 
         ventas = cursor.fetchall()
 
-
-        # =================================================
-        # BUSCAR NOMBRE DEL USUARIO
-        # =================================================
-
-        for venta in ventas:
-
-            venta["nombre_usuario"] = (
-                f"Usuario #{venta['id_usuario']}"
-            )
-
-
         return ventas
-
 
     except mysql.Error as err:
 
         print("Error ventasDiarias:", err)
 
         return []
-
 
     finally:
 

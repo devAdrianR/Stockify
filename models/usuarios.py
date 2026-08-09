@@ -10,7 +10,7 @@ def connect():
         return connection
     except mysql.Error as err:
         print(f"Error connecting to the database: {err}")
-        return None
+        return None 
 
 def registrarUsuario(id_empresa,usuario,correo,password,rol):
 
@@ -28,7 +28,7 @@ def registrarUsuario(id_empresa,usuario,correo,password,rol):
     OR id_empresa=%s AND correo=%s
     """
 
-    cursor.execute(sql,(id_empresa,usuario,id_empresa,correo,rol))
+    cursor.execute(sql,(id_empresa,usuario,id_empresa,correo))
 
     if cursor.fetchone():
 
