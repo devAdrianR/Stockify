@@ -7,6 +7,7 @@
     <title>Finanzas | Stockify</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/finanzas.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,11 +71,6 @@
         <span>${{ "{:,.0f}".format(utilidad or 0) }}</span>
     </div>
 
-    <div class="summary-card">
-        <i class="fa-solid fa-wallet"></i>
-        <h3>Saldo en Caja</h3>
-        <span>${{ "{:,.0f}".format(saldo_caja or 0) }}</span>
-    </div>
 
 </section>
 
@@ -120,65 +116,6 @@
 
             </a>
 
-            <a href="{{ url_for('finanzas.caja_dia') }}" class="card">
-
-                <div class="icon">
-
-                    <i class="fa-solid fa-cash-register"></i>
-
-                </div>
-
-                <h2>Caja del Día</h2>
-
-                <p>Consulta el dinero disponible al finalizar la jornada.</p>
-
-                <span class="arrow">
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                </span>
-
-            </a>
-
-            <a href="{{ url_for('finanzas.cuentas_cobrar') }}" class="card">
-
-                <div class="icon">
-
-                    <i class="fa-solid fa-hand-holding-dollar"></i>
-
-                </div>
-
-                <h2>Cuentas por Cobrar</h2>
-
-                <p>Administra los pagos pendientes de tus clientes.</p>
-
-                <span class="arrow">
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                </span>
-
-            </a>
-
-            <a href="{{ url_for('finanzas.cuentas_pagar') }}" class="card">
-
-                <div class="icon">
-
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-
-                </div>
-
-                <h2>Cuentas por Pagar</h2>
-
-                <p>Controla las obligaciones pendientes con proveedores.</p>
-
-                <span class="arrow">
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                </span>
-
-            </a>
 
             <a href="{{ url_for('finanzas.balance_general') }}" class="card">
 

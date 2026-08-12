@@ -9,9 +9,9 @@
     <title>Balance General | Stockify</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/balance_general.css') }}">
-
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -65,23 +65,7 @@
 
         </div>
 
-        <div class="summary-card">
-
-            <i class="fa-solid fa-hand-holding-dollar"></i>
-
-            <h3>Cuentas por Cobrar</h3>
-            <span>${{ "{:,.0f}".format(cuentas_cobrar|default(0, true)|float) }}</span>
-
-        </div>
-
-        <div class="summary-card">
-
-            <i class="fa-solid fa-file-invoice-dollar"></i>
-
-            <h3>Cuentas por Pagar</h3>
-            <span>${{ "{:,.0f}".format(cuentas_pagar|default(0, true)|float) }}</span>
-
-        </div>
+       
 
     </section>
 
@@ -110,16 +94,6 @@
                 <tr>
                     <td>Total de Gastos</td>
                     <td>${{ "{:,.0f}".format(total_gastos|default(0, true)|float) }}</td>
-                </tr>
-
-                <tr>
-                    <td>Cuentas por Cobrar</td>
-                    <td>${{ "{:,.0f}".format(cuentas_cobrar|default(0, true)|float) }}</td>
-                </tr>
-
-                <tr>
-                    <td>Cuentas por Pagar</td>
-                    <td>${{ "{:,.0f}".format(cuentas_pagar|default(0, true)|float) }}</td>
                 </tr>
 
                 <tr>
