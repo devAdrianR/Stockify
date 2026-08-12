@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Productos Más Vendidos | Stockify</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/productos_mas_vendidos.css') }}">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon"
+        href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header>
+
+    <div class="logo">
+
+        <img
+            src="{{ url_for('static', filename='img/logo.png') }}"
+            alt="Logo Stockify">
+
+        <h2>Stockify</h2>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('reportes.reportes') }}"
+        class="back">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Reportes
+
+    </a>
+
+</header>
+
+
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+====================================================== -->
+
+<main>
+
+
+    <!-- =================================================
+         TÍTULO
+    ================================================== -->
+
+    <section class="title">
+
+        <h1>
+            Productos Más Vendidos
+        </h1>
+
+        <p>
+            Consulta los productos con mayor cantidad de
+            unidades vendidas durante un período determinado.
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         FILTRO
+    ================================================== -->
+
+    <section class="filter-card">
+
+        <form method="GET">
+
+
+            <div class="date-group">
+
+                <div class="group">
+
+                    <label for="fecha_inicio">
+                        Fecha inicial
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fecha_inicio"
+                        name="fecha_inicio"
+                        value="{{ fecha_inicio or '' }}">
+
+                </div>
+
+
+                <div class="group">
+
+                    <label for="fecha_fin">
+                        Fecha final
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fecha_fin"
+                        name="fecha_fin"
+                        value="{{ fecha_fin or '' }}">
+
+                </div>
+
+            </div>
+
+
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="btn-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Buscar
+
+                </button>
+
+
+                <a
+                    href="{{ url_for('reportes.productos_mas_vendidos') }}"
+                    class="btn-clear">
+
+                    <i class="fa-solid fa-rotate"></i>
+
+                    Limpiar
+
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =================================================
+         RESUMEN
+    ================================================== -->
+
+    <section class="summary">
+
+
+        <!-- PRODUCTO MÁS VENDIDO -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-trophy"></i>
+
+            </div>
+
+            <h3>
+                Producto Más Vendido
+            </h3>
+
+            <span class="product-name">
+
+                {{ resumen.producto_mas_vendido or "Sin datos" }}
+
+            </span>
+
+        </div>
+
+
+
+        <!-- UNIDADES -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-boxes-stacked"></i>
+
+            </div>
+
+            <h3>
+                Unidades Vendidas
+            </h3>
+
+            <span>
+
+                {{ resumen.unidades_vendidas or 0 }}
+
+            </span>
+
+        </div>
+
+
+        <!-- INGRESOS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-sack-dollar"></i>
+
+            </div>
+
+            <h3>
+                Ingresos Generados
+            </h3>
+
+            <span>
+
+                ${{ "{:,.0f}".format(resumen.ingresos or 0) }}
+
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         TABLA
+    ================================================== -->
+
+    <section class="table-card">
+
+
+        <div class="table-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fa-solid fa-ranking-star"></i>
+
+                    Ranking de Productos
+
+                </h2>
+
+                <p>
+                    Productos ordenados de mayor a menor
+                    cantidad vendida.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            Producto
+                        </th>
+
+                        <th>
+                            Categoría
+                        </th>
+
+                        <th>
+                            Unidades Vendidas
+                        </th>
+
+                        <th>
+                            Ingresos
+                        </th>
+
+                        <th>
+                            Precio Promedio
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% if productos %}
+
+
+                        {% for producto in productos %}
+
+                        <tr>
+
+
+                            <!-- POSICIÓN -->
+
+                            <td>
+
+                                <span class="position">
+
+                                    {{ loop.index }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- PRODUCTO -->
+
+                            <td class="product-cell">
+
+                                <strong>
+                                    {{ producto.nombre_producto }}
+                                </strong>
+
+                            </td>
+
+
+
+                            <!-- CATEGORÍA -->
+
+                            <td>
+
+                                {{ producto.categoria or "-" }}
+
+                            </td>
+
+
+
+                            <!-- UNIDADES -->
+
+                            <td>
+
+                                <span class="quantity">
+
+                                    {{ producto.cantidad_vendida or 0 }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- INGRESOS -->
+
+                            <td class="money">
+
+                                ${{ "{:,.0f}".format(
+                                    producto.ingresos or 0
+                                ) }}
+
+                            </td>
+
+
+
+                            <!-- PRECIO PROMEDIO -->
+
+                            <td>
+
+                                ${{ "{:,.0f}".format(
+                                    producto.precio_promedio or 0
+                                ) }}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="empty">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                                No existen productos vendidos
+                                durante el período seleccionado.
+
+                            </td>
+
+                        </tr>
+
+
+                    {% endif %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/productos_mas_vendidos.js') }}"></script>
+
+</body>
+
+</html>

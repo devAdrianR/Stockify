@@ -5,7 +5,8 @@ from models.reportes import (
     resumenReportes,
     ventasDiarias,
     resumenVentasDiarias,
-    detalleVenta
+    detalleVenta,
+    productosMasVendidos
 )
 
 reportes_bp = Blueprint("reportes", __name__)
@@ -28,6 +29,11 @@ def reportes():
         }), 400
 
     resumen = resumenReportes(id_empresa)
+
+    resultado_productos = productosMasVendidos(id_empresa)
+
+    resumen["producto_mas_vendido"] = resultado_productos["resumen"]["producto_mas_vendido"]
+
 
     return render_template(
         "reportes/reportes.html",
@@ -153,7 +159,6 @@ def ventas_mensuales():
         resumen=resumen
     )
 
-
 # =====================================================
 # PRODUCTOS MÁS VENDIDOS
 # =====================================================
@@ -162,43 +167,64 @@ def ventas_mensuales():
 @login_required
 def productos_mas_vendidos():
 
+    # =================================================
+    # EMPRESA DEL USUARIO
+    # =================================================
+
     id_empresa = session.get("id_empresa")
 
+
     if id_empresa is None:
+
         return jsonify({
             "ok": False,
-            "mensaje": "No se encontró la empresa asociada."
+            "mensaje": "No se encontró la empresa asociada al usuario."
         }), 400
 
-    resumen = resumenReportes(id_empresa)
 
-    return render_template(
-        "reportes/productos_mas_vendidos.html",
-        resumen=resumen
+    # =================================================
+    # FECHAS
+    # =================================================
+
+    fecha_inicio = request.args.get("fecha_inicio")
+
+    fecha_fin = request.args.get("fecha_fin")
+
+
+    # =================================================
+    # CONSULTAR REPORTE
+    # =================================================
+
+    resultado = productosMasVendidos(
+        id_empresa,
+        fecha_inicio,
+        fecha_fin
     )
 
 
-# =====================================================
-# UTILIDAD POR PRODUCTO
-# =====================================================
+    # =================================================
+    # DATOS
+    # =================================================
 
-@reportes_bp.route("/reportes/utilidad_productos")
-@login_required
-def utilidad_productos():
+    resumen = resultado["resumen"]
 
-    id_empresa = session.get("id_empresa")
+    productos = resultado["productos"]
 
-    if id_empresa is None:
-        return jsonify({
-            "ok": False,
-            "mensaje": "No se encontró la empresa asociada."
-        }), 400
 
-    resumen = resumenReportes(id_empresa)
+    # =================================================
+    # MOSTRAR VISTA
+    # =================================================
 
     return render_template(
-        "reportes/utilidad_productos.html",
-        resumen=resumen
+        "reportes/productos_mas_vendidos.html",
+
+        resumen=resumen,
+
+        productos=productos,
+
+        fecha_inicio=fecha_inicio,
+
+        fecha_fin=fecha_fin
     )
 
 

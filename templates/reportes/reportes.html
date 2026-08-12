@@ -111,9 +111,9 @@
 
         <span>
 
-            {{ resumen.producto }}
+                {{ resumen.producto_mas_vendido or "Sin datos" }}
 
-        </span>
+            </span>
 
     </div>
 
@@ -145,29 +145,6 @@
 
     </a>
 
-    <a href="{{ url_for('reportes.ventas_mensuales') }}" class="card">
-
-        <div class="icon">
-
-            <i class="fa-solid fa-calendar-days"></i>
-
-        </div>
-
-        <h2>Ventas Mensuales</h2>
-
-        <p>
-
-            Visualiza el comportamiento de las ventas por mes.
-
-        </p>
-
-        <span class="arrow">
-
-            <i class="fa-solid fa-arrow-right"></i>
-
-        </span>
-
-    </a>
 
     <a href="{{ url_for('reportes.productos_mas_vendidos') }}" class="card">
 
@@ -182,54 +159,6 @@
         <p>
 
             Descubre cuáles son los productos con mayor cantidad de ventas.
-
-        </p>
-
-        <span class="arrow">
-
-            <i class="fa-solid fa-arrow-right"></i>
-
-        </span>
-
-    </a>
-
-    <a href="{{ url_for('reportes.utilidad_productos') }}" class="card">
-
-        <div class="icon">
-
-            <i class="fa-solid fa-chart-pie"></i>
-
-        </div>
-
-        <h2>Utilidad por Producto</h2>
-
-        <p>
-
-            Conoce la rentabilidad obtenida por cada producto vendido.
-
-        </p>
-
-        <span class="arrow">
-
-            <i class="fa-solid fa-arrow-right"></i>
-
-        </span>
-
-    </a>
-
-    <a href="{{ url_for('reportes.productos_sin_movimiento') }}" class="card">
-
-        <div class="icon">
-
-            <i class="fa-solid fa-box-archive"></i>
-
-        </div>
-
-        <h2>Productos sin Movimiento</h2>
-
-        <p>
-
-            Identifica los productos que llevan tiempo sin registrarse en ventas.
 
         </p>
 

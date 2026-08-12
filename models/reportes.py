@@ -525,3 +525,260 @@ def detalleVenta(id_empresa, id_venta):
 
         cursor.close()
         connection.close()
+
+# =====================================================
+# PRODUCTOS MÁS VENDIDOS
+# =====================================================
+
+def productosMasVendidos(id_empresa, fecha_inicio=None, fecha_fin=None):
+
+    connection = connect()
+
+    if connection is None:
+        return {
+            "resumen": {
+                "producto_mas_vendido": "Sin datos",
+                "unidades_vendidas": 0,
+                "productos_diferentes": 0,
+                "ingresos": 0
+            },
+            "productos": []
+        }
+
+    cursor = connection.cursor(dictionary=True)
+
+    try:
+
+        # =================================================
+        # CONSULTA PRINCIPAL
+        # =================================================
+
+        query = """
+            SELECT
+
+                p.id_producto,
+
+                p.codigo,
+
+                p.nombre AS nombre_producto,
+
+                p.categoria,
+
+                SUM(dv.cantidad) AS cantidad_vendida,
+
+                COALESCE(
+                    SUM(dv.subtotal),
+                    0
+                ) AS ingresos,
+
+                COALESCE(
+                    SUM(dv.subtotal) /
+                    NULLIF(SUM(dv.cantidad), 0),
+                    0
+                ) AS precio_promedio
+
+            FROM detalle_venta dv
+
+            INNER JOIN ventas v
+                ON v.id_venta = dv.id_venta
+                AND v.id_empresa = dv.id_empresa
+
+            INNER JOIN productos p
+                ON p.id_producto = dv.id_producto
+                AND p.id_empresa = dv.id_empresa
+
+            WHERE dv.id_empresa = %s
+
+            AND v.estado = 'Completada'
+        """
+
+        parametros = [id_empresa]
+
+
+        # =================================================
+        # FILTRO FECHA INICIAL
+        # =================================================
+
+        if fecha_inicio:
+
+            query += """
+                AND DATE(v.fecha) >= %s
+            """
+
+            parametros.append(fecha_inicio)
+
+
+        # =================================================
+        # FILTRO FECHA FINAL
+        # =================================================
+
+        if fecha_fin:
+
+            query += """
+                AND DATE(v.fecha) <= %s
+            """
+
+            parametros.append(fecha_fin)
+
+
+        # =================================================
+        # AGRUPAR Y ORDENAR
+        # =================================================
+
+        query += """
+
+            GROUP BY
+                p.id_producto,
+                p.codigo,
+                p.nombre,
+                p.categoria
+
+            ORDER BY
+                cantidad_vendida DESC,
+                ingresos DESC
+
+        """
+
+
+        # =================================================
+        # EJECUTAR CONSULTA
+        # =================================================
+
+        cursor.execute(
+            query,
+            tuple(parametros)
+        )
+
+        productos = cursor.fetchall()
+
+
+        # =================================================
+        # CONVERTIR VALORES NUMÉRICOS
+        # =================================================
+
+        for producto in productos:
+
+            producto["cantidad_vendida"] = int(
+                producto["cantidad_vendida"] or 0
+            )
+
+            producto["ingresos"] = float(
+                producto["ingresos"] or 0
+            )
+
+            producto["precio_promedio"] = float(
+                producto["precio_promedio"] or 0
+            )
+
+
+        # =================================================
+        # RESUMEN DEL PRODUCTO MÁS VENDIDO
+        # =================================================
+
+        if productos:
+
+            # El primer producto es el que más unidades vendió
+            producto_mas_vendido = productos[0]
+
+
+            nombre_producto = producto_mas_vendido[
+                "nombre_producto"
+            ]
+
+
+            unidades_vendidas = producto_mas_vendido[
+                "cantidad_vendida"
+            ]
+
+
+            ingresos = producto_mas_vendido[
+                "ingresos"
+            ]
+
+
+            # Cantidad de productos diferentes que aparecen
+            # en el ranking completo
+            productos_diferentes = len(productos)
+
+        else:
+
+            nombre_producto = "Sin datos"
+
+            unidades_vendidas = 0
+
+            ingresos = 0
+
+            productos_diferentes = 0
+
+
+        # =================================================
+        # RETORNAR RESULTADO
+        # =================================================
+
+        return {
+
+            "resumen": {
+
+                "producto_mas_vendido":
+                    nombre_producto,
+
+                "unidades_vendidas":
+                    unidades_vendidas,
+
+                "productos_diferentes":
+                    productos_diferentes,
+
+                "ingresos":
+                    ingresos
+
+            },
+
+            "productos":
+                productos
+
+        }
+
+
+    # =====================================================
+    # ERROR MYSQL
+    # =====================================================
+
+    except mysql.Error as err:
+
+        print(
+            "Error productosMasVendidos:",
+            err
+        )
+
+        return {
+
+            "resumen": {
+
+                "producto_mas_vendido":
+                    "Sin datos",
+
+                "unidades_vendidas":
+                    0,
+
+                "productos_diferentes":
+                    0,
+
+                "ingresos":
+                    0
+
+            },
+
+            "productos": []
+
+        }
+
+
+    # =====================================================
+    # CERRAR CONEXIÓN
+    # =====================================================
+
+    finally:
+
+        cursor.close()
+
+        connection.close()

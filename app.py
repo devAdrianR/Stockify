@@ -25,7 +25,7 @@ try:
     cursor = con.cursor()
     cursor.execute("SELECT DATABASE()")
     cursor.fetchone()
-    print("Conexión exitosa desde app.py")
+    print("Conexión exitosa a la base de datos")
     con.close()
 except Exception as e:
     print(f"Error en la conexión: {e}")
