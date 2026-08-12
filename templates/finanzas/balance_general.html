@@ -52,7 +52,7 @@
             <i class="fa-solid fa-arrow-trend-up"></i>
 
             <h3>Total Ingresos</h3>
-            <span>${{ "{:,.0f}".format(total_ingresos) }}</span>
+            <span>${{ "{:,.0f}".format(total_ingresos|default(0, true)|float) }}</span>
 
         </div>
 
@@ -61,7 +61,7 @@
             <i class="fa-solid fa-arrow-trend-down"></i>
 
             <h3>Total Gastos</h3>
-            <span>${{ "{:,.0f}".format(total_gastos) }}</span>
+            <span>${{ "{:,.0f}".format(total_gastos|default(0, true)|float) }}</span>
 
         </div>
 
@@ -70,8 +70,7 @@
             <i class="fa-solid fa-hand-holding-dollar"></i>
 
             <h3>Cuentas por Cobrar</h3>
-
-            <span>$0</span>
+            <span>${{ "{:,.0f}".format(cuentas_cobrar|default(0, true)|float) }}</span>
 
         </div>
 
@@ -80,8 +79,7 @@
             <i class="fa-solid fa-file-invoice-dollar"></i>
 
             <h3>Cuentas por Pagar</h3>
-
-            <span>$0</span>
+            <span>${{ "{:,.0f}".format(cuentas_pagar|default(0, true)|float) }}</span>
 
         </div>
 
@@ -106,40 +104,32 @@
 
                 <tr>
                     <td>Total de Ingresos</td>
-                    <td>${{ "{:,.0f}".format(total_ingresos) }}</td>
+                    <td>${{ "{:,.0f}".format(total_ingresos|default(0, true)|float) }}</td>
                 </tr>
 
                 <tr>
-
                     <td>Total de Gastos</td>
-
-                    <td>${{ "{:,.0f}".format(total_gastos) }}</td>
-
+                    <td>${{ "{:,.0f}".format(total_gastos|default(0, true)|float) }}</td>
                 </tr>
 
                 <tr>
-
                     <td>Cuentas por Cobrar</td>
-
-                    <td>$0</td>
-
+                    <td>${{ "{:,.0f}".format(cuentas_cobrar|default(0, true)|float) }}</td>
                 </tr>
 
                 <tr>
-
                     <td>Cuentas por Pagar</td>
-
-                    <td>$0</td>
-
+                    <td>${{ "{:,.0f}".format(cuentas_pagar|default(0, true)|float) }}</td>
                 </tr>
 
                 <tr>
-
                     <td><strong>Utilidad Neta</strong></td>
-
-                    <td><strong>$0</strong></td>
-
-                </tr>
+                <td>
+        <strong>
+            ${{ "{:,.0f}".format(utilidad_neta|default(0, true)|float) }}
+        </strong>
+    </td>
+</tr>
 
             </tbody>
 

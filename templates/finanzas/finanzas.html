@@ -52,47 +52,31 @@
 
         <section class="summary">
 
-            <div class="summary-card">
+    <div class="summary-card">
+        <i class="fa-solid fa-sack-dollar"></i>
+        <h3>Ingresos del Día</h3>
+        <span>${{ "{:,.0f}".format(ingresos_dia or 0) }}</span>
+    </div>
 
-                <i class="fa-solid fa-sack-dollar"></i>
+    <div class="summary-card">
+        <i class="fa-solid fa-money-bill-wave"></i>
+        <h3>Gastos del Día</h3>
+        <span>${{ "{:,.0f}".format(gastos_dia or 0) }}</span>
+    </div>
 
-                <h3>Ingresos del Día</h3>
+    <div class="summary-card">
+        <i class="fa-solid fa-chart-line"></i>
+        <h3>Utilidad</h3>
+        <span>${{ "{:,.0f}".format(utilidad or 0) }}</span>
+    </div>
 
-                <span>$0</span>
+    <div class="summary-card">
+        <i class="fa-solid fa-wallet"></i>
+        <h3>Saldo en Caja</h3>
+        <span>${{ "{:,.0f}".format(saldo_caja or 0) }}</span>
+    </div>
 
-            </div>
-
-            <div class="summary-card">
-
-                <i class="fa-solid fa-money-bill-wave"></i>
-
-                <h3>Gastos del Día</h3>
-
-                <span>$0</span>
-
-            </div>
-
-            <div class="summary-card">
-
-                <i class="fa-solid fa-chart-line"></i>
-
-                <h3>Utilidad</h3>
-
-                <span>$0</span>
-
-            </div>
-
-            <div class="summary-card">
-
-                <i class="fa-solid fa-wallet"></i>
-
-                <h3>Saldo en Caja</h3>
-
-                <span>$0</span>
-
-            </div>
-
-        </section>
+</section>
 
         <section class="modules">
 
