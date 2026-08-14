@@ -1,6 +1,10 @@
+import os
+
 from io import BytesIO
 from decimal import Decimal
 from datetime import datetime
+
+from flask import current_app
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT
@@ -52,6 +56,134 @@ def formatear_fecha(fecha):
 
 
 # =====================================================
+# RUTA DEL LOGO
+# =====================================================
+
+def obtener_ruta_logo():
+
+    try:
+
+        return os.path.join(
+            current_app.static_folder,
+            "img",
+            "logo.png"
+        )
+
+    except RuntimeError:
+
+        return None
+
+
+# =====================================================
+# ENCABEZADO Y PIE DE PÁGINA (CANVAS)
+# =====================================================
+
+def dibujar_marca_y_pie(canvas, documento):
+
+    canvas.saveState()
+
+
+    # =================================================
+    # LOGO + "STOCKIFY" (ESQUINA SUPERIOR DERECHA)
+    # =================================================
+
+    ruta_logo = obtener_ruta_logo()
+
+    ancho_pagina, alto_pagina = LETTER
+
+
+    x_derecha = ancho_pagina - 15 * mm
+
+    y_logo = alto_pagina - 22 * mm
+
+
+    if ruta_logo and os.path.isfile(ruta_logo):
+
+        try:
+
+            canvas.drawImage(
+
+                ruta_logo,
+
+                x_derecha - 12 * mm,
+
+                y_logo,
+
+                width=12 * mm,
+
+                height=12 * mm,
+
+                preserveAspectRatio=True,
+
+                mask="auto"
+
+            )
+
+        except Exception as err:
+
+            print(
+                "No fue posible dibujar el logo:",
+                err
+            )
+
+
+    canvas.setFont(
+        "Helvetica-Bold",
+        9
+    )
+
+    canvas.setFillColor(
+        colors.HexColor("#2D6A4F")
+    )
+
+    canvas.drawRightString(
+        x_derecha,
+
+        y_logo - 4 * mm,
+
+        "STOCKIFY"
+    )
+
+
+    # =================================================
+    # PIE DE PÁGINA
+    # =================================================
+
+    canvas.setFont(
+        "Helvetica",
+        7.5
+    )
+
+    canvas.setFillColor(
+        colors.HexColor("#888888")
+    )
+
+    canvas.drawCentredString(
+
+        ancho_pagina / 2,
+
+        10 * mm,
+
+        "Esta factura fue generada automáticamente por Stockify."
+
+    )
+
+
+    canvas.drawRightString(
+
+        ancho_pagina - 15 * mm,
+
+        10 * mm,
+
+        f"Página {documento.page}"
+
+    )
+
+
+    canvas.restoreState()
+
+
+# =====================================================
 # GENERAR FACTURA PDF
 # =====================================================
 
@@ -76,7 +208,11 @@ def generarFacturaPDF(venta, productos):
 
         topMargin=15 * mm,
 
-        bottomMargin=15 * mm
+        bottomMargin=20 * mm,
+
+        title=f"Factura #{venta['id_venta']}",
+
+        author="Stockify"
 
     )
 
@@ -193,9 +329,14 @@ def generarFacturaPDF(venta, productos):
     # ENCABEZADO
     # =================================================
 
+    nombre_empresa = venta.get(
+        "empresa_nombre"
+    ) or "Empresa"
+
+
     elementos.append(
         Paragraph(
-            "STOCKIFY",
+            nombre_empresa,
             titulo
         )
     )
@@ -288,6 +429,23 @@ def generarFacturaPDF(venta, productos):
             ),
 
             Paragraph(
+                "<b>Vendedor</b>",
+                normal
+            ),
+
+            Paragraph(
+                str(
+                    venta.get(
+                        "vendedor",
+                        "-"
+                    )
+                ),
+                normal
+            )
+        ],
+
+        [
+            Paragraph(
                 "<b>Estado</b>",
                 normal
             ),
@@ -299,6 +457,16 @@ def generarFacturaPDF(venta, productos):
                         "-"
                     )
                 ),
+                normal
+            ),
+
+            Paragraph(
+                "",
+                normal
+            ),
+
+            Paragraph(
+                "",
                 normal
             )
         ]
@@ -766,7 +934,6 @@ def generarFacturaPDF(venta, productos):
     )
 
 
-    # Alinear los totales a la derecha
     tabla_totales.hAlign = "RIGHT"
 
 
@@ -813,7 +980,7 @@ def generarFacturaPDF(venta, productos):
 
 
     # =================================================
-    # PIE DE FACTURA
+    # CIERRE
     # =================================================
 
     elementos.append(
@@ -834,7 +1001,13 @@ def generarFacturaPDF(venta, productos):
     # =================================================
 
     documento.build(
-        elementos
+
+        elementos,
+
+        onFirstPage=dibujar_marca_y_pie,
+
+        onLaterPages=dibujar_marca_y_pie
+
     )
 
 

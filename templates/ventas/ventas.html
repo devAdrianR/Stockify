@@ -9,373 +9,717 @@
 
     <title>Ventas | Stockify</title>
 
+
+    <!-- CSS PRINCIPAL -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
 
+
+    <!-- CSS NAVBAR -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
+
+    <!-- FAVICON -->
+
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+
+    <!-- GOOGLE FONTS -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
+
 <body>
 
-<header>
 
-    <div class="logo">
+    <!-- =====================================================
+     NAVBAR
+====================================================== -->
 
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+    <header class="main-header">
 
-        <h2>Stockify</h2>
 
-    </div>
+        <!-- MARCA -->
 
-    <a href="{{ url_for('dashboard.dashboard') }}" class="back">
+        <div class="main-brand">
 
-        <i class="fa-solid fa-arrow-left"></i>
 
-        Dashboard
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Stockify">
 
-    </a>
 
-</header>
+            <div class="main-brand-text">
 
-<main>
 
-    <section class="title">
+                <h2>
+                    {{ empresa.nombre }}
+                </h2>
 
-        <h1>Registrar Venta</h1>
 
-        <p>Registra una venta con uno o varios productos.</p>
+                <span class="company-name">
+                    Stockify
+                </span>
 
-    </section>
 
-    <form id="formVenta">
+            </div>
 
-        <!-- ========================= -->
-        <!-- PARTE SUPERIOR -->
-        <!-- ========================= -->
+        </div>
 
-        <section class="top-content">
 
-            <!-- PANEL IZQUIERDO -->
 
-            <div class="left-panel">
+        <!-- NAVEGACIÓN -->
 
-                <div class="card">
+        <nav class="main-nav">
 
-                    <h2>
+
+            <!-- VOLVER AL DASHBOARD -->
+
+            <a href="{{ url_for('dashboard.dashboard') }}" class="back-dashboard">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Dashboard
+
+            </a>
+
+
+
+            <!-- MENÚ DE USUARIO -->
+
+            <div class="user-menu">
+
+
+                <button type="button" class="user-button" id="userMenuButton">
+
+
+                    <span class="user-avatar">
 
                         <i class="fa-solid fa-user"></i>
 
-                        Información del Cliente
+                    </span>
 
-                    </h2>
 
-                    <div class="grid2">
+                    <span class="user-data">
 
-                        <div class="group">
+                        <strong>
 
-                            <label>Nombre del Cliente</label>
+                            {{ session.get(
+                            "nombre_usuario",
+                            "Usuario"
+                            ) }}
 
-                            <input
-                                type="text"
-                                id="cliente"
-                                name="cliente"
-                                placeholder="Nombre completo">
+                        </strong>
 
-                        </div>
 
-                        <div class="group">
+                        <small>
 
-                            <label>CC / NIT</label>
+                            {{ session.get(
+                            "rol",
+                            "Usuario"
+                            ) }}
 
-                            <input
-                                type="text"
-                                id="documento"
-                                name="documento"
-                                placeholder="Opcional">
+                        </small>
 
-                        </div>
+                    </span>
 
-                        <div class="group">
 
-                            <label>Fecha</label>
+                    <i class="fa-solid fa-chevron-down"></i>
 
-                            <input
-                                type="date"
-                                id="fecha"
-                                name="fecha">
 
-                        </div>
+                </button>
 
-                        <div class="group">
 
-                            <label>Método de Pago</label>
 
-                            <select
-                                id="metodo_pago"
-                                name="metodo_pago">
+                <!-- DROPDOWN -->
 
-                                <option>Efectivo</option>
-                                <option>Nequi</option>
-                                <option>Daviplata</option>
-                                <option>Transferencia</option>
-                                <option>Tarjeta Débito</option>
-                                <option>Tarjeta Crédito</option>
+                <div class="user-dropdown" id="userDropdown">
 
-                            </select>
 
-                        </div>
+                    <div class="dropdown-user">
+
+
+                        <strong>
+
+                            {{ session.get(
+                            "nombre_usuario",
+                            "Usuario"
+                            ) }}
+
+                        </strong>
+
+
+                        <span>
+
+                            {{ session.get(
+                            "rol",
+                            "Usuario"
+                            ) }}
+
+                        </span>
+
 
                     </div>
 
-                    <hr>
 
-                    <h2>
 
-                        <i class="fa-solid fa-cart-plus"></i>
+                    <div class="dropdown-divider"></div>
 
-                        Agregar Producto
 
-                    </h2>
 
-                    <div class="grid4">
+                    <a href="#" class="dropdown-item">
 
-                        <div class="group product">
+                        <i class="fa-solid fa-user"></i>
 
-                            <label>Producto</label>
+                        Mi perfil
 
-                            <div class="search-product">
+                    </a>
 
-                                <input
-                                    type="text"
-                                    id="buscar_producto"
-                                    placeholder="Buscar por nombre o código..."
-                                    autocomplete="off">
 
-                                <i class="fa-solid fa-magnifying-glass"></i>
 
-                                <div
-                                    id="lista_productos"
-                                    class="results">
+                    <a href="{{ url_for('auth.logout') }}" class="dropdown-item logout-item">
 
-                                </div>
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Cerrar sesión
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </nav>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+     CONTENIDO
+====================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+         TÍTULO
+    ================================================== -->
+
+        <section class="title">
+
+
+            <h1>
+                Registrar Venta
+            </h1>
+
+
+            <p>
+                Registra una venta con uno o varios productos.
+            </p>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+         FORMULARIO
+    ================================================== -->
+
+        <form id="formVenta">
+
+
+            <!-- =================================================
+             PARTE SUPERIOR
+        ================================================== -->
+
+            <section class="top-content">
+
+
+                <!-- =========================================
+                 PANEL IZQUIERDO
+            ========================================== -->
+
+                <div class="left-panel">
+
+
+                    <div class="card">
+
+
+                        <!-- CLIENTE -->
+
+                        <h2>
+
+                            <i class="fa-solid fa-user"></i>
+
+                            Información del Cliente
+
+                        </h2>
+
+
+
+                        <div class="grid2">
+
+
+                            <!-- NOMBRE -->
+
+                            <div class="group">
+
+                                <label for="cliente">
+                                    Nombre del Cliente
+                                </label>
+
+
+                                <input type="text" id="cliente" name="cliente" placeholder="Nombre completo">
 
                             </div>
 
-                            <input
-                                type="hidden"
-                                id="id_producto">
+
+
+                            <!-- DOCUMENTO -->
+
+                            <div class="group">
+
+                                <label for="documento">
+                                    CC / NIT
+                                </label>
+
+
+                                <input type="text" id="documento" name="documento" placeholder="Opcional">
+
+                            </div>
+
+
+
+                            <!-- FECHA -->
+
+                            <div class="group">
+
+                                <label for="fecha">
+                                    Fecha
+                                </label>
+
+
+                                <input type="date" id="fecha" name="fecha">
+
+                            </div>
+
+
+
+                            <!-- MÉTODO DE PAGO -->
+
+                            <div class="group">
+
+                                <label for="metodo_pago">
+                                    Método de Pago
+                                </label>
+
+
+                                <select id="metodo_pago" name="metodo_pago">
+
+                                    <option value="Efectivo">
+                                        Efectivo
+                                    </option>
+
+                                    <option value="Nequi">
+                                        Nequi
+                                    </option>
+
+                                    <option value="Daviplata">
+                                        Daviplata
+                                    </option>
+
+                                    <option value="Transferencia">
+                                        Transferencia
+                                    </option>
+
+                                    <option value="Tarjeta Débito">
+                                        Tarjeta Débito
+                                    </option>
+
+                                    <option value="Tarjeta Crédito">
+                                        Tarjeta Crédito
+                                    </option>
+
+                                </select>
+
+                            </div>
+
 
                         </div>
 
-                        <div class="group">
 
-                            <label>Cantidad</label>
 
-                            <input
-                                type="number"
-                                id="cantidad"
-                                min="1"
-                                value="1">
+                        <hr>
+
+
+
+                        <!-- AGREGAR PRODUCTO -->
+
+                        <h2>
+
+                            <i class="fa-solid fa-cart-plus"></i>
+
+                            Agregar Producto
+
+                        </h2>
+
+
+
+                        <div class="grid4">
+
+
+                            <!-- PRODUCTO -->
+
+                            <div class="group product">
+
+
+                                <label for="buscar_producto">
+                                    Producto
+                                </label>
+
+
+                                <div class="search-product">
+
+
+                                    <input type="text" id="buscar_producto" placeholder="Buscar por nombre o código..."
+                                        autocomplete="off">
+
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                                    <div id="lista_productos" class="results"></div>
+
+
+                                </div>
+
+
+                                <input type="hidden" id="id_producto">
+
+
+                            </div>
+
+
+
+                            <!-- CANTIDAD -->
+
+                            <div class="group">
+
+
+                                <label for="cantidad">
+                                    Cantidad
+                                </label>
+
+
+                                <input type="number" id="cantidad" min="1" value="1">
+
+
+                            </div>
+
+
+
+                            <!-- PRECIO -->
+
+                            <div class="group">
+
+
+                                <label for="precio">
+                                    Precio de venta
+                                </label>
+
+
+                                <input type="number" id="precio" min="0" step="0.01">
+
+
+                                <small id="precio_minimo" class="price-help">
+
+
+
+                                </small>
+
+
+                            </div>
+
+                            <!-- DESCUENTO -->
+                            <div class="group">
+                                <label for="descuento_input">
+                                    Descuento (%)
+                                </label>
+                                <input type="number" id="descuento_input" min="0" max="100" step="1" value="0"
+                                    placeholder="0">
+                            </div>
+
+
+
+                            <!-- AGREGAR -->
+
+                            <div class="group button-group">
+
+
+                                <button type="button" id="agregar_producto" class="add">
+
+                                    <i class="fa-solid fa-plus"></i>
+
+                                    Agregar
+
+                                </button>
+
+
+                            </div>
+
 
                         </div>
 
-                        <div class="group">
 
-                            <label>Precio</label>
+                    </div>
 
-                            <input
-                                type="number"
-                                id="precio"
-                                readonly>
+
+                </div>
+
+
+
+                <!-- =========================================
+                 PANEL DERECHO
+            ========================================== -->
+
+                <aside class="summary">
+
+
+                    <div class="card">
+
+
+                        <h2>
+
+                            <i class="fa-solid fa-receipt"></i>
+
+                            Resumen
+
+                        </h2>
+
+
+
+                        <div class="summary-list">
+
+
+                            <!-- PRODUCTOS -->
+
+                            <div class="item">
+
+
+                                <span>
+                                    Productos
+                                </span>
+
+
+                                <strong id="total_productos">
+                                    0
+                                </strong>
+
+
+                            </div>
+
+
+
+                            <!-- SUBTOTAL -->
+
+                            <div class="item">
+
+
+                                <span>
+                                    Subtotal
+                                </span>
+
+
+                                <strong id="subtotal">
+                                    $0
+                                </strong>
+
+
+                            </div>
+
+
+
+                            <!-- DESCUENTO -->
+                            <div class="item">
+                                <span>Descuento</span>
+                                <strong id="descuento">$0</strong>
+                            </div>
+
+
+                            <!-- IVA -->
+                            <div class="item iva-control">
+
+                                <label>
+                                    <input type="checkbox" id="aplicar_iva">
+                                    Aplicar IVA (19%)
+                                </label>
+
+                                <strong id="iva">$0</strong>
+
+                            </div>
+
+
+                            <!-- TOTAL -->
+                            <div class="total">
+                                <span>Total</span>
+                                <strong id="total">$0</strong>
+                            </div>
+
+                        </div> <!-- cierra summary-list -->
+
+
+                        <!-- OBSERVACIONES -->
+                        <div class="obs">
+
+                            <label for="observaciones">
+                                Observaciones
+                            </label>
+
+                            <textarea id="observaciones" name="observaciones"
+                                placeholder="Observaciones de la venta..."></textarea>
 
                         </div>
 
-                        <div class="group button-group">
 
-                            <button
-                                type="button"
-                                id="agregar_producto"
-                                class="add">
+                        <!-- BOTONES -->
+                        <div class="buttons-summary">
 
-                                <i class="fa-solid fa-plus"></i>
+                            <button type="submit" class="save">
+                                <i class="fa-solid fa-file-invoice"></i>
+                                Registrar Venta
+                            </button>
 
-                                Agregar
-
+                            <button type="reset" class="cancel">
+                                <i class="fa-solid fa-xmark"></i>
+                                Cancelar
                             </button>
 
                         </div>
 
-                    </div>
+                    </div> <!-- cierra card -->
+
+                </aside>
+
+            </section>
+
+
+
+            <!-- =================================================
+             TABLA DE PRODUCTOS
+        ================================================== -->
+
+            <section class="card table-card">
+
+
+                <h2>
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                    Productos de la Venta
+
+                </h2>
+
+
+
+                <div class="table-container">
+
+
+                    <table>
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Producto
+                                </th>
+
+                                <th>
+                                    Cantidad
+                                </th>
+
+                                <th>
+                                    Precio
+                                </th>
+
+                                <th>
+                                    Subtotal
+                                </th>
+
+                                <th>
+                                    Acción
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody id="detalle_venta">
+
+
+                            <tr>
+
+
+                                <td colspan="5" class="empty">
+
+                                    No hay productos agregados.
+
+                                </td>
+
+
+                            </tr>
+
+
+                        </tbody>
+
+
+                    </table>
+
 
                 </div>
 
-            </div>
 
-            <!-- PANEL DERECHO -->
+            </section>
 
-            <aside class="summary">
 
-                <div class="card">
+        </form>
 
-                    <h2>
 
-                        <i class="fa-solid fa-receipt"></i>
+    </main>
 
-                        Resumen
 
-                    </h2>
 
-                    <div class="summary-list">
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
 
-                        <div class="item">
+    <script src="{{ url_for('static', filename='js/ventas.js') }}"></script>
 
-                            <span>Productos</span>
 
-                            <strong id="total_productos">0</strong>
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
 
-                        </div>
 
-                        <div class="item">
-
-                            <span>Subtotal</span>
-
-                            <strong id="subtotal">$0</strong>
-
-                        </div>
-
-                        <div class="item">
-
-                            <span>Descuento</span>
-
-                            <strong id="descuento">$0</strong>
-
-                        </div>
-
-                        <div class="item">
-
-                            <span>IVA</span>
-
-                            <strong id="iva">$0</strong>
-
-                        </div>
-
-                        <div class="total">
-
-                            <span>Total</span>
-
-                            <strong id="total">$0</strong>
-
-                        </div>
-
-                    </div>
-
-                    <div class="obs">
-
-                        <label>Observaciones</label>
-
-                        <textarea
-                            id="observaciones"
-                            name="observaciones"
-                            placeholder="Observaciones de la venta..."></textarea>
-
-                    </div>
-
-                    <div class="buttons-summary">
-
-                        <button
-                            type="submit"
-                            class="save">
-
-                            <i class="fa-solid fa-floppy-disk"></i>
-
-                            Registrar Venta
-
-                        </button>
-
-                        <button
-                            type="reset"
-                            class="cancel">
-
-                            <i class="fa-solid fa-xmark"></i>
-
-                            Cancelar
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-        </section>
-
-        <!-- ========================= -->
-        <!-- TABLA PRODUCTOS -->
-        <!-- ========================= -->
-
-        <section class="card table-card">
-
-            <h2>
-
-                <i class="fa-solid fa-box-open"></i>
-
-                Productos de la Venta
-
-            </h2>
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Subtotal</th>
-                            <th>Acción</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="detalle_venta">
-
-                        <tr id="fila_vacia">
-
-                            <td colspan="5" class="empty">
-
-                                No hay productos agregados.
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-    </form>
-
-</main>
-<script src="{{ url_for('static', filename='js/ventas.js') }}"></script>
 </body>
 
 </html>

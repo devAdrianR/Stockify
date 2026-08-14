@@ -1,6 +1,16 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session
+)
 
 from auth import login_required
+
+from models.dashboard import obtenerEmpresa
 
 from models.finanzas import (
     registrarIngreso,
@@ -12,7 +22,10 @@ from models.finanzas import (
 )
 
 
-finanzas_bp = Blueprint("finanzas", __name__)
+finanzas_bp = Blueprint(
+    "finanzas",
+    __name__
+)
 
 
 # =====================================================
@@ -36,17 +49,43 @@ def finanzas():
             url_for("auth.login")
         )
 
+
+    # ==============================================
+    # OBTENER EMPRESA
+    # ==============================================
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        flash(
+            "No se encontró la empresa.",
+            "error"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
     # ==============================================
     # OBTENER RESUMEN
     # ==============================================
 
-    resumen = resumenFinanzas(id_empresa)
+    resumen = resumenFinanzas(
+        id_empresa
+    )
+
 
     # ==============================================
     # MOSTRAR FINANZAS
     # ==============================================
 
     return render_template(
+
         "finanzas/finanzas.html",
 
         ingresos_dia=resumen["ingresos_dia"],
@@ -55,7 +94,10 @@ def finanzas():
 
         utilidad=resumen["utilidad"],
 
-        saldo_caja=resumen["saldo_caja"]
+        saldo_caja=resumen["saldo_caja"],
+
+        empresa=empresa
+
     )
 
 
@@ -76,26 +118,40 @@ def registrar_ingreso():
         # DATOS DEL FORMULARIO
         # ==============================================
 
-        concepto = request.form["concepto"].strip()
+        concepto = request.form[
+            "concepto"
+        ].strip()
 
-        monto = request.form["monto"]
+        monto = request.form[
+            "monto"
+        ]
 
-        categoria = request.form["categoria"]
+        categoria = request.form[
+            "categoria"
+        ]
 
-        fecha = request.form["fecha"]
+        fecha = request.form[
+            "fecha"
+        ]
 
         descripcion = request.form.get(
             "descripcion",
             ""
         ).strip()
 
+
         # ==============================================
         # SESIÓN
         # ==============================================
 
-        id_empresa = session.get("id_empresa")
+        id_empresa = session.get(
+            "id_empresa"
+        )
 
-        id_usuario = session.get("id_usuario")
+        id_usuario = session.get(
+            "id_usuario"
+        )
+
 
         if not id_empresa or not id_usuario:
 
@@ -107,6 +163,7 @@ def registrar_ingreso():
             return redirect(
                 url_for("auth.login")
             )
+
 
         # ==============================================
         # REGISTRAR MEDIANTE EL MODEL
@@ -127,7 +184,9 @@ def registrar_ingreso():
             fecha,
 
             descripcion
+
         )
+
 
         # ==============================================
         # RESULTADO
@@ -141,22 +200,66 @@ def registrar_ingreso():
             )
 
             return redirect(
-                url_for("finanzas.finanzas")
+                url_for(
+                    "finanzas.finanzas"
+                )
             )
 
-        else:
 
-            flash(
-                mensaje,
-                "error"
-            )
+        flash(
+            mensaje,
+            "error"
+        )
+
+
+    # ==============================================
+    # OBTENER EMPRESA PARA EL NAVBAR
+    # ==============================================
+
+    id_empresa = session.get(
+        "id_empresa"
+    )
+
+
+    if not id_empresa:
+
+        flash(
+            "No se pudo identificar la empresa.",
+            "error"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        flash(
+            "No se encontró la empresa.",
+            "error"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
 
     # ==============================================
     # MOSTRAR FORMULARIO
     # ==============================================
 
     return render_template(
-        "finanzas/registrar_ingreso.html"
+
+        "finanzas/registrar_ingreso.html",
+
+        empresa=empresa
+
     )
 
 
@@ -177,9 +280,14 @@ def registrar_gasto():
         # SESIÓN
         # ==============================================
 
-        id_empresa = session.get("id_empresa")
+        id_empresa = session.get(
+            "id_empresa"
+        )
 
-        id_usuario = session.get("id_usuario")
+        id_usuario = session.get(
+            "id_usuario"
+        )
+
 
         if not id_empresa or not id_usuario:
 
@@ -192,22 +300,32 @@ def registrar_gasto():
                 url_for("auth.login")
             )
 
+
         # ==============================================
         # DATOS DEL FORMULARIO
         # ==============================================
 
-        concepto = request.form["concepto"].strip()
+        concepto = request.form[
+            "concepto"
+        ].strip()
 
-        monto = request.form["monto"]
+        monto = request.form[
+            "monto"
+        ]
 
-        categoria = request.form["categoria"]
+        categoria = request.form[
+            "categoria"
+        ]
 
-        fecha = request.form["fecha"]
+        fecha = request.form[
+            "fecha"
+        ]
 
         descripcion = request.form.get(
             "descripcion",
             ""
         ).strip()
+
 
         # ==============================================
         # REGISTRAR MEDIANTE EL MODEL
@@ -228,7 +346,9 @@ def registrar_gasto():
             fecha,
 
             descripcion
+
         )
+
 
         # ==============================================
         # RESULTADO
@@ -242,34 +362,26 @@ def registrar_gasto():
             )
 
             return redirect(
-                url_for("finanzas.finanzas")
+                url_for(
+                    "finanzas.finanzas"
+                )
             )
 
-        else:
 
-            flash(
-                mensaje,
-                "error"
-            )
+        flash(
+            mensaje,
+            "error"
+        )
+
 
     # ==============================================
-    # MOSTRAR FORMULARIO
+    # OBTENER EMPRESA PARA EL NAVBAR
     # ==============================================
 
-    return render_template(
-        "finanzas/registrar_gasto.html"
+    id_empresa = session.get(
+        "id_empresa"
     )
 
-
-# =====================================================
-# BALANCE GENERAL
-# =====================================================
-
-@finanzas_bp.route("/balance_general")
-@login_required
-def balance_general():
-
-    id_empresa = session.get("id_empresa")
 
     if not id_empresa:
 
@@ -282,28 +394,122 @@ def balance_general():
             url_for("auth.login")
         )
 
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        flash(
+            "No se encontró la empresa.",
+            "error"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
     # ==============================================
-    # OBTENER BALANCE DESDE EL MODEL
+    # MOSTRAR FORMULARIO
+    # ==============================================
+
+    return render_template(
+
+        "finanzas/registrar_gasto.html",
+
+        empresa=empresa
+
+    )
+
+
+# =====================================================
+# BALANCE GENERAL
+# =====================================================
+
+@finanzas_bp.route(
+    "/balance_general"
+)
+@login_required
+def balance_general():
+
+    id_empresa = session.get(
+        "id_empresa"
+    )
+
+
+    if not id_empresa:
+
+        flash(
+            "No se pudo identificar la empresa.",
+            "error"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
+    # ==============================================
+    # OBTENER EMPRESA
+    # ==============================================
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        flash(
+            "No se encontró la empresa.",
+            "error"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
+    # ==============================================
+    # OBTENER BALANCE
     # ==============================================
 
     balance = obtenerBalanceGeneral(
         id_empresa
     )
 
+
     # ==============================================
     # MOSTRAR BALANCE
     # ==============================================
 
     return render_template(
+
         "finanzas/balance_general.html",
 
-        total_ingresos=balance["total_ingresos"],
+        total_ingresos=balance[
+            "total_ingresos"
+        ],
 
-        total_gastos=balance["total_gastos"],
+        total_gastos=balance[
+            "total_gastos"
+        ],
 
-        cuentas_cobrar=balance["cuentas_cobrar"],
+        cuentas_cobrar=balance[
+            "cuentas_cobrar"
+        ],
 
-        cuentas_pagar=balance["cuentas_pagar"],
+        cuentas_pagar=balance[
+            "cuentas_pagar"
+        ],
 
-        utilidad_neta=balance["utilidad_neta"]
+        utilidad_neta=balance[
+            "utilidad_neta"
+        ],
+
+        empresa=empresa
+
     )

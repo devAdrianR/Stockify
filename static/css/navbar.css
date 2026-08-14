@@ -1,0 +1,343 @@
+/* =========================================
+   NAVBAR STOCKIFY
+========================================= */
+
+:root {
+    --dark: #173D31;
+    --green: #2D6A4F;
+    --accent: #52B788;
+    --white: #FFFFFF;
+    --light: #F4F8F6;
+    --text: #26342D;
+    --gray: #7B8A84;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.main-header {
+    width: 100%;
+    min-height: 75px;
+
+    background: var(--dark);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 35px;
+}
+
+
+/* =========================================
+   MARCA
+========================================= */
+
+.main-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.main-brand img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
+.main-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.main-brand-text h2 {
+    margin: 0;
+
+    color: var(--white);
+
+    font-family: "Sora", sans-serif;
+
+    font-size: 25px;
+}
+
+.company-name {
+    color: rgba(255, 255, 255, .75);
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================
+   PARTE DERECHA
+========================================= */
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* =========================================
+   USUARIO
+========================================= */
+
+.user-menu {
+    position: relative;
+}
+
+.user-button {
+    border: none;
+
+    background: #214C3D;
+
+    color: var(--white);
+
+    min-height: 48px;
+
+    padding: 7px 12px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+.user-button:hover {
+    background: var(--green);
+}
+
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: var(--accent);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--dark);
+}
+
+
+.user-data {
+    display: flex;
+    flex-direction: column;
+
+    text-align: left;
+
+    line-height: 1.2;
+}
+
+
+.user-data strong {
+    font-size: 14px;
+}
+
+
+.user-data small {
+    font-size: 11px;
+
+    color: rgba(255, 255, 255, .7);
+}
+
+
+/* =========================================
+   DROPDOWN
+========================================= */
+
+.user-dropdown {
+    position: absolute;
+
+    right: 0;
+
+    top: calc(100% + 10px);
+
+    width: 220px;
+
+    background: var(--white);
+
+    border: 1px solid #DCE6E1;
+
+    border-radius: 14px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+    padding: 8px;
+
+    display: none;
+
+    z-index: 5000;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+
+.dropdown-user {
+    padding: 10px 12px;
+}
+
+.dropdown-user strong {
+    display: block;
+
+    color: var(--dark);
+
+    font-size: 14px;
+}
+
+.dropdown-user span {
+    color: var(--gray);
+
+    font-size: 12px;
+}
+
+
+.dropdown-divider {
+    height: 1px;
+
+    background: #E5ECE8;
+
+    margin: 6px 0;
+}
+
+
+.dropdown-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 12px;
+
+    border-radius: 9px;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: .2s;
+}
+
+.dropdown-item:hover {
+    background: var(--light);
+
+    color: var(--green);
+}
+
+
+.dropdown-item.logout-item:hover {
+    color: #C0392B;
+}
+
+
+/* =========================================
+   BOTÓN REGRESAR
+========================================= */
+
+.back-dashboard {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background: var(--green);
+
+    color: var(--white);
+
+    text-decoration: none;
+
+    padding: 11px 18px;
+
+    border-radius: 11px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: .25s;
+}
+
+.back-dashboard:hover {
+    background: var(--accent);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .main-header {
+        padding: 10px 18px;
+
+        flex-wrap: wrap;
+
+        gap: 10px;
+    }
+
+    .main-brand img {
+        width: 58px;
+        height: 58px;
+    }
+
+    .main-brand-text h2 {
+        font-size: 21px;
+    }
+
+    .company-name {
+        font-size: 11px;
+    }
+
+    .user-data {
+        display: none;
+    }
+
+    .user-button {
+        padding: 7px 9px;
+    }
+
+    .back-dashboard {
+        padding: 10px 14px;
+
+        font-size: 13px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .main-header {
+        padding: 10px 12px;
+    }
+
+    .main-brand-text h2 {
+        font-size: 19px;
+    }
+
+    .back-dashboard {
+        padding: 9px 12px;
+    }
+}

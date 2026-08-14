@@ -16,6 +16,10 @@ from models.ventas import (
     obtenerVentaFactura
 )
 
+from models.dashboard import (
+    obtenerEmpresa
+)
+
 from utils.factura_pdf import (
     generarFacturaPDF
 )
@@ -35,8 +39,32 @@ ventas_bp = Blueprint(
 @login_required
 def ventas():
 
+    id_empresa = session.get("id_empresa")
+
+    if not id_empresa:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa asociada al usuario."
+        }), 400
+
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa."
+        }), 404
+
+
     return render_template(
-        "ventas/ventas.html"
+        "ventas/ventas.html",
+        empresa=empresa
     )
 
 
@@ -107,12 +135,8 @@ def registrar_venta():
     if not data:
 
         return jsonify({
-
             "ok": False,
-
-            "mensaje":
-                "No se recibieron datos."
-
+            "mensaje": "No se recibieron datos."
         }), 400
 
 
@@ -132,24 +156,16 @@ def registrar_venta():
     if not id_usuario:
 
         return jsonify({
-
             "ok": False,
-
-            "mensaje":
-                "No se encontró el usuario en sesión."
-
+            "mensaje": "No se encontró el usuario en sesión."
         }), 401
 
 
     if not id_empresa:
 
         return jsonify({
-
             "ok": False,
-
-            "mensaje":
-                "No se encontró la empresa del usuario en sesión."
-
+            "mensaje": "No se encontró la empresa del usuario en sesión."
         }), 400
 
 
@@ -166,12 +182,8 @@ def registrar_venta():
     if not productos:
 
         return jsonify({
-
             "ok": False,
-
-            "mensaje":
-                "La venta no contiene productos."
-
+            "mensaje": "La venta no contiene productos."
         }), 400
 
 
@@ -242,11 +254,8 @@ def registrar_venta():
         if not ok:
 
             return jsonify({
-
                 "ok": False,
-
                 "mensaje": mensaje
-
             }), 400
 
 

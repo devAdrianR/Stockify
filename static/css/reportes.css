@@ -3,287 +3,301 @@
 =========================================*/
 
 :root{
---dark:#173D31;
---green:#2D6A4F;
---accent:#52B788;
---light:#F4F8F6;
---white:#FFFFFF;
---text:#26342D;
---gray:#7B8A84;
---border:#DCE6E1;
---shadow:0 10px 30px rgba(0,0,0,.08);
+    --dark:#173D31;
+    --green:#2D6A4F;
+    --accent:#52B788;
+    --light:#F4F8F6;
+    --white:#FFFFFF;
+    --text:#26342D;
+    --gray:#7B8A84;
+    --border:#DCE6E1;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
 }
+
 
 /*=========================================
             RESET
 =========================================*/
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-font-family:"Inter",sans-serif;
-background:var(--light);
-color:var(--text);
+    font-family:"Inter",sans-serif;
+    background:var(--light);
+    color:var(--text);
 }
+
 
 /*=========================================
             HEADER
 =========================================*/
 
 header{
-height:80px;
-background:var(--dark);
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 50px;
-box-shadow:0 5px 15px rgba(0,0,0,.12);
+    height:80px;
+    background:var(--dark);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 50px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
 }
 
 .logo{
-display:flex;
-align-items:center;
-gap:15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 
 .logo img{
-width:100px;
- height:100px;
+    width:100px;
+    height:100px;
+    object-fit:contain;
 }
 
 .logo h2{
-font-family:"Sora",sans-serif;
-font-size:28px;
-color:white;
+    font-family:"Sora",sans-serif;
+    font-size:28px;
+    color:white;
 }
 
 .back{
-padding:12px 22px;
-border-radius:12px;
-background:var(--green);
-color:white;
-text-decoration:none;
-font-weight:600;
-transition:.25s;
+    padding:12px 22px;
+    border-radius:12px;
+    background:var(--green);
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    transition:.25s;
 }
 
 .back:hover{
-background:var(--accent);
+    background:var(--accent);
 }
+
 
 /*=========================================
             CONTENIDO
 =========================================*/
 
 main{
-width:1500px;
-max-width:95%;
-margin:40px auto;
+    width:1500px;
+    max-width:95%;
+    margin:40px auto;
 }
 
 .title{
-margin-bottom:40px;
+    margin-bottom:40px;
 }
 
 .title h1{
-font-family:"Sora",sans-serif;
-font-size:44px;
-color:var(--dark);
-margin-bottom:10px;
+    font-family:"Sora",sans-serif;
+    font-size:44px;
+    color:var(--dark);
+    margin-bottom:10px;
 }
 
 .title p{
-font-size:18px;
-color:var(--gray);
+    font-size:18px;
+    color:var(--gray);
 }
+
 
 /*=========================================
         TARJETAS RESUMEN
 =========================================*/
 
 .summary{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:25px;
-margin-bottom:45px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:25px;
+    margin-bottom:45px;
 }
 
 .summary-card{
-background:var(--white);
-border:1px solid var(--border);
-border-radius:18px;
-padding:30px;
-box-shadow:var(--shadow);
-transition:.3s;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:30px;
+    box-shadow:var(--shadow);
+    transition:.3s;
+    flex:1 1 280px;
+    max-width:340px;
 }
 
 .summary-card:hover{
-transform:translateY(-6px);
+    transform:translateY(-6px);
 }
 
 .summary-card i{
-font-size:34px;
-color:var(--accent);
-margin-bottom:18px;
+    font-size:34px;
+    color:var(--accent);
+    margin-bottom:18px;
 }
 
 .summary-card h3{
-font-size:18px;
-font-weight:600;
-margin-bottom:15px;
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:15px;
 }
 
 .summary-card span{
-font-family:"Sora",sans-serif;
-font-size:34px;
-font-weight:700;
-color:var(--green);
-display:block;
+    font-family:"Sora",sans-serif;
+    font-size:34px;
+    font-weight:700;
+    color:var(--green);
+    display:block;
 }
+
 
 /*=========================================
             MÓDULOS
 =========================================*/
 
 .modules{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:30px;
-margin-bottom:50px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:30px;
+    margin-bottom:50px;
 }
 
 .card{
-background:var(--white);
-border:1px solid var(--border);
-border-radius:20px;
-padding:35px;
-box-shadow:var(--shadow);
-display:flex;
-flex-direction:column;
-text-decoration:none;
-color:inherit;
-transition:.3s;
-cursor:pointer;
-min-height:270px;
-position:relative;
-overflow:hidden;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:35px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    text-decoration:none;
+    color:inherit;
+    transition:.3s;
+    cursor:pointer;
+    min-height:270px;
+    position:relative;
+    overflow:hidden;
+    flex:1 1 380px;
+    max-width:460px;
 }
 
 .card::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:5px;
-background:var(--accent);
-transform:scaleX(0);
-transform-origin:left;
-transition:.3s;
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:5px;
+    background:var(--accent);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:.3s;
 }
 
 .card:hover::before{
-transform:scaleX(1);
+    transform:scaleX(1);
 }
 
 .card:hover{
-transform:translateY(-8px);
-border-color:var(--accent);
-box-shadow:0 18px 35px rgba(0,0,0,.12);
+    transform:translateY(-8px);
+    border-color:var(--accent);
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
 }
 
 .icon{
-width:70px;
-height:70px;
-background:rgba(82,183,136,.15);
-border-radius:18px;
-display:flex;
-justify-content:center;
-align-items:center;
-margin-bottom:28px;
+    width:70px;
+    height:70px;
+    background:rgba(82,183,136,.15);
+    border-radius:18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:28px;
 }
 
 .icon i{
-font-size:30px;
-color:var(--green);
+    font-size:30px;
+    color:var(--green);
 }
 
 .card h2{
-font-family:"Sora",sans-serif;
-font-size:24px;
-color:var(--dark);
-margin-bottom:15px;
+    font-family:"Sora",sans-serif;
+    font-size:24px;
+    color:var(--dark);
+    margin-bottom:15px;
 }
 
 .card p{
-font-size:16px;
-color:var(--gray);
-line-height:1.7;
-flex:1;
+    font-size:16px;
+    color:var(--gray);
+    line-height:1.7;
+    flex:1;
 }
 
 .arrow{
-margin-top:25px;
-align-self:flex-end;
-font-size:22px;
-color:var(--green);
-transition:.3s;
+    margin-top:25px;
+    align-self:flex-end;
+    font-size:22px;
+    color:var(--green);
+    transition:.3s;
 }
 
 .card:hover .arrow{
-transform:translateX(8px);
-color:var(--accent);
+    transform:translateX(8px);
+    color:var(--accent);
 }
+
 
 /*=========================================
         EXPORTAR REPORTES
 =========================================*/
 
 .export{
-background:var(--white);
-border:1px solid var(--border);
-border-radius:20px;
-padding:35px;
-box-shadow:var(--shadow);
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:35px;
+    box-shadow:var(--shadow);
 }
 
 .export h2{
-font-family:"Sora",sans-serif;
-font-size:30px;
-color:var(--dark);
-margin-bottom:25px;
+    font-family:"Sora",sans-serif;
+    font-size:30px;
+    color:var(--dark);
+    margin-bottom:25px;
 }
 
 .export-buttons{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
 }
 
 .export-buttons button{
-height:60px;
-border:none;
-border-radius:14px;
-background:var(--green);
-color:white;
-font-size:16px;
-font-weight:600;
-cursor:pointer;
-transition:.25s;
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
+    height:60px;
+    border:none;
+    border-radius:14px;
+    background:var(--green);
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
 }
 
 .export-buttons button:hover{
-background:var(--dark);
-transform:translateY(-3px);
+    background:var(--dark);
+    transform:translateY(-3px);
 }
+
 
 /*=========================================
             RESPONSIVE
@@ -291,123 +305,142 @@ transform:translateY(-3px);
 
 @media(max-width:1200px){
 
-.summary{
-grid-template-columns:repeat(2,1fr);
-}
-
-.modules{
-grid-template-columns:repeat(2,1fr);
-}
-
-.export-buttons{
-grid-template-columns:1fr;
-}
+    .export-buttons{
+        grid-template-columns:1fr;
+    }
 
 }
+
+
+/*=========================================
+            TABLETS / MÓVILES
+=========================================*/
 
 @media(max-width:768px){
 
-header{
-height:auto;
-padding:20px;
-flex-direction:column;
-gap:15px;
+    header{
+        height:auto;
+        padding:20px;
+    }
+
+    .logo{
+        gap:10px;
+    }
+
+    .logo img{
+        width:70px;
+        height:70px;
+    }
+
+    .logo h2{
+        font-size:24px;
+    }
+
+    .back{
+        padding:10px 16px;
+        white-space:nowrap;
+    }
+
+    main{
+        margin:30px auto;
+    }
+
+    .title h1{
+        font-size:36px;
+    }
+
+    .title p{
+        font-size:16px;
+    }
+
+    .card{
+        padding:28px;
+        min-height:240px;
+    }
+
+    .summary-card{
+        padding:25px;
+    }
+
+    .summary-card span{
+        font-size:30px;
+    }
+
+    .icon{
+        width:60px;
+        height:60px;
+    }
+
+    .icon i{
+        font-size:26px;
+    }
+
+    .export{
+        padding:25px;
+    }
+
+    .export h2{
+        font-size:26px;
+    }
+
 }
 
-.logo h2{
-font-size:24px;
-}
 
-main{
-margin:30px auto;
-}
-
-.title h1{
-font-size:36px;
-}
-
-.title p{
-font-size:16px;
-}
-
-.summary{
-grid-template-columns:1fr;
-}
-
-.modules{
-grid-template-columns:1fr;
-}
-
-.card{
-padding:28px;
-min-height:240px;
-}
-
-.summary-card{
-padding:25px;
-}
-
-.summary-card span{
-font-size:30px;
-}
-
-.icon{
-width:60px;
-height:60px;
-}
-
-.icon i{
-font-size:26px;
-}
-
-.export{
-padding:25px;
-}
-
-.export h2{
-font-size:26px;
-}
-
-}
+/*=========================================
+            MÓVILES PEQUEÑOS
+=========================================*/
 
 @media(max-width:500px){
 
-header{
-padding:18px;
-}
+    header{
+        padding:15px;
+    }
 
-.back{
-width:100%;
-text-align:center;
-}
+    .logo{
+        gap:8px;
+    }
 
-.title{
-text-align:center;
-}
+    .logo img{
+        width:55px;
+        height:55px;
+    }
 
-.title h1{
-font-size:32px;
-}
+    .logo h2{
+        font-size:18px;
+    }
 
-.card h2{
-font-size:22px;
-}
+    .back{
+        padding:9px 12px;
+        font-size:14px;
+    }
 
-.card p{
-font-size:15px;
-}
+    .title{
+        text-align:center;
+    }
 
-.summary-card h3{
-font-size:17px;
-}
+    .title h1{
+        font-size:32px;
+    }
 
-.summary-card span{
-font-size:28px;
-}
+    .card h2{
+        font-size:22px;
+    }
 
-.export-buttons button{
-font-size:15px;
-height:55px;
-}
+    .card p{
+        font-size:15px;
+    }
+
+    .summary-card h3{
+        font-size:17px;
+    }
+
+    .summary-card span{
+        font-size:28px;
+    }
+
+    .export-buttons button{
+        font-size:15px;
+        height:55px;
+    }
 
 }

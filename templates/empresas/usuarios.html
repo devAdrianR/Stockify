@@ -10,6 +10,7 @@
     <title>Usuarios | Stockify</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/administradores.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
 
@@ -27,23 +28,128 @@
 
 <body>
 
-    <header>
+    <header class="main-header">
 
-        <div class="logo">
+        <div class="main-brand">
 
-            <img src="{{ url_for('static', filename='img/logo.png') }}">
+            <img
+                src="{{ url_for('static', filename='img/logo.png') }}"
+                alt="Stockify"
+            >
 
-            <h2>Stockify</h2>
+            <div class="main-brand-text">
+
+                <h2>Panel Superadmin</h2>
+
+                <span class="company-name">
+                    Stockify
+                </span>
+
+            </div>
 
         </div>
 
-        <a href="{{ url_for('dashboard.dashboard_superadmin') }}" class="back">
 
-            <i class="fa-solid fa-arrow-left"></i>
+        <nav class="main-nav">
 
-            Dashboard
+            <!-- VOLVER AL DASHBOARD -->
 
-        </a>
+            <a
+                href="{{ url_for('dashboard.dashboard_superadmin') }}"
+                class="back-dashboard"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Dashboard
+
+            </a>
+
+
+            <!-- USUARIO -->
+
+            <div class="user-menu">
+
+                <button
+                    type="button"
+                    class="user-button"
+                    id="userMenuButton"
+                >
+
+                    <span class="user-avatar">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </span>
+
+
+                    <span class="user-data">
+
+                        <strong>
+                            {{ session.get("nombre_usuario", "Usuario") }}
+                        </strong>
+
+                        <small>
+                            {{ session.get("rol", "Usuario") }}
+                        </small>
+
+                    </span>
+
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </button>
+
+
+                <div
+                    class="user-dropdown"
+                    id="userDropdown"
+                >
+
+                    <div class="dropdown-user">
+
+                        <strong>
+                            {{ session.get("nombre_usuario", "Usuario") }}
+                        </strong>
+
+                        <span>
+                            {{ session.get("rol", "Usuario") }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="dropdown-divider"></div>
+
+
+                    <a
+                        href="#"
+                        class="dropdown-item"
+                    >
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Mi perfil
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('auth.logout') }}"
+                        class="dropdown-item logout-item"
+                    >
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Cerrar sesión
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
 
     </header>
 
@@ -51,17 +157,13 @@
 
         <section class="title">
 
-            <div>
+            <h1>Usuarios</h1>
 
-                <h1>Usuarios</h1>
+            <p>
 
-                <p>
+                Gestiona todos los usuarios registrados en Stockify.
 
-                    Gestiona todos los usuarios registrados en Stockify.
-
-                </p>
-
-            </div>
+            </p>
 
         </section>
 
@@ -83,9 +185,9 @@
 
         {% endwith %}
 
-        <section class="container">
+        <div class="content">
 
-            <div class="form-card">
+            <section class="card">
 
                 <h2>
 
@@ -99,107 +201,95 @@
 
                     <input type="hidden" name="id_usuario" value="{{ usuario.id_usuario if usuario else '' }}">
 
-                    <div class="group">
+                    <label>Usuario</label>
 
-                        <label>Usuario</label>
+                    <input type="text" name="nombre_usuario" required
+                        value="{{ usuario.nombre_usuario if usuario else '' }}">
 
-                        <input type="text" name="nombre_usuario" required
-                            value="{{ usuario.nombre_usuario if usuario else '' }}">
+                    <label>Correo</label>
 
-                    </div>
+                    <input type="email" name="correo" required value="{{ usuario.correo if usuario else '' }}">
 
-                    <div class="group">
+                    <label>Contraseña</label>
 
-                        <label>Correo</label>
+                    <input type="password" name="password" placeholder="Vacío para conservar contraseña">
 
-                        <input type="email" name="correo" required value="{{ usuario.correo if usuario else '' }}">
+                    <div class="grid2">
 
-                    </div>
+                        <div>
 
-                    <div class="group">
+                            <label>Rol</label>
 
-                        <label>Contraseña</label>
+                            <select name="rol" required>
 
-                        <input type="password" name="password" placeholder="Vacío para conservar contraseña">
+                                <option value="">Seleccione...</option>
 
-                    </div>
+                                <option value="ADMIN" {% if usuario and usuario.rol=="ADMIN" %}selected{% endif %}>
 
-                    <div class="group">
+                                    ADMIN
 
-                        <label>Rol</label>
+                                </option>
 
-                        <select name="rol" required>
+                                <option value="EMPLEADO" {% if usuario and usuario.rol=="EMPLEADO" %}selected{% endif %}>
 
-                            <option value="">Seleccione...</option>
+                                    EMPLEADO
 
-                            <option value="ADMIN" {% if usuario and usuario.rol=="ADMIN" %}selected{% endif %}>
+                                </option>
 
-                                ADMIN
+                            </select>
 
-                            </option>
+                        </div>
 
-                            <option value="EMPLEADO" {% if usuario and usuario.rol=="EMPLEADO" %}selected{% endif %}>
+                        <div>
 
-                                EMPLEADO
+                            <label>Empresa</label>
 
-                            </option>
+                            <select name="id_empresa" required>
 
-                        </select>
+                                <option value="">Seleccione una empresa...</option>
 
-                    </div>
+                                {% for empresa in empresas %}
 
-                    <div class="group">
+                                <option value="{{ empresa.id_empresa }}" {% if usuario and
+                                    usuario.id_empresa==empresa.id_empresa %}selected{% endif %}>
 
-                        <label>Empresa</label>
+                                    {{ empresa.nombre }}
 
-                        <select name="id_empresa" required>
+                                </option>
 
-                            <option value="">Seleccione una empresa...</option>
+                                {% endfor %}
 
-                            {% for empresa in empresas %}
+                            </select>
 
-                            <option value="{{ empresa.id_empresa }}" {% if usuario and
-                                usuario.id_empresa==empresa.id_empresa %}selected{% endif %}>
-
-                                {{ empresa.nombre }}
-
-                            </option>
-
-                            {% endfor %}
-
-                        </select>
+                        </div>
 
                     </div>
 
                     {% if usuario %}
 
-                    <div class="group">
+                    <label>Estado</label>
 
-                        <label>Estado</label>
+                    <select name="estado">
 
-                        <select name="estado">
+                        <option value="1" {% if usuario.estado==1 %}selected{% endif %}>
 
-                            <option value="1" {% if usuario.estado==1 %}selected{% endif %}>
+                            Activo
 
-                                Activo
+                        </option>
 
-                            </option>
+                        <option value="0" {% if usuario.estado==0 %}selected{% endif %}>
 
-                            <option value="0" {% if usuario.estado==0 %}selected{% endif %}>
+                            Inactivo
 
-                                Inactivo
+                        </option>
 
-                            </option>
-
-                        </select>
-
-                    </div>
+                    </select>
 
                     {% endif %}
 
                     <div class="buttons">
 
-                        <button type="submit" class="btn-save">
+                        <button type="submit" class="save">
 
                             <i class="fa-solid fa-floppy-disk"></i>
 
@@ -209,7 +299,9 @@
 
                         {% if usuario %}
 
-                        <a href="{{ url_for('crud_usuarios.usuarios') }}" class="btn-cancel">
+                        <a href="{{ url_for('crud_usuarios.usuarios') }}" class="cancel">
+
+                            <i class="fa-solid fa-xmark"></i>
 
                             Cancelar
 
@@ -221,121 +313,144 @@
 
                 </form>
 
-            </div>
+            </section>
 
-            <div class="table-card">
+            <section class="card">
 
-                <div class="table-container">
+                <div class="table-header">
 
-                    <table>
+                    <h2>
 
-                        <thead>
+                        <i class="fa-solid fa-list"></i>
 
-                            <tr>
+                        Usuarios Registrados
 
-                                <th>ID</th>
-
-                                <th>Usuario</th>
-
-                                <th>Correo</th>
-
-                                <th>Rol</th>
-
-                                <th>Empresa</th>
-
-                                <th>Estado</th>
-
-                                <th>Acciones</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            {% for usuario in usuarios %}
-
-                            <tr>
-
-                                <td>{{ usuario.id_usuario }}</td>
-
-                                <td>{{ usuario.nombre_usuario }}</td>
-
-                                <td>{{ usuario.correo }}</td>
-
-                                <td>{{ usuario.rol }}</td>
-
-                                <td>{{ usuario.empresa or "-" }}</td>
-
-                                <td>
-
-                                    {% if usuario.estado==1 %}
-
-                                    <span class="badge activo">
-
-                                        Activo
-
-                                    </span>
-
-                                    {% else %}
-
-                                    <span class="badge inactivo">
-
-                                        Inactivo
-
-                                    </span>
-
-                                    {% endif %}
-
-                                </td>
-
-                                <td class="acciones">
-
-                                    <a class="edit" href="{{ url_for('crud_usuarios.usuarios',
-editar=usuario.id_usuario) }}">
-
-                                        <i class="fa-solid fa-pen"></i>
-
-                                    </a>
-
-                                    {% if usuario.estado==1 %}
-
-                                    <a class="delete" href="{{ url_for('crud_usuarios.desactivar_usuario',
-id_usuario=usuario.id_usuario) }}">
-
-                                        <i class="fa-solid fa-ban"></i>
-
-                                    </a>
-
-                                    {% else %}
-
-                                    <a class="activate" href="{{ url_for('crud_usuarios.activar_usuario',
-id_usuario=usuario.id_usuario) }}">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                    </a>
-
-                                    {% endif %}
-
-                                </td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-
-                    </table>
+                    </h2>
 
                 </div>
 
-            </div>
+                <table>
 
-        </section>
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Usuario</th>
+
+                            <th>Correo</th>
+
+                            <th>Rol</th>
+
+                            <th>Empresa</th>
+
+                            <th>Estado</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for usuario in usuarios %}
+
+                        <tr>
+
+                            <td>{{ usuario.id_usuario }}</td>
+
+                            <td>{{ usuario.nombre_usuario }}</td>
+
+                            <td>{{ usuario.correo }}</td>
+
+                            <td>{{ usuario.rol }}</td>
+
+                            <td>{{ usuario.empresa or "-" }}</td>
+
+                            <td>
+
+                                {% if usuario.estado==1 %}
+
+                                <span class="status active">
+
+                                    Activo
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status inactive">
+
+                                    Inactivo
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td class="actions">
+
+                                <a class="edit" href="{{ url_for('crud_usuarios.usuarios',
+editar=usuario.id_usuario) }}">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                {% if usuario.estado==1 %}
+
+                                <a class="delete" href="{{ url_for('crud_usuarios.desactivar_usuario',
+id_usuario=usuario.id_usuario) }}">
+
+                                    <i class="fa-solid fa-ban"></i>
+
+                                </a>
+
+                                {% else %}
+
+                                <a class="activate" href="{{ url_for('crud_usuarios.activar_usuario',
+id_usuario=usuario.id_usuario) }}">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% if not usuarios %}
+
+                        <tr>
+
+                            <td colspan="7" class="empty">
+
+                                No hay usuarios registrados.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        </div>
 
     </main>
 
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
 </body>
 
 </html>

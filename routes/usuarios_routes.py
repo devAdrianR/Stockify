@@ -1,4 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session
+)
 
 from auth import login_required, admin_required
 
@@ -12,8 +20,13 @@ from models.usuarios import (
     desactivarUsuario
 )
 
+from models.dashboard import obtenerEmpresa
 
-usuarios_bp = Blueprint("usuarios", __name__)
+
+usuarios_bp = Blueprint(
+    "usuarios",
+    __name__
+)
 
 
 # ==========================================================
@@ -27,10 +40,40 @@ def registro_usuario():
 
     usuarios = obtenerUsuarios()
 
+    rol = session.get("rol")
+
+    empresa = None
+
+    # El ADMIN debe tener empresa
+    if rol == "ADMIN":
+
+        id_empresa = session.get("id_empresa")
+
+        if not id_empresa:
+
+            session.clear()
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        empresa = obtenerEmpresa(
+            id_empresa
+        )
+
+        if empresa is None:
+
+            session.clear()
+
+            return redirect(
+                url_for("auth.login")
+            )
+
     return render_template(
         "usuarios/registro_usuario.html",
         usuarios=usuarios,
-        usuarioEditar=None
+        usuarioEditar=None,
+        empresa=empresa
     )
 
 
@@ -38,7 +81,10 @@ def registro_usuario():
 # REGISTRAR USUARIO
 # ==========================================================
 
-@usuarios_bp.route("/registrar_usuario", methods=["POST"])
+@usuarios_bp.route(
+    "/registrar_usuario",
+    methods=["POST"]
+)
 @login_required
 @admin_required
 def registrar():
@@ -52,14 +98,28 @@ def registrar():
     # Validar contraseñas
     if password != confirmar:
 
-        flash("Las contraseñas no coinciden.", "error")
+        flash(
+            "Las contraseñas no coinciden.",
+            "error"
+        )
 
         return redirect(
             url_for("usuarios.registro_usuario")
         )
 
     # Obtener empresa del usuario administrador
-    id_empresa = session["id_empresa"]
+    id_empresa = session.get("id_empresa")
+
+    if not id_empresa:
+
+        flash(
+            "El administrador no tiene una empresa asignada.",
+            "error"
+        )
+
+        return redirect(
+            url_for("usuarios.registro_usuario")
+        )
 
     # Registrar usuario
     ok, mensaje = registrarUsuario(
@@ -84,12 +144,16 @@ def registrar():
 # EDITAR USUARIO
 # ==========================================================
 
-@usuarios_bp.route("/editar_usuario/<int:id_usuario>")
+@usuarios_bp.route(
+    "/editar_usuario/<int:id_usuario>"
+)
 @login_required
 @admin_required
 def editar_usuario(id_usuario):
 
-    usuarioEditar = obtenerUsuarioID(id_usuario)
+    usuarioEditar = obtenerUsuarioID(
+        id_usuario
+    )
 
     if usuarioEditar is None:
 
@@ -104,10 +168,40 @@ def editar_usuario(id_usuario):
 
     usuarios = obtenerUsuarios()
 
+    rol = session.get("rol")
+
+    empresa = None
+
+    # El ADMIN debe tener empresa
+    if rol == "ADMIN":
+
+        id_empresa = session.get("id_empresa")
+
+        if not id_empresa:
+
+            session.clear()
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        empresa = obtenerEmpresa(
+            id_empresa
+        )
+
+        if empresa is None:
+
+            session.clear()
+
+            return redirect(
+                url_for("auth.login")
+            )
+
     return render_template(
         "usuarios/registro_usuario.html",
         usuarios=usuarios,
-        usuarioEditar=usuarioEditar
+        usuarioEditar=usuarioEditar,
+        empresa=empresa
     )
 
 
@@ -115,12 +209,17 @@ def editar_usuario(id_usuario):
 # ACTUALIZAR USUARIO
 # ==========================================================
 
-@usuarios_bp.route("/actualizar_usuario", methods=["POST"])
+@usuarios_bp.route(
+    "/actualizar_usuario",
+    methods=["POST"]
+)
 @login_required
 @admin_required
 def actualizar_usuario():
 
-    idUsuario = int(request.form["id_usuario"])
+    idUsuario = int(
+        request.form["id_usuario"]
+    )
 
     usuario = request.form["usuario"].strip()
     correo = request.form["correo"].strip()
@@ -173,7 +272,9 @@ def actualizar_usuario():
 @admin_required
 def cambiar_password(id_usuario):
 
-    usuario = obtenerUsuarioID(id_usuario)
+    usuario = obtenerUsuarioID(
+        id_usuario
+    )
 
     if usuario is None:
 
@@ -185,6 +286,35 @@ def cambiar_password(id_usuario):
         return redirect(
             url_for("usuarios.registro_usuario")
         )
+
+    rol = session.get("rol")
+
+    empresa = None
+
+    # El ADMIN debe tener empresa
+    if rol == "ADMIN":
+
+        id_empresa = session.get("id_empresa")
+
+        if not id_empresa:
+
+            session.clear()
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        empresa = obtenerEmpresa(
+            id_empresa
+        )
+
+        if empresa is None:
+
+            session.clear()
+
+            return redirect(
+                url_for("auth.login")
+            )
 
     # Si enviaron el formulario
     if request.method == "POST":
@@ -224,7 +354,8 @@ def cambiar_password(id_usuario):
     # Mostrar formulario
     return render_template(
         "usuarios/cambiar_password.html",
-        usuario=usuario
+        usuario=usuario,
+        empresa=empresa
     )
 
 
@@ -232,12 +363,16 @@ def cambiar_password(id_usuario):
 # ACTIVAR USUARIO
 # ==========================================================
 
-@usuarios_bp.route("/activar_usuario/<int:id_usuario>")
+@usuarios_bp.route(
+    "/activar_usuario/<int:id_usuario>"
+)
 @login_required
 @admin_required
 def activar_usuario(id_usuario):
 
-    ok, mensaje = activarUsuario(id_usuario)
+    ok, mensaje = activarUsuario(
+        id_usuario
+    )
 
     flash(
         mensaje,
@@ -249,7 +384,13 @@ def activar_usuario(id_usuario):
     )
 
 
-@usuarios_bp.route("/desactivar_usuario/<int:id_usuario>")
+# ==========================================================
+# DESACTIVAR USUARIO
+# ==========================================================
+
+@usuarios_bp.route(
+    "/desactivar_usuario/<int:id_usuario>"
+)
 @login_required
 @admin_required
 def desactivar_usuario(id_usuario):
@@ -265,7 +406,9 @@ def desactivar_usuario(id_usuario):
             url_for("usuarios.registro_usuario")
         )
 
-    ok, mensaje = desactivarUsuario(id_usuario)
+    ok, mensaje = desactivarUsuario(
+        id_usuario
+    )
 
     flash(
         mensaje,

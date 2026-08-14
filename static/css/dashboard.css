@@ -31,68 +31,6 @@ body{
 }
 
 /*=========================================
-                HEADER
-=========================================*/
-
-header{
-    width:100%;
-    height:80px;
-    background:var(--dark);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 50px;
-    box-shadow:0 4px 15px rgba(0,0,0,.15);
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.logo img{
-    width:100px;
-    height:100px;
-}
-
-.logo h2{
-    color:white;
-    font-family:"Sora",sans-serif;
-    font-size:24px;
-    font-weight:800;
-}
-
-nav{
-    display:flex;
-    align-items:center;
-    gap:20px;
-}
-
-/*=========================================
-            BOTÓN LOGOUT
-=========================================*/
-
-.logout{
-    background:#214C3D;
-    color:white;
-    border:none;
-    border-radius:12px;
-    padding:12px 22px;
-    font-size:15px;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.logout:hover{
-    background:#2D6A4F;
-}
-
-.logout i{
-    margin-right:8px;
-}
-
-/*=========================================
                 MAIN
 =========================================*/
 
@@ -169,142 +107,6 @@ main{
 .card:hover .arrow{
     transform:translateX(8px);
     color:var(--accent);
-}
-
-.icon{
-    width:65px;
-    height:65px;
-    background:rgba(82,183,136,.15);
-    color:var(--green);
-    border-radius:16px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:28px;
-    margin-bottom:25px;
-}
-
-.card h2{
-    font-family:"Sora",sans-serif;
-    font-size:24px;
-    color:var(--dark);
-    margin-bottom:12px;
-}
-
-.card p{
-    color:var(--gray);
-    line-height:1.6;
-    margin-bottom:30px;
-    flex:1;
-}
-
-
-/*=========================================
-                FOOTER
-=========================================*/
-
-footer{
-    margin:50px 0 30px;
-    text-align:center;
-    color:var(--gray);
-    font-size:15px;
-}
-
-/*=========================================
-            RESPONSIVE
-=========================================*/
-
-@media(max-width:1100px){
-
-    .modules{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    header{
-        padding:0 30px;
-    }
-
-    .welcome h1{
-        font-size:36px;
-    }
-
-}
-
-@media(max-width:768px){
-
-    header{
-        flex-direction:column;
-        justify-content:center;
-        gap:10px;
-        height:120px;
-        padding:20px;
-    }
-
-    .modules{
-        grid-template-columns:1fr;
-    }
-
-    .logo h2{
-        font-size:24px;
-    }
-
-    .welcome h1{
-        font-size:30px;
-    }
-
-    .welcome p{
-        font-size:16px;
-    }
-
-    main{
-        margin:30px auto;
-    }
-
-}
-
-@media(max-width:500px){
-
-    .card{
-        padding:22px;
-    }
-
-    .icon{
-        width:55px;
-        height:55px;
-        font-size:24px;
-    }
-
-    .card h2{
-        font-size:22px;
-    }
-
-    .recent{
-        padding:20px;
-    }
-
-    .recent-content{
-        height:140px;
-    }
-
-}/*=========================================
-                TARJETAS
-=========================================*/
-
-.card{
-    background:var(--white);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:30px;
-    box-shadow:var(--shadow);
-    transition:.3s;
-    display:flex;
-    flex-direction:column;
-}
-
-.card:hover{
-    transform:translateY(-8px);
-    border-color:var(--accent);
-    box-shadow:0 18px 35px rgba(0,0,0,.12);
 }
 
 .icon{
@@ -415,10 +217,6 @@ footer{
         grid-template-columns:repeat(2,1fr);
     }
 
-    header{
-        padding:0 30px;
-    }
-
     .welcome h1{
         font-size:36px;
     }
@@ -427,20 +225,8 @@ footer{
 
 @media(max-width:768px){
 
-    header{
-        flex-direction:column;
-        justify-content:center;
-        gap:10px;
-        height:120px;
-        padding:20px;
-    }
-
     .modules{
         grid-template-columns:1fr;
-    }
-
-    .logo h2{
-        font-size:24px;
     }
 
     .welcome h1{

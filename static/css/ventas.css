@@ -14,6 +14,8 @@
     --shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
+
+
 /*=========================================
                 RESET
 =========================================*/
@@ -158,10 +160,16 @@ main{
 
 .grid4{
     display:grid;
-    grid-template-columns:2.8fr .8fr 1fr auto;
+    grid-template-columns:2fr .6fr 1fr .9fr auto;
     gap:18px;
     align-items:end;
 }
+
+.grid4 .group label{
+    white-space:nowrap;
+}
+
+
 
 /*=========================================
                 INPUTS
@@ -396,6 +404,64 @@ tbody tr:hover{
 
 .cancel:hover{
     background:#d8ddd9;
+}
+
+
+/* INPUT */
+
+#descuento_input{
+    width:100%;
+    height:48px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:0 15px;
+    font-size:15px;
+    text-align:left;
+    appearance:textfield;
+    -moz-appearance:textfield;
+}
+
+#descuento_input::-webkit-inner-spin-button,
+#descuento_input::-webkit-outer-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+
+
+/* SIGNO % */
+
+.discount-input-wrapper span{
+    padding-right:10px;
+
+    color:var(--green);
+
+    font-weight:700;
+
+    font-size:14px;
+}
+
+
+
+
+
+/* =========================================
+   PRECIO MÍNIMO
+========================================= */
+
+.price-help{
+    display:block;
+
+    margin-top:6px;
+
+    color:var(--gray);
+
+    font-size:11px;
+}
+
+.price-help.price-error{
+    color:#C0392B;
+
+    font-weight:600;
 }
 
 /*=========================================

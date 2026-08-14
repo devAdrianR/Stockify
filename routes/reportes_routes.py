@@ -1,5 +1,14 @@
-from flask import Blueprint, render_template, request, session, jsonify
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    session,
+    jsonify
+)
+
 from auth import login_required
+
+from models.dashboard import obtenerEmpresa
 
 from models.reportes import (
     resumenReportes,
@@ -9,7 +18,11 @@ from models.reportes import (
     productosMasVendidos
 )
 
-reportes_bp = Blueprint("reportes", __name__)
+
+reportes_bp = Blueprint(
+    "reportes",
+    __name__
+)
 
 
 # =====================================================
@@ -23,21 +36,47 @@ def reportes():
     id_empresa = session.get("id_empresa")
 
     if id_empresa is None:
+
         return jsonify({
             "ok": False,
             "mensaje": "No se encontró la empresa asociada al usuario."
         }), 400
 
-    resumen = resumenReportes(id_empresa)
 
-    resultado_productos = productosMasVendidos(id_empresa)
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
 
-    resumen["producto_mas_vendido"] = resultado_productos["resumen"]["producto_mas_vendido"]
+
+    if empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa."
+        }), 404
+
+
+    resumen = resumenReportes(
+        id_empresa
+    )
+
+
+    resultado_productos = productosMasVendidos(
+        id_empresa
+    )
+
+
+    resumen["producto_mas_vendido"] = (
+        resultado_productos["resumen"]["producto_mas_vendido"]
+    )
 
 
     return render_template(
         "reportes/reportes.html",
-        resumen=resumen
+
+        resumen=resumen,
+
+        empresa=empresa
     )
 
 
@@ -52,23 +91,44 @@ def ventas_diarias():
     id_empresa = session.get("id_empresa")
 
     if id_empresa is None:
+
         return jsonify({
             "ok": False,
             "mensaje": "No se encontró la empresa asociada al usuario."
         }), 400
 
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa."
+        }), 404
+
+
     # ==========================================
     # FECHA SELECCIONADA
     # ==========================================
 
-    fecha = request.args.get("fecha")
+    fecha = request.args.get(
+        "fecha"
+    )
+
 
     # Si no se selecciona una fecha,
     # automáticamente se utiliza HOY.
 
     if not fecha:
+
         from datetime import date
+
         fecha = date.today().isoformat()
+
 
     # ==========================================
     # RESUMEN DEL DÍA
@@ -79,6 +139,7 @@ def ventas_diarias():
         fecha
     )
 
+
     # ==========================================
     # VENTAS DEL DÍA
     # ==========================================
@@ -88,15 +149,21 @@ def ventas_diarias():
         fecha
     )
 
+
     # ==========================================
     # MOSTRAR VISTA
     # ==========================================
 
     return render_template(
         "reportes/ventas_diarias.html",
+
         resumen=resumen,
+
         ventas=ventas,
-        fecha=fecha
+
+        fecha=fecha,
+
+        empresa=empresa
     )
 
 
@@ -104,36 +171,48 @@ def ventas_diarias():
 # DETALLE DE UNA VENTA - AJAX
 # =====================================================
 
-@reportes_bp.route("/reportes/detalle_venta/<int:id_venta>")
+@reportes_bp.route(
+    "/reportes/detalle_venta/<int:id_venta>"
+)
 @login_required
 def detalle_venta(id_venta):
 
-    id_empresa = session.get("id_empresa")
+    id_empresa = session.get(
+        "id_empresa"
+    )
+
 
     if id_empresa is None:
+
         return jsonify({
             "ok": False,
             "mensaje": "No se encontró la empresa asociada."
         }), 400
+
 
     encabezado, productos = detalleVenta(
         id_empresa,
         id_venta
     )
 
+
     if encabezado is None:
+
         return jsonify({
             "ok": False,
             "mensaje": "Venta no encontrada."
         }), 404
 
-    return jsonify({
-        "ok": True,
-        "venta": encabezado,
-        "productos": productos
-    })
 
-   
+    return jsonify({
+
+        "ok": True,
+
+        "venta": encabezado,
+
+        "productos": productos
+
+    })
 
 
 # =====================================================
@@ -144,34 +223,9 @@ def detalle_venta(id_venta):
 @login_required
 def ventas_mensuales():
 
-    id_empresa = session.get("id_empresa")
-
-    if id_empresa is None:
-        return jsonify({
-            "ok": False,
-            "mensaje": "No se encontró la empresa asociada."
-        }), 400
-
-    resumen = resumenReportes(id_empresa)
-
-    return render_template(
-        "reportes/ventas_mensuales.html",
-        resumen=resumen
+    id_empresa = session.get(
+        "id_empresa"
     )
-
-# =====================================================
-# PRODUCTOS MÁS VENDIDOS
-# =====================================================
-
-@reportes_bp.route("/reportes/productos_mas_vendidos")
-@login_required
-def productos_mas_vendidos():
-
-    # =================================================
-    # EMPRESA DEL USUARIO
-    # =================================================
-
-    id_empresa = session.get("id_empresa")
 
 
     if id_empresa is None:
@@ -182,18 +236,85 @@ def productos_mas_vendidos():
         }), 400
 
 
-    # =================================================
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa."
+        }), 404
+
+
+    resumen = resumenReportes(
+        id_empresa
+    )
+
+
+    return render_template(
+        "reportes/ventas_mensuales.html",
+
+        resumen=resumen,
+
+        empresa=empresa
+    )
+
+
+# =====================================================
+# PRODUCTOS MÁS VENDIDOS
+# =====================================================
+
+@reportes_bp.route(
+    "/reportes/productos_mas_vendidos"
+)
+@login_required
+def productos_mas_vendidos():
+
+    id_empresa = session.get(
+        "id_empresa"
+    )
+
+
+    if id_empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa asociada al usuario."
+        }), 400
+
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa."
+        }), 404
+
+
+    # ==========================================
     # FECHAS
-    # =================================================
+    # ==========================================
 
-    fecha_inicio = request.args.get("fecha_inicio")
+    fecha_inicio = request.args.get(
+        "fecha_inicio"
+    )
 
-    fecha_fin = request.args.get("fecha_fin")
+    fecha_fin = request.args.get(
+        "fecha_fin"
+    )
 
 
-    # =================================================
+    # ==========================================
     # CONSULTAR REPORTE
-    # =================================================
+    # ==========================================
 
     resultado = productosMasVendidos(
         id_empresa,
@@ -202,18 +323,18 @@ def productos_mas_vendidos():
     )
 
 
-    # =================================================
+    # ==========================================
     # DATOS
-    # =================================================
+    # ==========================================
 
     resumen = resultado["resumen"]
 
     productos = resultado["productos"]
 
 
-    # =================================================
+    # ==========================================
     # MOSTRAR VISTA
-    # =================================================
+    # ==========================================
 
     return render_template(
         "reportes/productos_mas_vendidos.html",
@@ -224,7 +345,9 @@ def productos_mas_vendidos():
 
         fecha_inicio=fecha_inicio,
 
-        fecha_fin=fecha_fin
+        fecha_fin=fecha_fin,
+
+        empresa=empresa
     )
 
 
@@ -232,21 +355,47 @@ def productos_mas_vendidos():
 # PRODUCTOS SIN MOVIMIENTO
 # =====================================================
 
-@reportes_bp.route("/reportes/productos_sin_movimiento")
+@reportes_bp.route(
+    "/reportes/productos_sin_movimiento"
+)
 @login_required
 def productos_sin_movimiento():
 
-    id_empresa = session.get("id_empresa")
+    id_empresa = session.get(
+        "id_empresa"
+    )
+
 
     if id_empresa is None:
+
         return jsonify({
             "ok": False,
-            "mensaje": "No se encontró la empresa asociada."
+            "mensaje": "No se encontró la empresa asociada al usuario."
         }), 400
 
-    resumen = resumenReportes(id_empresa)
+
+    empresa = obtenerEmpresa(
+        id_empresa
+    )
+
+
+    if empresa is None:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se encontró la empresa."
+        }), 404
+
+
+    resumen = resumenReportes(
+        id_empresa
+    )
+
 
     return render_template(
         "reportes/productos_sin_movimiento.html",
-        resumen=resumen
+
+        resumen=resumen,
+
+        empresa=empresa
     )

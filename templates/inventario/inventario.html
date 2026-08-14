@@ -1,82 +1,350 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inventario | Stockify</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/inventario.css') }}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventario | Stockify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inventario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
+
 <body>
 
-<header>
-<div class="logo">
-<img src="{{ url_for('static', filename='img/logo.png') }}">
-<h2>Stockify</h2>
-</div>
+    <header class="main-header">
 
-<a href="{{ url_for('dashboard.dashboard') }}" class="back">
-<i class="fa-solid fa-arrow-left"></i>
-Dashboard
-</a>
-</header>
+        <div class="main-brand">
 
-<main>
+            <img
+                src="{{ url_for('static', filename='img/logo.png') }}"
+                alt="Stockify"
+            >
 
-<section class="title">
-<h1>Inventario</h1>
-<p>Gestiona todos los productos de tu negocio.</p>
-</section>
+            <div class="main-brand-text">
 
-<section class="search">
-<input type="text" id="buscarModulo" placeholder="Buscar módulo...">
-<i class="fa-solid fa-magnifying-glass"></i>
-</section>
+                <h2>{{ empresa.nombre }}</h2>
 
-<section class="cards">
+                <span class="company-name">
+                    Stockify
+                </span>
 
-<a href="{{ url_for('inventario.registrar_producto') }}" class="card">
-<i class="fa-solid fa-boxes-stacked"></i>
-<h3>Gestionar Productos</h3>
-<p>Registrar, editar, activar o desactivar productos y consultar existencias.</p>
-</a>
+            </div>
 
-<a href="{{ url_for('inventario.categorias') }}" class="card">
-<i class="fa-solid fa-layer-group"></i>
-<h3>Categorías</h3>
-<p>Crear y administrar las categorías del inventario.</p>
-</a>
+        </div>
 
-<a href="{{ url_for('inventario.movimientos') }}" class="card">
-<i class="fa-solid fa-arrow-right-arrow-left"></i>
-<h3>Movimientos</h3>
-<p>Consultar entradas y salidas de inventario.</p>
-</a>
 
-</section>
+        <nav class="main-nav">
 
-</main>
+            <!-- VOLVER AL DASHBOARD -->
 
-<script>
-const buscador = document.getElementById("buscarModulo");
-const tarjetas = document.querySelectorAll(".cards .card");
+            <a
+                href="{{ url_for('dashboard.dashboard') }}"
+                class="back-dashboard"
+            >
 
-buscador.addEventListener("input", () => {
-    const texto = buscador.value.toLowerCase();
+                <i class="fa-solid fa-arrow-left"></i>
 
-    tarjetas.forEach(tarjeta => {
-        const titulo = tarjeta.querySelector("h3").textContent.toLowerCase();
-        const descripcion = tarjeta.querySelector("p").textContent.toLowerCase();
-        const coincide = titulo.includes(texto) || descripcion.includes(texto);
+                Dashboard
 
-        tarjeta.style.display = coincide ? "" : "none";
-    });
-});
-</script>
+            </a>
 
+
+            <!-- USUARIO -->
+
+            <div class="user-menu">
+
+                <button
+                    type="button"
+                    class="user-button"
+                    id="userMenuButton"
+                >
+
+                    <span class="user-avatar">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </span>
+
+
+                    <span class="user-data">
+
+                        <strong>
+                            {{ session.get("nombre_usuario", "Usuario") }}
+                        </strong>
+
+                        <small>
+                            {{ session.get("rol", "Usuario") }}
+                        </small>
+
+                    </span>
+
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </button>
+
+
+                <div
+                    class="user-dropdown"
+                    id="userDropdown"
+                >
+
+                    <div class="dropdown-user">
+
+                        <strong>
+                            {{ session.get("nombre_usuario", "Usuario") }}
+                        </strong>
+
+                        <span>
+                            {{ session.get("rol", "Usuario") }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="dropdown-divider"></div>
+
+
+                    <a
+                        href="#"
+                        class="dropdown-item"
+                    >
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Mi perfil
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('auth.logout') }}"
+                        class="dropdown-item logout-item"
+                    >
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Cerrar sesión
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="title">
+
+            <h1>Inventario</h1>
+
+            <p>Administra los productos registrados en el sistema.</p>
+
+        </section>
+
+        <div class="content">
+
+            <section class="card">
+
+                <div class="table-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-boxes-stacked"></i>
+
+                        Productos Registrados
+
+                    </h2>
+
+                    <div class="header-actions">
+
+                        <a href="{{ url_for('inventario.registrar_producto') }}" class="add-product">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Nuevo Producto
+
+                        </a>
+
+                        <div class="search-container">
+
+                            <div class="search-box">
+
+                                <i class="fa-solid fa-magnifying-glass"></i>
+
+                                <input type="text" id="buscarProducto"
+                                    placeholder="Buscar por código, nombre o categoría...">
+
+                            </div>
+
+                            <select id="filtroBusqueda">
+
+                                <option value="todos">Todos</option>
+
+                                <option value="codigo">Código</option>
+
+                                <option value="nombre">Nombre</option>
+
+                                <option value="categoria">Categoría</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Código</th>
+
+                            <th>Nombre</th>
+
+                            <th>Categoría</th>
+
+                            <th>Costo</th>
+
+                            <th>Precio Venta</th>
+
+                            <th>Stock</th>
+
+                            <th>Estado</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaProductos">
+
+                        {% if productos %}
+
+                        {% for producto in productos %}
+
+                        <tr>
+
+                            <td>{{ producto.codigo }}</td>
+
+                            <td>{{ producto.nombre }}</td>
+
+                            <td>{{ producto.categoria }}</td>
+
+                            <td>${{ producto.costo }}</td>
+
+                            <td>${{ producto.precio_venta }}</td>
+
+                            <td>{{ producto.stock }}</td>
+
+                            <td>
+
+                                {% if producto.estado==1 %}
+
+                                <span class="status active">
+
+                                    Activo
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status inactive">
+
+                                    Inactivo
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td class="actions">
+
+                                <a href="{{ url_for('inventario.editar_producto',id_producto=producto.id_producto) }}"
+                                    class="edit">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                {% if producto.estado==1 %}
+
+                                <a href="{{ url_for('inventario.desactivar_producto',id_producto=producto.id_producto) }}"
+                                    class="delete">
+
+                                    <i class="fa-solid fa-box-archive"></i>
+
+                                </a>
+
+                                {% else %}
+
+                                <a href="{{ url_for('inventario.activar_producto',id_producto=producto.id_producto) }}"
+                                    class="activate">
+
+                                    <i class="fa-solid fa-box-open"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="8" class="empty">
+
+                                No hay productos registrados.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        </div>
+
+    </main>
+
+<script src="{{ url_for('static', filename='js/buscar_productos.js') }}"></script>
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-console.log("JS cargado correctamente");
+console.log("Ventas JS cargado correctamente.");
 
 let productosVenta = [];
 let productoSeleccionado = null;
@@ -44,121 +44,209 @@ const totalHTML =
 const totalProductosHTML =
     document.getElementById("total_productos");
 
+const descuentoInput =
+    document.getElementById("descuento_input");
+
+const aplicarIVA =
+    document.getElementById("aplicar_iva");
+
+const precioMinimoHTML =
+    document.getElementById("precio_minimo");
+
 const formulario =
     document.getElementById("formVenta");
+
+
+//=====================================
+// COMPROBAR ELEMENTOS
+//=====================================
+
+console.log("Elementos ventas:", {
+    formulario,
+    subtotalHTML,
+    descuentoHTML,
+    ivaHTML,
+    totalHTML,
+    totalProductosHTML,
+    descuentoInput,
+    aplicarIVA
+});
+
+
+//=====================================
+// FECHA DE HOY
+//=====================================
+
+function establecerFechaHoy() {
+
+    const campoFecha =
+        document.getElementById("fecha");
+
+    if (!campoFecha) {
+        return;
+    }
+
+    const hoy = new Date();
+
+    const anio =
+        hoy.getFullYear();
+
+    const mes =
+        String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0");
+
+    const dia =
+        String(
+            hoy.getDate()
+        ).padStart(2, "0");
+
+    campoFecha.value =
+        `${anio}-${mes}-${dia}`;
+}
+
+
+//=====================================
+// INICIO
+//=====================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        establecerFechaHoy();
+
+        actualizarResumen();
+
+    }
+);
 
 
 //=====================================
 // BUSCAR PRODUCTOS
 //=====================================
 
-inputBuscar.addEventListener("input", async () => {
+inputBuscar.addEventListener(
+    "input",
+    async function () {
 
-    const texto =
-        inputBuscar.value.trim();
-
-
-    if (texto.length < 2) {
-
-        listaProductos.style.display = "none";
-
-        listaProductos.innerHTML = "";
-
-        return;
-    }
+        const texto =
+            inputBuscar.value.trim();
 
 
-    try {
-
-        const respuesta = await fetch(
-            `/buscar_producto?q=${encodeURIComponent(texto)}`
-        );
-
-
-        if (!respuesta.ok) {
-
-            throw new Error(
-                `HTTP ${respuesta.status}`
-            );
-
-        }
-
-
-        const productos =
-            await respuesta.json();
-
-
-        listaProductos.innerHTML = "";
-
-
-        if (productos.length === 0) {
-
-            listaProductos.innerHTML = `
-
-                <div class="item-producto-vacio">
-
-                    No se encontraron productos
-
-                </div>
-
-            `;
+        if (texto.length < 2) {
 
             listaProductos.style.display =
-                "block";
+                "none";
+
+            listaProductos.innerHTML =
+                "";
 
             return;
         }
 
 
-        productos.forEach(producto => {
+        try {
 
-            listaProductos.innerHTML += `
-
-                <div
-                    class="item-producto"
-                    data-id="${producto.id_producto}"
-                    data-precio="${producto.precio_venta}"
-                    data-stock="${producto.stock}"
-                    data-codigo="${producto.codigo}"
-                    data-nombre="${producto.nombre}"
-                >
-
-                    <strong>
-                        ${producto.codigo}
-                    </strong>
-
-                    <br>
-
-                    ${producto.nombre}
-
-                    <small>
-
-                        Stock: ${producto.stock}
-
-                    </small>
-
-                </div>
-
-            `;
-
-        });
+            const respuesta =
+                await fetch(
+                    `/buscar_producto?q=${encodeURIComponent(texto)}`
+                );
 
 
-        listaProductos.style.display =
-            "block";
+            if (!respuesta.ok) {
+
+                throw new Error(
+                    `HTTP ${respuesta.status}`
+                );
+
+            }
+
+
+            const productos =
+                await respuesta.json();
+
+
+            listaProductos.innerHTML =
+                "";
+
+
+            if (
+                productos.length === 0
+            ) {
+
+                listaProductos.innerHTML = `
+
+                    <div class="item-producto-vacio">
+                        No se encontraron productos
+                    </div>
+
+                `;
+
+                listaProductos.style.display =
+                    "block";
+
+                return;
+            }
+
+
+            productos.forEach(
+                producto => {
+
+                    listaProductos.innerHTML += `
+
+                        <div
+                            class="item-producto"
+
+                            data-id="${producto.id_producto}"
+
+                            data-precio="${producto.precio_venta}"
+
+                            data-costo="${producto.costo}"
+
+                            data-stock="${producto.stock}"
+
+                            data-codigo="${producto.codigo}"
+
+                            data-nombre="${producto.nombre}"
+                        >
+
+                            <strong>
+                                ${escapeHTML(producto.codigo)}
+                            </strong>
+
+                            <br>
+
+                            ${escapeHTML(producto.nombre)}
+
+                            <small>
+                                Stock: ${producto.stock}
+                            </small>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+
+            listaProductos.style.display =
+                "block";
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error buscando productos:",
+                error
+            );
+
+        }
 
     }
-
-    catch (error) {
-
-        console.error(
-            "Error buscando productos:",
-            error
-        );
-
-    }
-
-});
+);
 
 
 //=====================================
@@ -167,7 +255,7 @@ inputBuscar.addEventListener("input", async () => {
 
 listaProductos.addEventListener(
     "click",
-    (e) => {
+    function (e) {
 
         const item =
             e.target.closest(
@@ -198,6 +286,11 @@ listaProductos.addEventListener(
                     item.dataset.precio
                 ),
 
+            costo:
+                Number(
+                    item.dataset.costo
+                ),
+
             stock:
                 Number(
                     item.dataset.stock
@@ -214,11 +307,22 @@ listaProductos.addEventListener(
             productoSeleccionado.precio;
 
 
+        precio.min =
+            productoSeleccionado.costo;
+
+
+        precioMinimoHTML.textContent =
+            `Precio mínimo: ${formatearMoneda(
+                productoSeleccionado.costo
+            )}`;
+
+
         inputBuscar.value =
             productoSeleccionado.nombre;
 
 
-        listaProductos.innerHTML = "";
+        listaProductos.innerHTML =
+            "";
 
         listaProductos.style.display =
             "none";
@@ -236,7 +340,7 @@ listaProductos.addEventListener(
 
 document.addEventListener(
     "click",
-    (e) => {
+    function (e) {
 
         if (
             !e.target.closest(
@@ -254,12 +358,78 @@ document.addEventListener(
 
 
 //=====================================
+// VALIDAR PRECIO
+//=====================================
+
+function validarPrecio() {
+
+    if (
+        productoSeleccionado === null
+    ) {
+
+        return false;
+
+    }
+
+
+    const precioActual =
+        Number(
+            precio.value
+        );
+
+
+    const costo =
+        Number(
+            productoSeleccionado.costo
+        );
+
+
+    if (
+        isNaN(precioActual) ||
+        precioActual <= 0
+    ) {
+
+        alert(
+            "Ingrese un precio válido."
+        );
+
+        precio.focus();
+
+        return false;
+
+    }
+
+
+    if (
+        precioActual < costo
+    ) {
+
+        alert(
+            `El precio no puede ser inferior al costo de ${formatearMoneda(costo)}.`
+        );
+
+        precio.value =
+            costo;
+
+        precio.focus();
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+//=====================================
 // AGREGAR PRODUCTO
 //=====================================
 
 btnAgregar.addEventListener(
     "click",
-    () => {
+    function () {
 
         if (
             productoSeleccionado === null
@@ -270,6 +440,16 @@ btnAgregar.addEventListener(
             );
 
             return;
+
+        }
+
+
+        if (
+            !validarPrecio()
+        ) {
+
+            return;
+
         }
 
 
@@ -289,6 +469,7 @@ btnAgregar.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -302,17 +483,24 @@ btnAgregar.addEventListener(
             );
 
             return;
+
         }
 
 
+        const precioActual =
+            Number(
+                precio.value
+            );
+
+
         // =================================
-        // EVITAR PRODUCTOS REPETIDOS
+        // BUSCAR PRODUCTO EXISTENTE
         // =================================
 
         const existente =
             productosVenta.find(
-                p =>
-                    p.id_producto ===
+                producto =>
+                    producto.id_producto ===
                     productoSeleccionado.id_producto
             );
 
@@ -320,7 +508,8 @@ btnAgregar.addEventListener(
         if (existente) {
 
             const nuevaCantidad =
-                existente.cantidad + cant;
+                existente.cantidad +
+                cant;
 
 
             if (
@@ -333,6 +522,7 @@ btnAgregar.addEventListener(
                 );
 
                 return;
+
             }
 
 
@@ -340,12 +530,15 @@ btnAgregar.addEventListener(
                 nuevaCantidad;
 
 
+            existente.precio =
+                precioActual;
+
+
             existente.subtotal =
                 existente.cantidad *
                 existente.precio;
 
         }
-
         else {
 
             productosVenta.push({
@@ -360,11 +553,14 @@ btnAgregar.addEventListener(
                     cant,
 
                 precio:
-                    productoSeleccionado.precio,
+                    precioActual,
+
+                costo:
+                    productoSeleccionado.costo,
 
                 subtotal:
                     cant *
-                    productoSeleccionado.precio
+                    precioActual
 
             });
 
@@ -380,12 +576,13 @@ btnAgregar.addEventListener(
 
 
 //=====================================
-// TABLA
+// ACTUALIZAR TABLA
 //=====================================
 
 function actualizarTabla() {
 
-    detalleVenta.innerHTML = "";
+    detalleVenta.innerHTML =
+        "";
 
 
     if (
@@ -400,9 +597,7 @@ function actualizarTabla() {
                     colspan="5"
                     class="empty"
                 >
-
                     No hay productos agregados.
-
                 </td>
 
             </tr>
@@ -417,14 +612,16 @@ function actualizarTabla() {
 
 
     productosVenta.forEach(
-        (producto, index) => {
+        function (producto, index) {
 
             detalleVenta.innerHTML += `
 
                 <tr>
 
                     <td>
-                        ${producto.nombre}
+                        ${escapeHTML(
+                            producto.nombre
+                        )}
                     </td>
 
                     <td>
@@ -432,14 +629,14 @@ function actualizarTabla() {
                     </td>
 
                     <td>
-                        $${producto.precio.toLocaleString(
-                            "es-CO"
+                        ${formatearMoneda(
+                            producto.precio
                         )}
                     </td>
 
                     <td>
-                        $${producto.subtotal.toLocaleString(
-                            "es-CO"
+                        ${formatearMoneda(
+                            producto.subtotal
                         )}
                     </td>
 
@@ -448,6 +645,7 @@ function actualizarTabla() {
                         <button
                             type="button"
                             onclick="eliminarProducto(${index})"
+                            title="Eliminar"
                         >
 
                             <i
@@ -482,18 +680,16 @@ function eliminarProducto(indice) {
         1
     );
 
-
     actualizarTabla();
 
 }
-
 
 window.eliminarProducto =
     eliminarProducto;
 
 
 //=====================================
-// CALCULAR SUBTOTAL
+// SUBTOTAL
 //=====================================
 
 function calcularSubtotal() {
@@ -502,7 +698,7 @@ function calcularSubtotal() {
 
 
     productosVenta.forEach(
-        producto => {
+        function (producto) {
 
             subtotal +=
                 Number(
@@ -519,41 +715,114 @@ function calcularSubtotal() {
 
 
 //=====================================
-// CALCULAR IVA
+// PORCENTAJE DE DESCUENTO
 //=====================================
 
-function calcularIVA() {
+function obtenerPorcentajeDescuento() {
 
-    return calcularSubtotal() * 0.19;
+    let porcentaje =
+        Number(
+            descuentoInput.value
+        );
+
+
+    if (
+        isNaN(porcentaje) ||
+        porcentaje < 0
+    ) {
+
+        porcentaje = 0;
+
+    }
+
+
+    if (
+        porcentaje > 100
+    ) {
+
+        porcentaje = 100;
+
+        descuentoInput.value = 100;
+
+    }
+
+
+    return porcentaje;
 
 }
 
 
 //=====================================
-// CALCULAR TOTAL
+// VALOR DEL DESCUENTO
 //=====================================
 
-function calcularTotal() {
+function calcularDescuento() {
+
+    const subtotal =
+        calcularSubtotal();
+
+
+    const porcentaje =
+        obtenerPorcentajeDescuento();
+
 
     return (
-        calcularSubtotal() +
-        calcularIVA()
+        subtotal *
+        (porcentaje / 100)
     );
 
 }
 
 
 //=====================================
-// RESUMEN
+// IVA
 //=====================================
 
-function actualizarResumen() {
+function calcularIVA() {
+
+    if (
+        !aplicarIVA.checked
+    ) {
+
+        return 0;
+
+    }
+
 
     const subtotal =
         calcularSubtotal();
 
 
-    const descuento = 0;
+    const descuento =
+        calcularDescuento();
+
+
+    const baseIVA =
+        Math.max(
+            subtotal - descuento,
+            0
+        );
+
+
+    return (
+        baseIVA * 0.19
+    );
+
+}
+
+
+//=====================================
+// TOTAL
+//=====================================
+
+function calcularTotal() {
+
+    const subtotal =
+        calcularSubtotal();
+
+
+    const descuento =
+        calcularDescuento();
 
 
     const iva =
@@ -566,59 +835,221 @@ function actualizarResumen() {
         iva;
 
 
-    totalProductosHTML.textContent =
-        productosVenta.length;
+    console.log({
+        subtotal,
+        descuento,
+        iva,
+        total
+    });
 
 
-    subtotalHTML.textContent =
-        "$" +
-        subtotal.toLocaleString(
-            "es-CO"
-        );
-
-
-    descuentoHTML.textContent =
-        "$" +
-        descuento.toLocaleString(
-            "es-CO"
-        );
-
-
-    ivaHTML.textContent =
-        "$" +
-        iva.toLocaleString(
-            "es-CO"
-        );
-
-
-    totalHTML.textContent =
-        "$" +
-        total.toLocaleString(
-            "es-CO"
-        );
+    return total;
 
 }
 
 
 //=====================================
-// LIMPIAR CONTROLES
+// ACTUALIZAR RESUMEN
+//=====================================
+
+function actualizarResumen() {
+
+    const subtotal =
+        calcularSubtotal();
+
+
+    const descuento =
+        calcularDescuento();
+
+
+    const iva =
+        calcularIVA();
+
+
+    const total =
+        calcularTotal();
+
+
+    // =================================
+    // TOTAL DE UNIDADES
+    // =================================
+
+    const totalUnidades =
+        productosVenta.reduce(
+            function (total, producto) {
+
+                return (
+                    total +
+                    Number(
+                        producto.cantidad
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    totalProductosHTML.textContent =
+        totalUnidades;
+
+
+    // =================================
+    // MOSTRAR VALORES
+    // =================================
+
+    subtotalHTML.textContent =
+        formatearMoneda(
+            subtotal
+        );
+
+
+    descuentoHTML.textContent =
+        formatearMoneda(
+            descuento
+        );
+
+
+    ivaHTML.textContent =
+        formatearMoneda(
+            iva
+        );
+
+
+    totalHTML.textContent =
+        formatearMoneda(
+            total
+        );
+
+
+    console.log(
+        "RESUMEN ACTUALIZADO:",
+        {
+            unidades: totalUnidades,
+            subtotal: subtotal,
+            descuento: descuento,
+            iva: iva,
+            total: total
+        }
+    );
+
+}
+
+
+//=====================================
+// CAMBIO DE DESCUENTO
+//=====================================
+
+descuentoInput.addEventListener(
+    "input",
+    actualizarResumen
+);
+
+
+//=====================================
+// CAMBIO DE IVA
+//=====================================
+
+aplicarIVA.addEventListener(
+    "change",
+    actualizarResumen
+);
+
+
+//=====================================
+// CAMBIO DE PRECIO
+//=====================================
+
+precio.addEventListener(
+    "input",
+    function () {
+
+        if (
+            productoSeleccionado === null
+        ) {
+
+            return;
+
+        }
+
+
+        const costo =
+            Number(
+                productoSeleccionado.costo
+            );
+
+
+        const precioActual =
+            Number(
+                precio.value
+            );
+
+
+        if (
+            precioActual < costo
+        ) {
+
+            precioMinimoHTML.textContent =
+                `El precio mínimo es ${formatearMoneda(costo)}`;
+
+            precioMinimoHTML.classList.add(
+                "price-error"
+            );
+
+        }
+        else {
+
+            precioMinimoHTML.textContent =
+                `Precio mínimo: ${formatearMoneda(costo)}`;
+
+            precioMinimoHTML.classList.remove(
+                "price-error"
+            );
+
+        }
+
+    }
+);
+
+
+//=====================================
+// LIMPIAR PRODUCTO
 //=====================================
 
 function limpiarFormularioProducto() {
 
-    productoSeleccionado = null;
+    productoSeleccionado =
+        null;
 
 
-    idProducto.value = "";
+    idProducto.value =
+        "";
 
 
-    inputBuscar.value = "";
+    inputBuscar.value =
+        "";
 
 
-    precio.value = "";
+    precio.value =
+        "";
 
 
-    cantidad.value = 1;
+    precio.removeAttribute(
+        "min"
+    );
+
+
+    precioMinimoHTML.textContent =
+        "Selecciona un producto.";
+
+
+    precioMinimoHTML.classList.remove(
+        "price-error"
+    );
+
+
+    cantidad.value =
+        1;
 
 
     inputBuscar.focus();
@@ -627,7 +1058,7 @@ function limpiarFormularioProducto() {
 
 
 //=====================================
-// LIMPIAR VENTA COMPLETA
+// LIMPIAR VENTA
 //=====================================
 
 function limpiarVentaCompleta() {
@@ -635,16 +1066,28 @@ function limpiarVentaCompleta() {
     productosVenta = [];
 
 
-    actualizarTabla();
-
-
     formulario.reset();
 
 
-    cantidad.value = 1;
+    establecerFechaHoy();
+
+
+    cantidad.value =
+        1;
+
+
+    descuentoInput.value =
+        0;
+
+
+    aplicarIVA.checked =
+        false;
 
 
     limpiarFormularioProducto();
+
+
+    actualizarTabla();
 
 }
 
@@ -660,10 +1103,6 @@ formulario.addEventListener(
         e.preventDefault();
 
 
-        // =================================
-        // VALIDAR PRODUCTOS
-        // =================================
-
         if (
             productosVenta.length === 0
         ) {
@@ -673,12 +1112,63 @@ formulario.addEventListener(
             );
 
             return;
+
         }
 
 
         // =================================
-        // PREPARAR DATOS
+        // VALIDAR PRECIOS
         // =================================
+
+        const precioInvalido =
+            productosVenta.some(
+                function (producto) {
+
+                    return (
+                        Number(
+                            producto.precio
+                        ) <
+                        Number(
+                            producto.costo
+                        )
+                    );
+
+                }
+            );
+
+
+        if (
+            precioInvalido
+        ) {
+
+            alert(
+                "Existe un producto con un precio inferior a su costo."
+            );
+
+            return;
+
+        }
+
+
+        const subtotal =
+            calcularSubtotal();
+
+
+        const porcentajeDescuento =
+            obtenerPorcentajeDescuento();
+
+
+        const descuento =
+            calcularDescuento();
+
+
+        const iva =
+            calcularIVA();
+
+
+        const total =
+            calcularTotal();
+
 
         const datos = {
 
@@ -703,16 +1193,20 @@ formulario.addEventListener(
                 ).value,
 
             subtotal:
-                calcularSubtotal(),
+                subtotal,
+
+            // IMPORTANTE:
+            // Se envía el valor monetario
+            // del descuento, no el porcentaje.
 
             descuento:
-                0,
+                descuento,
 
             iva:
-                calcularIVA(),
+                iva,
 
             total:
-                calcularTotal(),
+                total,
 
             observaciones:
                 document.getElementById(
@@ -726,14 +1220,13 @@ formulario.addEventListener(
 
 
         console.log(
-            "Datos de la venta:",
-            datos
+            "DATOS ENVIADOS:",
+            {
+                porcentajeDescuento,
+                ...datos
+            }
         );
 
-
-        // =================================
-        // ENVIAR A FLASK
-        // =================================
 
         try {
 
@@ -742,7 +1235,8 @@ formulario.addEventListener(
                     "/registrar_venta",
                     {
 
-                        method: "POST",
+                        method:
+                            "POST",
 
                         headers: {
                             "Content-Type":
@@ -763,14 +1257,10 @@ formulario.addEventListener(
 
 
             console.log(
-                "Respuesta de Flask:",
+                "RESPUESTA FLASK:",
                 resultado
             );
 
-
-            // =================================
-            // VENTA CORRECTA
-            // =================================
 
             if (
                 resultado.ok
@@ -780,10 +1270,6 @@ formulario.addEventListener(
                     resultado.mensaje
                 );
 
-
-                // =================================
-                // ABRIR FACTURA PDF
-                // =================================
 
                 if (
                     resultado.factura_url
@@ -795,23 +1281,11 @@ formulario.addEventListener(
                     );
 
                 }
-                else {
 
-                    console.warn(
-                        "No se recibió factura_url."
-                    );
-
-                }
-
-
-                // =================================
-                // LIMPIAR FORMULARIO
-                // =================================
 
                 limpiarVentaCompleta();
 
             }
-
             else {
 
                 alert(
@@ -822,7 +1296,6 @@ formulario.addEventListener(
             }
 
         }
-
         catch (error) {
 
             console.error(
@@ -839,3 +1312,70 @@ formulario.addEventListener(
 
     }
 );
+
+
+//=====================================
+// FORMATEAR MONEDA
+//=====================================
+
+function formatearMoneda(valor) {
+
+    const numero =
+        Number(
+            valor
+        ) || 0;
+
+
+    return (
+        "$" +
+        numero.toLocaleString(
+            "es-CO",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }
+        )
+    );
+
+}
+
+
+//=====================================
+// ESCAPAR HTML
+//=====================================
+
+function escapeHTML(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(valor)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}

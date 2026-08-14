@@ -11,6 +11,8 @@
 
     <link rel="stylesheet"
         href="{{ url_for('static', filename='css/reportes.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
 
     <link rel="shortcut icon"
         href="{{ url_for('static', filename='img/negocios-y-finanzas.png') }}">
@@ -29,23 +31,128 @@
 
 <body>
 
-<header>
+ <header class="main-header">
 
-    <div class="logo">
+    <div class="main-brand">
 
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+        <img
+            src="{{ url_for('static', filename='img/logo.png') }}"
+            alt="Stockify"
+        >
 
-        <h2>Stockify</h2>
+        <div class="main-brand-text">
+
+            <h2>{{ empresa.nombre }}</h2>
+
+            <span class="company-name">
+                Stockify
+            </span>
+
+        </div>
 
     </div>
 
-    <a href="{{ url_for('dashboard.dashboard') }}" class="back">
 
-        <i class="fa-solid fa-arrow-left"></i>
+    <nav class="main-nav">
 
-        Dashboard
+        <!-- VOLVER AL DASHBOARD -->
 
-    </a>
+        <a
+            href="{{ url_for('dashboard.dashboard') }}"
+            class="back-dashboard"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+
+        <!-- USUARIO -->
+
+        <div class="user-menu">
+
+            <button
+                type="button"
+                class="user-button"
+                id="userMenuButton"
+            >
+
+                <span class="user-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </span>
+
+
+                <span class="user-data">
+
+                    <strong>
+                        {{ session.get("nombre_usuario", "Usuario") }}
+                    </strong>
+
+                    <small>
+                        {{ session.get("rol", "Usuario") }}
+                    </small>
+
+                </span>
+
+
+                <i class="fa-solid fa-chevron-down"></i>
+
+            </button>
+
+
+            <div
+                class="user-dropdown"
+                id="userDropdown"
+            >
+
+                <div class="dropdown-user">
+
+                    <strong>
+                        {{ session.get("nombre_usuario", "Usuario") }}
+                    </strong>
+
+                    <span>
+                        {{ session.get("rol", "Usuario") }}
+                    </span>
+
+                </div>
+
+
+                <div class="dropdown-divider"></div>
+
+
+                <a
+                    href="#"
+                    class="dropdown-item"
+                >
+
+                    <i class="fa-solid fa-user"></i>
+
+                    Mi perfil
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('auth.logout') }}"
+                    class="dropdown-item logout-item"
+                >
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Cerrar sesión
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
 
 </header>
 
@@ -64,16 +171,6 @@
 </section>
 
 <section class="summary">
-
-    <div class="summary-card">
-
-        <i class="fa-solid fa-file-lines"></i>
-
-        <h3>Reportes Disponibles</h3>
-
-        <span>{{ resumen.reportes }}</span>
-
-    </div>
 
     <div class="summary-card">
 
@@ -173,7 +270,7 @@
 </section>
 
 </main>
-
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
 </body>
 
 </html>
